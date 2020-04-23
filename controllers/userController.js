@@ -18,7 +18,7 @@ module.exports = function (app , mongoose) {
     
     app.post('/login',urlencodedParser,function(req,res){
         console.log(req.body);
-        res.render('profile');
+        res.render('home');
     });
     
     app.get('/registration',function(req,res){
