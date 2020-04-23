@@ -7,6 +7,14 @@ module.exports = function (app , mongoose) {
         extended: false
     })
 
+
+    var MILLISECONDS_IN_A_YEAR = 1000*60*60*24*365;
+    function get_age(time){
+        var date_array = time.split('-')
+        var years_elapsed = (new Date() - new Date(date_array[0],date_array[1],date_array[2]))/(MILLISECONDS_IN_A_YEAR);
+        return Math.trunc(years_elapsed) ; 
+    }
+
     app.get('/',(req,res)=>{
         res.render('login');
     });
@@ -18,7 +26,24 @@ module.exports = function (app , mongoose) {
     
     app.post('/login',urlencodedParser,function(req,res){
         console.log(req.body);
-        res.render('home');
+
+        User.findOne({email : req.body.email , password : req.body.password},(err,user)=>{
+            if(user){
+                console.log('user connecté');
+                res.redirect('/home');
+            }
+            else{
+                Medecin.findOne({email : req.body.email , password : req.body.password},(err,medecin)=>{
+                    if (medecin) {
+                        console.log('medecin connecté');
+                        res.redirect('/home');
+                    } else {
+                        console.log('echec de connexion');
+                        res.render('login',{err : 'Email ou mot de passe incorrecte'});
+                    }
+                })
+            }
+        })
     });
     
     app.get('/registration',function(req,res){
@@ -40,7 +65,7 @@ module.exports = function (app , mongoose) {
                 telephone : data.telephone,
                 dateNaissance : data.dateNaissance,
                 email : data.email,
-                age : 30,
+                age : get_age(data.dateNaissance),
                 ville : data.ville,
                 pays : data.pays,
                 password : data.password,
@@ -66,10 +91,14 @@ module.exports = function (app , mongoose) {
             console.log('medecin created');
         }
 
-        res.render('login');
+        res.redirect('/login');
 
         
     });
+
+    app.get('/home',(req,res)=>{
+        res.render('home');
+    })
 
    
 }
