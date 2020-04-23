@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../public/css/register.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <title>Register</title>
+</head>
+<body>
+    <div class="container">
+
+        <div class="registration-container">
+
+            <form id="user-form" action="/registration" method="POST">
+                <h2>Creer votre compte !</h2>
+                <h5 style="margin: 10px auto ">Vous etes un médecin ? <a id="medecin-link" href="?user=medecin" >Cliquer ici</a></h1>
+                <div class="input-div one ">
+                    <div class="i">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div>
+                        <h5>Nom Complet</h5>
+                        <input class="input" type="text" name="nomComplet" >
+                    </div>
+                </div>
+                <div class="radio" style="display: flex;">
+                    <div >
+                        <input class="gender" type="radio" name="gender" id="male" value="male" >
+                        <label for="male" style="color: #999;" >Masculin</label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                        <input class="gender" type="radio" name="gender" id="female" value="female">
+                        <label for="female" style="color: #999" >Féminin</label>
+                    </div>
+                </div>
+                <div class="input-div two ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Email</h5>
+                        <input class="input" type="text" name="email">
+                    </div>
+                </div>
+                <div class="input-div two ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Téléphone</h5>
+                        <input class="input" type="text" name="telephone">
+                    </div>
+                </div>
+                <div class="input-div two ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Date de naissance</h5>
+                        <input class="input" type="date" style="content: none; color: transparent; "  name="dateNaissance">
+                    </div>
+                </div>
+                <div class="input-div three ">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Ville</h5>
+                        <input class="input" type="text" name="ville">
+                    </div>
+                </div>
+                <div class="input-div three ">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Pays</h5>
+                        <input class="input" type="text" name="pays">
+                    </div>
+                </div>
+                <div class="grpsang ">
+                    <div>
+                        <label class="sang" for="sang" style="color: #999; margin-right: 20px;">Groupe sanguin</label>
+                        <select id="sang" style="width: 50px;" name="grpsang">
+                            <option value="none"></option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O-</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-div four">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5>Mot de passe</h5>
+                        <input class="input" type="password" name="password">
+                    </div>
+                </div>
+                <div class="input-div five">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5>Confirmer le Mot de passe</h5>
+                        <input class="input" type="password" name="confirmation">
+                    </div>
+                </div>
+                <input type="text" name="type" value="normal" style="display: none;">
+                <input class="btn" type="submit" value="Envoyer" onclick="return checkPassword()">
+                
+
+            </form>
+
+
+            <form id="medecin-form" action="/registration" method="POST">
+                <h2>Creer votre compte !</h2>
+                <h5 style="margin: 10px auto ">Vous n'etes pas un médecin ? <a id="medecin-link" href="?user=normal" >Cliquer ici</a></h1>
+                <div class="input-div one ">
+                    <div class="i">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div>
+                        <h5>Nom Complet</h5>
+                        <input class="input" type="text" name="nomComplet">
+                    </div>
+                </div>
+                <div class="radio" style="display: flex;">
+                    <div >
+                        <input class="gender" type="radio" name="gender" id="male" value="male" >
+                        <label for="male" style="color: #999;" >Masculin</label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                        <input class="gender" type="radio" name="gender" id="female" value="female">
+                        <label for="female" style="color: #999" >Féminin</label>
+                    </div>
+                </div>
+                <div class="input-div two ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Email</h5>
+                        <input class="input" type="text" name="email">
+                    </div>
+                </div>
+                <div class="input-div two ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Téléphone</h5>
+                        <input class="input" type="text" name="telephone">
+                    </div>
+                </div>
+                <div class="input-div three ">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Ville</h5>
+                        <input class="input" type="text" name="ville">
+                    </div>
+                </div>
+                <div class="input-div three ">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Pays</h5>
+                        <input class="input" type="text" name="pays">
+                    </div>
+                </div>
+                <div class="input-div three ">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Adresse Hopitale ou Cabinet</h5>
+                        <input class="input" type="text" name="adresse">
+                    </div>
+                </div>
+                
+                <div class="input-div four">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5>Mot de passe</h5>
+                        <input id="password" class="input" type="password" name="password">
+                    </div>
+                </div>
+                <div class="input-div five">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5>Confirmer le Mot de passe</h5>
+                        <input id="confirmation" class="input" type="password" name="confirmation">
+                    </div>
+                </div>
+                <input type="text" name="type" id="type" value="medecin" style="display: none;">
+                <input class="btn" type="submit" value="Envoyer" onclick="return checkPassword()">
+                
+    
+            </form>
+
+        </div>
+        
+
+        <div class="image-container">
+            <div class="img">
+                <img src="../public/img/register.svg" alt="img">
+            </div>
+            <div class="sign-in" style="margin: 90px auto;">
+                <p >
+                    Vous avez déjà un compte ? <a href="/login">connecter-vous d'ici !</a>
+                </p>
+            </div>
+        </div>
+
+        
+    </div>
+    <script type="text/javascript" src="../public/js/main.js"></script>
+    <script type="text/javascript">
+       
+           var url_string = window.location.href;
+           var url = new URL(url_string);
+           var param = url.searchParams.get("user");
+           var medecin = document.getElementById('medecin-form');
+           var user = document.getElementById('user-form');
+
+           
+           if(param === "normal"){
+                medecin.style.display = "none";
+           }
+
+           if(param === "medecin"){
+               user.style.display = "none";
+           }
+        
+    </script>
+    <script type="text/javascript">
+
+        function checkPassword(){
+            var password = document.getElementById('password').value;
+            var confirmation = document.getElementById('confirmation').value;
+
+            if (password != confirmation) {
+                alert('Confirmation de mot de passe incorrecte');
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+</body>
+</html>

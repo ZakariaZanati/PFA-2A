@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <title>Login page</title>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <div class="img">
+                <img class="img" src="../public/img/vacation.svg" alt="img">
+            </div>
+            <div class="sign-in" style="margin: 90px auto;">
+                <p>
+                    Vous n'avez pas un compte ? <a href="registration/?user=normal">créer un maintenant !</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="login-container">
+            <form action="/login" method="POST">
+                <img class="avatar" src="../public/img/avatar.svg" alt="avatar">
+                <h2>Bienvenue !</h2>
+                <div class="input-div one ">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h5>Email</h5>
+                        <input class="input" type="text">
+                    </div>
+                </div>
+                <div class="input-div two">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5>Mot de passe</h5>
+                        <input class="input" type="password">
+                    </div>
+                </div>
+                <input class="btn" type="submit" value="Se connecter">
+                
+
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="../public/js/main.js"></script>
+    
+</body>
+</html>
