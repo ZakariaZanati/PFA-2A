@@ -235,9 +235,8 @@
            var param = url.searchParams.get("user");
            var medecin = document.getElementById('medecin-form');
            var user = document.getElementById('user-form');
-
            
-           if(param === "normal"){
+           if(param === "normal" || param === null){
                 medecin.style.display = "none";
            }
 

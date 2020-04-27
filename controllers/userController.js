@@ -29,21 +29,27 @@ module.exports = function (app , mongoose) {
 
         User.findOne({email : req.body.email , password : req.body.password},(err,user)=>{
             if(user){
+                
+                req.session.email = req.body.email;
+                
                 console.log('user connecté');
                 res.redirect('/home');
             }
             else{
                 Medecin.findOne({email : req.body.email , password : req.body.password},(err,medecin)=>{
                     if (medecin) {
+
+                        req.session.email = req.body.email;
+
                         console.log('medecin connecté');
                         res.redirect('/home');
                     } else {
                         console.log('echec de connexion');
                         res.render('login',{err : 'Email ou mot de passe incorrecte'});
                     }
-                })
+                });
             }
-        })
+        });
     });
     
     app.get('/registration',function(req,res){
@@ -51,53 +57,79 @@ module.exports = function (app , mongoose) {
         res.render('registration');
     })
     
-    app.post('/registration',urlencodedParser, function(req,res){
+    app.post('/registration',urlencodedParser, function(req,res,next){
         console.log(req.body);
         
      
         var type = req.body.type;
         var data = req.body;
 
-        if (type === 'normal') {
-            var user = new User({
-                nom_complet : data.nomComplet,
-                sexe : data.gender,
-                telephone : data.telephone,
-                dateNaissance : data.dateNaissance,
-                email : data.email,
-                age : get_age(data.dateNaissance),
-                ville : data.ville,
-                pays : data.pays,
-                password : data.password,
-                groupeSanguin : data.grpsang
-            });
-            User.create(user);
-            console.log('user created');
-            
-        }
-        else if(type === 'medecin'){
-            var medecin = new Medecin({
-                nom_complet : data.nomComplet,
-                sexe: data.gender,
-                telephone: data.telephone,
-                email: data.email,
-                ville: data.ville,
-                pays: data.pays,
-                password: data.password,
-                adresse_lieu_travail : data.grpsang
-            })
+        User.findOne({email : data.email})
+        .then((user)=>{
+            if(user != null) {
+                var err = new Error("L'émail "+ data.email + " exist déjà !");
+                err.status = 403;
+                next(err);
+            }
+            else{
+                if (type === 'normal') {
+                    var user = new User({
+                        nom_complet : data.nomComplet,
+                        sexe : data.gender,
+                        telephone : data.telephone,
+                        dateNaissance : data.dateNaissance,
+                        email : data.email,
+                        age : get_age(data.dateNaissance),
+                        ville : data.ville,
+                        pays : data.pays,
+                        password : data.password,
+                        groupeSanguin : data.grpsang
+                    });
+                    User.create(user);
+                    
+                    
+                }
+                else if(type === 'medecin'){
+                    var medecin = new Medecin({
+                        nom_complet : data.nomComplet,
+                        sexe: data.gender,
+                        telephone: data.telephone,
+                        email: data.email,
+                        ville: data.ville,
+                        pays: data.pays,
+                        password: data.password,
+                        adresse_lieu_travail : data.grpsang
+                    })
+        
+                    Medecin.create(medecin);
+                    
+                }
 
-            Medecin.create(medecin);
-            console.log('medecin created');
-        }
-
-        res.redirect('/login');
-
+                console.log('user created');
+                res.redirect('/login');
+            }
+        })
+        .catch((err)=>next(err));
         
     });
 
     app.get('/home',(req,res)=>{
-        res.render('home');
+
+        if (req.session.email) {
+            res.render('home');
+        }
+        
+    });
+
+    app.get('/logout',(req,res)=>{
+        
+        req.session.destroy(function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                res.redirect('/');
+            }
+        });
     })
 
    

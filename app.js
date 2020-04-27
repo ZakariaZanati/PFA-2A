@@ -1,19 +1,24 @@
 var mongoose = require('mongoose');
 var express = require('express');
+var session = require('express-session');
 var http = require('http');
 
-var app = express();
+var userController = require('./controllers/userController');
 
+
+var app = express();
 
 const hostname = 'localhost';
 const port = 3000;
 
 const url = 'mongodb://localhost:27017/pfa';
 
-var userController = require('./controllers/userController');
 
 app.set('view engine','ejs');
 app.use('/public',express.static('public'));
+
+
+app.use(session({secret: '0123456789'}));
 
 mongoose.connect(url).then((db)=>{
     console.log('Connected correctly to server');
