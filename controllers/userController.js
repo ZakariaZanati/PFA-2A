@@ -31,6 +31,7 @@ module.exports = function (app , mongoose) {
             if(user){
                 
                 req.session.email = req.body.email;
+                req.session.type = 'normal';
                 
                 console.log('user connecté');
                 res.redirect('/home');
@@ -40,6 +41,7 @@ module.exports = function (app , mongoose) {
                     if (medecin) {
 
                         req.session.email = req.body.email;
+                        req.session.type = 'medecin';
 
                         console.log('medecin connecté');
                         res.redirect('/home');
@@ -67,8 +69,9 @@ module.exports = function (app , mongoose) {
         User.findOne({email : data.email})
         .then((user)=>{
             if(user != null) {
+                res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
                 var err = new Error("L'émail "+ data.email + " exist déjà !");
-                err.status = 403;
+                err.status = 500;
                 next(err);
             }
             else{
@@ -130,6 +133,40 @@ module.exports = function (app , mongoose) {
                 res.redirect('/');
             }
         });
+    });
+
+    app.get('/medecin',(req,res)=>{
+        if (req.session.type === 'normal') {
+            Medecin.find({})
+            .then((medecins)=>{
+                res.render('medecin',{medecins : medecins});
+            });
+        }
+    })
+
+    app.post('/medecin',urlencodedParser,(req,res)=>{
+
+        if (req.session.type === 'normal') {
+            User.find({medecin})
+            .then((medecin)=>{
+                if (medecin != null) {
+                    var err = new Error("Vous disposez déjà d'un medecin ");
+                }
+                else{
+
+                    Medecin.findOneAndUpdate({email : req.body.medecin},{$push:{demandes : req.session.email}} )
+                }
+            })
+        }
+    });
+
+    app.get('/demande',(req,res)=>{
+        if (req.session.type === 'medecin') {
+            Medecin.find({demandes})
+            .then((demandes)=>{
+
+            })
+        }
     })
 
    

@@ -11,7 +11,17 @@ var medecinSchema = new Schema({
     ville: String,
     pays: String,
     password: String,
-    adresse_lieu_travail : String
+    adresse_lieu_travail : String,
+    utilisareurs : {
+        type : [String],
+        default : null
+    },
+
+    demandes : {
+        type : [String],
+        default : null
+    }
+
 
 })
 

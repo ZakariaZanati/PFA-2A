@@ -8,14 +8,15 @@
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <title>Register</title>
 </head>
-<body>
-    <div class="container">
 
+<body >
+    <div class="container">
+        
         <div class="registration-container">
 
             <form id="user-form" action="/registration" method="POST">
                 <h2>Creer votre compte !</h2>
-                <h5 style="margin: 10px auto ">Vous etes un médecin ? <a id="medecin-link" href="?user=medecin" >Cliquer ici</a></h1>
+                <h5 style="margin: 10px auto ">Vous etes un médecin ? <a id="medecin-link" href="?user=medecin" >Cliquez ici</a></h1>
                 <div class="input-div one ">
                     <div class="i">
                         <i class="fas fa-user-circle"></i>
@@ -121,7 +122,7 @@
 
             <form id="medecin-form" action="/registration" method="POST">
                 <h2>Creer votre compte !</h2>
-                <h5 style="margin: 10px auto ">Vous n'etes pas un médecin ? <a id="medecin-link" href="?user=normal" >Cliquer ici</a></h1>
+                <h5 style="margin: 10px auto ">Vous n'etes pas un médecin ? <a id="medecin-link" href="?user=normal" >Cliquez ici</a></h1>
                 <div class="input-div one ">
                     <div class="i">
                         <i class="fas fa-user-circle"></i>
@@ -220,7 +221,7 @@
             </div>
             <div class="sign-in" style="margin: 90px auto;">
                 <p >
-                    Vous avez déjà un compte ? <a href="/login">connecter-vous d'ici !</a>
+                    Vous avez déjà un compte ? <a href="/login">connectez-vous d'ici !</a>
                 </p>
             </div>
         </div>
@@ -258,7 +259,9 @@
 
             return true;
         }
-
+    
     </script>
+    
 </body>
+
 </html>

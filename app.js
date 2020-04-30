@@ -18,7 +18,11 @@ app.set('view engine','ejs');
 app.use('/public',express.static('public'));
 
 
-app.use(session({secret: '0123456789'}));
+app.use(session({
+    secret: '0123456789',
+    saveUninitialized : false,
+    resave : false
+}));
 
 mongoose.connect(url).then((db)=>{
     console.log('Connected correctly to server');
@@ -28,10 +32,6 @@ mongoose.connect(url).then((db)=>{
 
 userController(app,mongoose);
 
-app.use((req,res,next)=>{
-    req.statusCode = 200;
-    res.setHeader('Content-type','text/html');
- });
  
  const server = http.createServer(app);
  

@@ -14,6 +14,10 @@ var utilisateurSchema = new Schema({
     pays: String,
     password: String,
     groupeSanguin: String,
+    Medecin : {
+        type : String,
+        default : null
+    }
 
 })
 
