@@ -4,7 +4,8 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var medecinSchema = new Schema({
-    nom_complet: String,
+    nom: String,
+    prenom: String,
     sexe: String,
     telephone: String,
     email: String,
@@ -12,16 +13,14 @@ var medecinSchema = new Schema({
     pays: String,
     password: String,
     adresse_lieu_travail : String,
-    utilisareurs : {
-        type : [String],
-        default : null
+    utilisateurs : {
+        type: [String],
+        default: null
     },
-
-    demandes : {
-        type : [String],
-        default : null
+    demandes: {
+        type: [String],
+        default: null
     }
-
 
 })
 

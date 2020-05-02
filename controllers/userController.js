@@ -16,11 +16,21 @@ module.exports = function (app , mongoose) {
     }
 
     app.get('/',(req,res)=>{
-        res.render('login');
+        if(req.session.email) {
+            res.render('home');
+        }
+        else {
+            res.render('login');
+        }
     });
 
     app.get('/login',function(req,res){
-        res.render('login');
+        if(req.session.email) {
+            res.redirect('/home');
+        }
+        else {
+            res.redirect('/');
+        }
     });
     
     
@@ -29,10 +39,11 @@ module.exports = function (app , mongoose) {
 
         User.findOne({email : req.body.email , password : req.body.password},(err,user)=>{
             if(user){
-                
                 req.session.email = req.body.email;
+                req.session.nom = user.nom;
+                req.session.prenom = user.prenom;
+                req.session.userId = user._id;
                 req.session.type = 'normal';
-                
                 console.log('user connecté');
                 res.redirect('/home');
             }
@@ -77,7 +88,8 @@ module.exports = function (app , mongoose) {
             else{
                 if (type === 'normal') {
                     var user = new User({
-                        nom_complet : data.nomComplet,
+                        nom : data.nom,
+                        prenom : data.prenom,
                         sexe : data.gender,
                         telephone : data.telephone,
                         dateNaissance : data.dateNaissance,
@@ -94,7 +106,8 @@ module.exports = function (app , mongoose) {
                 }
                 else if(type === 'medecin'){
                     var medecin = new Medecin({
-                        nom_complet : data.nomComplet,
+                        nom : data.nom,
+                        prenom: data.prenom,
                         sexe: data.gender,
                         telephone: data.telephone,
                         email: data.email,
@@ -120,6 +133,10 @@ module.exports = function (app , mongoose) {
 
         if (req.session.email) {
             res.render('home');
+        }
+        else {
+            console.log("Not logged");
+            res.redirect('/login');
         }
         
     });

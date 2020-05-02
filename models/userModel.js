@@ -4,7 +4,8 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var utilisateurSchema = new Schema({
-    nom_complet: String,
+    nom: String,
+    prenom: String,
     sexe : String,
     telephone: String,
     dateNaissance: Date,
@@ -14,11 +15,10 @@ var utilisateurSchema = new Schema({
     pays: String,
     password: String,
     groupeSanguin: String,
-    Medecin : {
-        type : String,
-        default : null
+    Medecin: {
+        type: String,
+        default: null
     }
-
 })
 
 var utilisateur = mongoose.model('utilisateur', utilisateurSchema);
