@@ -52,6 +52,7 @@ module.exports = function (app , mongoose) {
                     if (medecin) {
 
                         req.session.email = req.body.email;
+                        req.session.medecinId = medecin._id;
                         req.session.type = 'medecin';
 
                         console.log('medecin connecté');

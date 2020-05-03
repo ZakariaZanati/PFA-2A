@@ -57,12 +57,64 @@ module.exports = function (app , mongoose) {
     })
 
 
-    app.get('/demande',(req,res)=>{
+    app.get('/demandes',(req,res)=>{
         if (req.session.type === 'medecin') {
-            Medecin.find({demandes})
-            .then((demandes)=>{
-
+            Medecin.findById(req.session.medecinId)
+            .populate('demandes')
+            .then((medecin)=>{
+                res.render('demandes',{demandes : medecin.demandes});
             })
+        }
+    })
+
+    app.get('/userProfile',(req,res)=>{
+        if (req.session.type === 'medecin') {
+            id = req.query.id
+            User.findById(id)
+            .then((user)=>{
+                res.render('userProfile',{user : user});
+            })
+        }
+    });
+
+    app.post('/userProfile',urlencodedParser,(req,res)=>{
+        if (req.session.type === 'medecin') {
+            userId = req.query.id;
+            action = req.query.action
+            console.log(action)
+            if (action === 'yes') {
+                Medecin.findById(req.session.medecinId)
+                .then((medecin)=>{
+                    medecin.utilisateurs.push(userId);
+                    medecin.demandes.pull(userId);
+                    medecin.save();
+                    User.findById(userId)
+                    .then((user)=>{
+                        user.medecin = req.session.medecinId;
+                        user.save();
+                        Medecin.find({})
+                        .then((medecins)=>{
+                            medecins.forEach((medecin)=>{
+                                var isInArray = medecin.demandes.some((user)=>{
+                                    return user.equals(userId);
+                                })
+                                if (isInArray) {
+                                    medecin.demandes.pull(userId);
+                                    medecin.save();
+                                }
+                            })
+                        })
+                    });
+                })
+            }
+            if (action === 'no') {
+                Medecin.findById(req.session.medecinId)
+                .then((medecin)=>{
+                    medecin.demandes.pull(userId)
+                    medecin.save();
+                })
+            }
+            res.redirect('demandes')
         }
     })
 

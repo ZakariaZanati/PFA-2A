@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="../public/css/style2.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <title>Profil</title>
+</head>
+<body>
+    <div class="wrapper">
+
+        <div class="navbar-wrapper">
+            <nav>
+                <ul>
+                    <li><a href="home">Home</a></li>
+                    <li><a href="">Profil</a></li>
+                    <li><a href="medecins">Medecin</a></li>
+                    <li><a href="newvalues">New values</a></li>
+                </ul>
+                <ul class="log-out">
+                    <li><a href="/logout">Log out</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content-wrapper">
+            
+            
+                
+                    Nom :
+                    <input type="text" value="<%= user.nom %>" readonly> <br>
+                    Prenom :
+                    <input type="text" value="<%= user.prenom %>" readonly> <br>
+                    Email :
+                    <input type="email" value="<%= user.email %>" readonly> <br>
+                    Telephone :
+                    <input type="tel" value="<%= user.telephone %>" readonly> <br>
+                    Ville :
+                    <input type="text" value="<%= user.ville %>" readonly> <br>
+                    Pays :
+                    <input type="text" value="<%= user.pays %>" readonly><br>
+                    Age :
+                    <input type="text" value="<%= user.age %>" readonly><br>
+                    <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
+                        <input type="submit" value="Accepter" >
+                    </form>
+                    <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
+                        <input type="submit" value="Rejeter" >
+                    </form>
+                    
+                
+            
+        </div>
+        
+
+    </div>
+    
+</body>
+</html>

@@ -27,6 +27,7 @@
                     <li><a href="home">Home</a></li>
                     <li><a href="">Profil</a></li>
                     <li><a href="medecins">Medecin</a></li>
+                    <li><a href="demandes">Demandes</a></li>
                     <li><a href="newvalues">New values</a></li>
                 </ul>
                 <ul class="log-out">
@@ -45,14 +46,14 @@
                     <th>Pays</th>
                     <th>Ville</th>
                 </tr>
-                <% medecins.forEach((medecin)=>{ %>
+                <% demandes.forEach((user)=>{ %>
                     <tr>
-                        <td><%= medecin.nom %></td>
-                        <td><%= medecin.prenom %></td>
-                        <td><%= medecin.email %></td>
-                        <td><%= medecin.pays %></td>
-                        <td><%= medecin.ville %></td>
-                        <td><a href='medecinProfile?id=<%= medecin._id %>' style="text-decoration: none; color: black;">Consulter</a></td>
+                        <td><%= user.nom %></td>
+                        <td><%= user.prenom %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.pays %></td>
+                        <td><%= user.ville %></td>
+                        <td><a href='userProfile?id=<%= user._id %>' style="text-decoration: none; color: black;">Consulter</a></td>
                     </tr>
                 <% }); %>
                 
