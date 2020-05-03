@@ -4,12 +4,14 @@ var session = require('express-session');
 var http = require('http');
 
 var userController = require('./controllers/userController');
+var newValuesController = require('./controllers/newValuesController');
+var relationsController = require('./controllers/relationsController');
 
 
 var app = express();
 
 const hostname = 'localhost';
-const port = 3000;
+const port = 4000;
 
 const url = 'mongodb://localhost:27017/pfa';
 
@@ -31,7 +33,8 @@ mongoose.connect(url).then((db)=>{
 });
 
 userController(app,mongoose);
-
+newValuesController(app,mongoose);
+relationsController(app,mongoose);
  
  const server = http.createServer(app);
  

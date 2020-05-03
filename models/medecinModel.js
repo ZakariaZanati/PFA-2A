@@ -13,14 +13,20 @@ var medecinSchema = new Schema({
     pays: String,
     password: String,
     adresse_lieu_travail : String,
-    utilisateurs : {
-        type: [String],
-        default: null
-    },
-    demandes: {
-        type: [String],
-        default: null
-    }
+    utilisateurs : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "utilisateur",
+            default : null
+        } 
+    ],
+    demandes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "utilisateur",
+            default : null
+        } 
+    ]
 
 })
 

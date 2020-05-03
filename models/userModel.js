@@ -15,9 +15,10 @@ var utilisateurSchema = new Schema({
     pays: String,
     password: String,
     groupeSanguin: String,
-    Medecin: {
-        type: String,
-        default: null
+    medecin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'medecin',
+        default : null
     }
 })
 

@@ -114,7 +114,7 @@ module.exports = function (app , mongoose) {
                         ville: data.ville,
                         pays: data.pays,
                         password: data.password,
-                        adresse_lieu_travail : data.grpsang
+                        adresse_lieu_travail : data.adresse
                     })
         
                     Medecin.create(medecin);
@@ -151,40 +151,6 @@ module.exports = function (app , mongoose) {
             }
         });
     });
-
-    app.get('/medecin',(req,res)=>{
-        if (req.session.type === 'normal') {
-            Medecin.find({})
-            .then((medecins)=>{
-                res.render('medecin',{medecins : medecins});
-            });
-        }
-    })
-
-    app.post('/medecin',urlencodedParser,(req,res)=>{
-
-        if (req.session.type === 'normal') {
-            User.find({medecin})
-            .then((medecin)=>{
-                if (medecin != null) {
-                    var err = new Error("Vous disposez déjà d'un medecin ");
-                }
-                else{
-
-                    Medecin.findOneAndUpdate({email : req.body.medecin},{$push:{demandes : req.session.email}} )
-                }
-            })
-        }
-    });
-
-    app.get('/demande',(req,res)=>{
-        if (req.session.type === 'medecin') {
-            Medecin.find({demandes})
-            .then((demandes)=>{
-
-            })
-        }
-    })
 
    
 }
