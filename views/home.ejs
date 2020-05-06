@@ -14,11 +14,14 @@
         <div class="navbar-wrapper">
             <nav>
                 <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="">Profil</a></li>
-                    <li><a href="medecins">Medecins</a></li>
-                    <li><a href="demandes">Demandes</a></li>
-                    <li><a href="newvalues">New values</a></li>
+                    <li><a href="home?user=<%=userType%>">Home</a></li>
+                    <li><a id="medecins" href="medecins">Medecins</a></li>
+                    <li><a id="demandes" href="demandes">Demandes</a></li>
+                    <li><a id="patients" href="patients">Patients</a></li>
+                    <li><a id="patientValuer" href="patientValues">Prelevements</a></li>
+                    <li><a id="myProfile" href="myProfileUser">My profile</a></li>
+                    <li><a id="seuils" href="seuils">Seuils</a></li>
+                    <li><a id="newValues" href="newvalues">New values</a></li>
                 </ul>
                 <ul class="log-out">
                     <li><a href="/logout">Log out</a></li>
@@ -26,14 +29,30 @@
             </nav>
         </div>
 
-        <div class="content-wrapper">
-            
-            
-        </div>
-        
+    
 
     </div>
     <script type="text/javascript" src="../public/js/main.js"></script>
-    
+    <script type="text/javascript">
+       
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var param = url.searchParams.get("user");
+        var _newValues = document.getElementById('newValues');
+        var _medecins = document.getElementById('medecins');
+        var _demandes = document.getElementById('demandes');
+        if(param === "normal" || param === null){
+            _newValues.style.display = "block";
+            _medecins.style.display = "block";
+            _demandes.style.display = "none";
+        }
+
+        if(param === "medecin"){
+            _newValues.style.display = "none";
+            _medecins.style.display = "none";
+            _demandes.style.display = "block";
+        }
+     
+ </script>
 </body>
 </html>

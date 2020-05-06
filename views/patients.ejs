@@ -25,8 +25,8 @@
             <nav>
                 <ul>
                     <li><a href="home">Home</a></li>
-                    <li><a id="demandes" href="demandes">Demandes</a></li>
-                    <li><a id="patients" href="patients">Demandes</a></li>
+                    <li><a id="medecins" href="medecins">Medecins</a></li>
+                    <li><a id="newValues" href="newvalues">New values</a></li>
                 </ul>
                 <ul class="log-out">
                     <li><a href="/logout">Log out</a></li>
@@ -44,14 +44,15 @@
                     <th>Pays</th>
                     <th>Ville</th>
                 </tr>
-                <% demandes.forEach((user)=>{ %>
+                <% patients.forEach((patient)=>{ %>
                     <tr>
-                        <td><%= user.nom %></td>
-                        <td><%= user.prenom %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.pays %></td>
-                        <td><%= user.ville %></td>
-                        <td><a href='userProfile?id=<%= user._id %>' style="text-decoration: none; color: black;">Consulter</a></td>
+                        <td><%= patient.nom %></td>
+                        <td><%= patient.prenom %></td>
+                        <td><%= patient.email %></td>
+                        <td><%= patient.pays %></td>
+                        <td><%= patient.ville %></td>
+                        <td><a href='userProfile?id=<%= patient._id %>' style="text-decoration: none; color: black;">Profile</a></td>
+                        <td><a href='patientValues?id=<%= patient._id %>' style="text-decoration: none; color: black;">Prelevement</a></td>
                     </tr>
                 <% }); %>
                 
@@ -60,6 +61,6 @@
         
 
     </div>
-   
+    
 </body>
 </html>

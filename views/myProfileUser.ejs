@@ -40,24 +40,24 @@
                     <input type="text" value="<%= user.ville %>" readonly> <br>
                     Pays :
                     <input type="text" value="<%= user.pays %>" readonly><br>
+                    Date naissance :
+                    <input type="text" value="<%= user.dateNaissance %>" readonly><br>
                     Age :
                     <input type="text" value="<%= user.age %>" readonly><br>
+                    Sexe :
+                    <input type="text" value="<%= user.sexe %>" readonly><br>
+                    Groupe sanguin:
+                    <input type="text" value="<%= user.groupeSanguin %>" readonly><br>
+                    Medecin :
+                    <% if(user.medecin != null) { %>
+                    <a href='medecinProfile?id=<%= user.medecin.id %>' style="text-decoration: none; color: black; width: fit-content;"><%= user.medecin.nom %> <%= user.medecin.prenom %></a>
+                    <%}%><br>
                     Maladies:
                     <% user.maladies.forEach((maladie) => { %>
                         Nom de la maladie : <input type="text" value="<%= maladie%>" readonly><br>
                     <%})%>
-                    <% if(estPatient == "no") {%>
-                    <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
-                        <input type="submit" value="Accepter" >
-                    </form>
-                    <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
-                        <input type="submit" value="Rejeter" >
-                    </form>
-                    <%} else { %>
-                    <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
-                        <input type="submit" value="Fin contrat" >
-                    </form>
-                    <%}%>
+    
+                
                 
             
         </div>

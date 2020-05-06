@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="../public/css/style2.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <title>Profil</title>
+</head>
+<body>
+    <div class="wrapper">
+
+        <div class="navbar-wrapper">
+            <nav>
+                <ul>
+                    <li><a href="home?user=<%=userType%>">Home</a></li>
+                    <li><a id="medecins" href="medecins">Medecins</a></li>
+                    <li><a id="demandes" href="demandes">Demandes</a></li>
+                    <li><a id="patients" href="patients">Patients</a></li>
+                    <li><a id="patientValuer" href="patientValues">Prelevements</a></li>
+                    <li><a id="myProfile" href="myProfileUser">My profile</a></li>
+                    <li><a id="seuils" href="seuils">Seuils</a></li>
+                    <li><a id="newValues" href="newvalues">New values</a></li>
+                </ul>
+                <ul class="log-out">
+                    <li><a href="/logout">Log out</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div>
+                <% prelevements.forEach((prelevement)=>{ %>
+                    
+                    <h4>Date : <%= prelevement.date %></h4>
+                    <h6>--------------------------------------</h6>
+                    <h5>Prelevements : </h5>
+                    <h6><strong>Temperatures:</strong></h6>
+                    <% prelevement.temperature.forEach((temperature) => { %>
+                        <h6>Temps : <%= temperature.temps%></h6>
+                        <h6>Valeur : <%= temperature.valeur%></h6>
+                        <h6>--------------------------------------</h6>
+                    <% }); %>
+                    <h6>--------------------------------------</h6>
+                    <h6><strong>Tensions Systolique:</strong></h6>
+                    <% prelevement.tensionSystolique.forEach((tension) => { %>
+                        <h6>Temps : <%= tension.temps%></h6>
+                        <h6>Valeur : <%= tension.valeur%></h6>
+                        <h6>--------------------------------------</h6>
+                    <% }); %>
+                    <h6>--------------------------------------</h6>
+                    <h6><strong>Tensions Diastolique:</strong></h6>
+                    <% prelevement.tensionDiastolique.forEach((tension) => { %>
+                        <h6>Temps : <%= tension.temps%></h6>
+                        <h6>Valeur : <%= tension.valeur%></h6>
+                        <h6>--------------------------------------</h6>
+                    <% }); %>
+                    <h6>--------------------------------------</h6>
+                    <h6><strong>Taux d'oxygène:</strong></h6>
+                    <% prelevement.tauxOxygen.forEach((tauxOxygen) => { %>
+                        <h6>Temps : <%= tauxOxygen.temps%></h6>
+                        <h6>Valeur : <%= tauxOxygen.valeur%></h6>
+                        <h6>--------------------------------------</h6>
+                    <% }); %>
+                    <h6>--------------------------------------</h6>
+                    <h6><strong>Taux de glucose:</strong></h6>
+                    <% prelevement.tauxGlucose.forEach((tauxGlucose) => { %>
+                        <h6>Temps : <%= tauxGlucose.temps%></h6>
+                        <h6>Valeur : <%= tauxGlucose.valeur%></h6>
+                        <h6>--------------------------------------</h6>
+                    <% }); %>
+                    <h6>--------------------------------------</h6>
+                    <h6><strong>Les moyennes:</strong></h6>
+                    <% prelevement.moyennesJour.forEach((moyenne, index)=>{ %>
+                            <% if(index == 0) {%>
+                                <h6>Temperature moyenne du jour : </h6>
+                            <% } %>
+                            <% if(index == 1) {%>
+                                <h6>Tension Systolique moyenne du jour : </h6>
+                            <% } %>
+                            <% if(index == 2) {%>
+                                <h6>Tension Diastolique moyenne du jour : </h6>
+                            <% } %>
+                            <% if(index == 3) {%>
+                                <h6>Taux moyen d'oxygène du jour</6>
+                            <% } %>
+                            <% if(index == 4) {%>
+                                <h6>Taux moyen du glucose du jour</h6>
+                            <% } %>    
+                            <h6><%= moyenne%></h6>
+                        <% }); %>
+                        <h6>--------------------------------------</h6>
+                        <h6>--------------------------------------</h6>
+                        <h6>--------------------------------------</h6>
+                <% }); %>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="../public/js/main.js"></script>
+    <script type="text/javascript">
+       
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var param = url.searchParams.get("user");
+        var _newValues = document.getElementById('newValues');
+        var _medecins = document.getElementById('medecins');
+        var _demandes = document.getElementById('demandes');
+        if(param === "normal" || param === null){
+            _newValues.style.display = "block";
+            _medecins.style.display = "block";
+            _demandes.style.display = "none";
+        }
+
+        if(param === "medecin"){
+            _newValues.style.display = "none";
+            _medecins.style.display = "none";
+            _demandes.style.display = "block";
+        }
+     
+ </script>
+</body>
+</html>

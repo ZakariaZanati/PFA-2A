@@ -9,8 +9,9 @@
             <nav>
                 <ul>
                     <li><a href="home">Home</a></li>
-                    <li><a href="">Profil</a></li>
-                    <li><a href="newvalues">New values</a></li>
+                    <li><a id="medecins" href="medecins">Medecins</a></li>
+                    <li><a id="newValues" href="newvalues">New values</a></li>
+                    
                 </ul>
                 <ul class="log-out">
                     <li><a href="/logout">Log out</a></li>
@@ -18,18 +19,48 @@
             </nav>
         </div>
         <form id="formValues" method="POST">
-            <label for="temperature">Température</label>
-            <input name="temperature" placeholder="Température" required>
-            <label for="tension">Tension</label>
-            <input name="tension" placeholder="Tension" required>
-            <label for="tauxOxygene">Taux oxygène</label>
-            <input name="tauxOxygene" placeholder="Taux oxygène" required>
-            <label for="tauxGlucose">Taux glucose</label>
-            <input name="tauxGlucose" placeholder="Taux glucose" required>
+            <div>
+                <label for="temperature">Température</label>
+                <input name="temperature" placeholder="Température" required>
+            </div>
+            <div>
+                <label for="tensionSystolique">Tension</label>
+                <input name="tensionSystolique" placeholder="Tension systolique" required>
+                <label for="tensionDiastolique">Tension</label>
+                <input name="tensionDiastolique" placeholder="Tension diastolique" required>
+            </div>
+            <div>
+                <label for="tauxOxygene">Taux oxygène</label>
+                <input name="tauxOxygene" placeholder="Taux oxygène" required>
+            </div>
+            <div>
+                <label for="tauxGlucose">Taux glucose</label>
+                <input name="tauxGlucose" placeholder="Taux glucose" required>
+            </div>
             <input type="submit" value="Valider">
         </form>
         <script type="text/javascript">
             
+        </script>
+
+        <script type="text/javascript">
+            
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var param = url.searchParams.get("user");
+            var _newValues = document.getElementById('newValues');
+            var _medecins = document.getElementById('medecins');
+            
+            if(param === "normal" || param === null){
+                _newValues.style.display = "block";
+                _medecins.style.display = "block";
+            }
+
+            if(param === "medecin"){
+                _newValues.style.display = "none";
+                _medecins.style.display = "none";
+            }
+        
         </script>
     </body>
 </html>

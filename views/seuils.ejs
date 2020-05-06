@@ -38,20 +38,23 @@
             
             <table>
                 <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Email</th>
-                    <th>Pays</th>
-                    <th>Ville</th>
+                    <th>Nom de la mesure</th>
+                    <th>Type</th>
+                    <th>Sous type</th>
+                    <th>Valeur min</th>
+                    <th>Valeur max</th>
+                    <th>Unité</th>
+                    <th>Abréviation de l'unité</th>
                 </tr>
-                <% demandes.forEach((user)=>{ %>
+                <% seuils.forEach((seuil)=>{ %>
                     <tr>
-                        <td><%= user.nom %></td>
-                        <td><%= user.prenom %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.pays %></td>
-                        <td><%= user.ville %></td>
-                        <td><a href='userProfile?id=<%= user._id %>' style="text-decoration: none; color: black;">Consulter</a></td>
+                        <td><%= seuil.nom %></td>
+                        <td><%= seuil.type %></td>
+                        <td><%= seuil.sousType %></td>
+                        <td><%= seuil.valMin %></td>
+                        <td><%= seuil.valMax %></td>
+                        <td><%= seuil.unite %></td>
+                        <td><%= seuil.abreviation %></td>
                     </tr>
                 <% }); %>
                 
