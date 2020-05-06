@@ -8,12 +8,19 @@ var oneValueSchema = new Schema({
 })
 
 var valuesSchema = new Schema({
-    id: String,
+    utilisateur :
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "utilisateur",
+            default : null
+        },
     date: Date,
     temperature: [oneValueSchema],
-    tension: [oneValueSchema],
+    tensionSystolique: [oneValueSchema],
+    tensionDiastolique: [oneValueSchema],
     tauxOxygen: [oneValueSchema],
     tauxGlucose: [oneValueSchema],
+    moyennesJour: [Number],
 })
 
 var prelevements = mongoose.model('prelevements', valuesSchema)
