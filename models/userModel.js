@@ -15,6 +15,7 @@ var utilisateurSchema = new Schema({
     pays: String,
     password: String,
     groupeSanguin: String,
+    maladies: [String],
     medecin: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'medecin',
