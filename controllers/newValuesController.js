@@ -1,6 +1,7 @@
 module.exports = (app , mongoose) => {
 
     const Prelevements = require('../models/valuesModel');
+    var url = require('url');
     const bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
@@ -16,8 +17,17 @@ module.exports = (app , mongoose) => {
     }
 
     app.get('/newvalues', (req, res) => {
-        if(req.session.email) {
+        console.log("new values from new values controller");
+        if(req.session.type === 'normal') {
             res.render('newvalues');
+        }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
         }
         else {
             res.redirect('/')
@@ -25,33 +35,73 @@ module.exports = (app , mongoose) => {
         
     })
 
+    
     app.post('/newvalues', urlencodedParser, (req, res) => {
-        var docId = req.session.userId;
+        var userId = req.session.userId;
         var currentDate = getFormatDate();
         var _date = currentDate[0];
         var _time = currentDate[1];
-        Prelevements.findOne({id: docId, date: _date}, (err, values) => {
+        Prelevements.findOne({utilisateur: userId, date: _date}, (err, values) => {
             if(values) {
                 var length = values.temperature.length;
                 if(length == 4) {
                     console.log("You cannot add more, Max = 4 is reached ")
                 }   
                 else {
-                    values.temperature.push({temps: _time, valeur: req.body.temperature});
-                    values.tension.push({temps: _time, valeur: req.body.tension});
-                    values.tauxOxygen.push({temps: _time, valeur: req.body.tauxOxygene});
-                    values.tauxGlucose.push({temps: _time, valeur: req.body.tauxGlucose});
+                    values.temperature.push({
+                        $each: [{temps: _time, valeur: req.body.temperature}],
+                        $position: 0});
+                    values.tensionSystolique.push({
+                        $each: [{temps: _time, valeur: req.body.tensionSystolique}],
+                        $position: 0}); 
+                    values.tensionDiastolique.push({
+                        $each: [{temps: _time, valeur: req.body.tensionDiastolique}],
+                        $position: 0});  
+                    values.tauxOxygen.push({
+                        $each: [{temps: _time, valeur: req.body.tauxOxygene}],
+                        $position: 0});
+                    values.tauxGlucose.push({
+                        $each: [{temps: _time, valeur: req.body.tauxGlucose}],
+                        $position: 0});  
+        
+                    for (i = 0; i < values.moyennesJour.length; i++) {
+                        var newMoyenne = values.moyennesJour[0] * length;
+                        //values.moyennesJour.remove(values.moyennesJour[0]);
+                        values.moyennesJour.shift();
+                        switch(i) {
+                            case 0:
+                                newMoyenne += parseFloat(req.body.temperature);
+                                break;
+                            case 1:
+                                newMoyenne += parseFloat(req.body.tensionSystolique);
+                                break;
+                            case 2:
+                                newMoyenne += parseFloat(req.body.tensionDiastolique);
+                                break;    
+                            case 3:
+                                newMoyenne += parseFloat(req.body.tauxOxygene);
+                                break;
+                            case 4:
+                                newMoyenne += parseFloat(req.body.tauxGlucose);
+                                break;
+                        }
+                        newMoyenne = newMoyenne / (length + 1);
+                        values.moyennesJour.push(newMoyenne);
+                    }
                     values.save();
                 } 
             }
             else {
+                console.log(req.body.tensionSystolique + " " + req.body.tensionDiastolique);
                 var _values = new Prelevements({
-                    id: docId,
+                    utilisateur: userId,
                     date: _date,
                     temperature: [{temps: _time, valeur: req.body.temperature}],
-                    tension: [{temps: _time, valeur: req.body.tension}],
+                    tensionSystolique: [{temps: _time, valeur: req.body.tensionSystolique}],
+                    tensionDiastolique: [{temps: _time, valeur: req.body.tensionDiastolique}],
                     tauxOxygen: [{temps: _time, valeur: req.body.tauxOxygene}],
-                    tauxGlucose: [{temps: _time, valeur: req.body.tauxGlucose}]
+                    tauxGlucose: [{temps: _time, valeur: req.body.tauxGlucose}],
+                    moyennesJour: [req.body.temperature, req.body.tensionSystolique, req.body.tensionDiastolique, req.body.tauxOxygene, req.body.tauxGlucose]
                 });
 
                 Prelevements.create(_values);
