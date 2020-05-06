@@ -2,6 +2,7 @@ module.exports = function (app , mongoose) {
 
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
+    var url = require('url');
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
@@ -16,8 +17,21 @@ module.exports = function (app , mongoose) {
     }
 
     app.get('/',(req,res)=>{
-        if(req.session.email) {
-            res.render('home');
+        if(req.session.type === 'normal') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
         }
         else {
             res.render('login');
@@ -25,11 +39,24 @@ module.exports = function (app , mongoose) {
     });
 
     app.get('/login',function(req,res){
-        if(req.session.email) {
-            res.redirect('/home');
+        if(req.session.type === 'normal') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
         }
         else {
-            res.redirect('/');
+            res.render('login');
         }
     });
     
@@ -45,18 +72,30 @@ module.exports = function (app , mongoose) {
                 req.session.userId = user._id;
                 req.session.type = 'normal';
                 console.log('user connecté');
-                res.redirect('/home');
+                res.redirect(url.format({
+                    pathname:"/home",
+                    query: {
+                        "user": req.session.type
+                    }
+                }));
             }
             else{
                 Medecin.findOne({email : req.body.email , password : req.body.password},(err,medecin)=>{
                     if (medecin) {
 
                         req.session.email = req.body.email;
-                        req.session.medecinId = medecin._id;
+                        req.session.nom = medecin.nom;
+                        req.session.prenom = medecin.prenom;
+                        req.session.userId = medecin._id;
                         req.session.type = 'medecin';
 
                         console.log('medecin connecté');
-                        res.redirect('/home');
+                        res.redirect(url.format({
+                            pathname:"/home",
+                            query: {
+                                "user": req.session.type
+                            }
+                        }));
                     } else {
                         console.log('echec de connexion');
                         res.render('login',{err : 'Email ou mot de passe incorrecte'});
@@ -88,22 +127,40 @@ module.exports = function (app , mongoose) {
             }
             else{
                 if (type === 'normal') {
-                    var user = new User({
-                        nom : data.nom,
-                        prenom : data.prenom,
-                        sexe : data.gender,
-                        telephone : data.telephone,
-                        dateNaissance : data.dateNaissance,
-                        email : data.email,
-                        age : get_age(data.dateNaissance),
-                        ville : data.ville,
-                        pays : data.pays,
-                        password : data.password,
-                        groupeSanguin : data.grpsang
-                    });
-                    User.create(user);
-                    
-                    
+                    if(data.diabete === "none"){
+                        var user = new User({
+                            nom : data.nom,
+                            prenom : data.prenom,
+                            sexe : data.gender,
+                            telephone : data.telephone,
+                            dateNaissance : data.dateNaissance,
+                            email : data.email,
+                            age : get_age(data.dateNaissance),
+                            ville : data.ville,
+                            pays : data.pays,
+                            password : data.password,
+                            groupeSanguin : data.grpsang,
+                        });
+                        User.create(user);
+                    }
+                    else {
+                        var user = new User({
+                            nom : data.nom,
+                            prenom : data.prenom,
+                            sexe : data.gender,
+                            telephone : data.telephone,
+                            dateNaissance : data.dateNaissance,
+                            email : data.email,
+                            age : get_age(data.dateNaissance),
+                            ville : data.ville,
+                            pays : data.pays,
+                            password : data.password,
+                            groupeSanguin : data.grpsang,
+                            maladies: [data.diabete]
+                        });
+                        User.create(user);
+                    }
+
                 }
                 else if(type === 'medecin'){
                     var medecin = new Medecin({
@@ -130,16 +187,25 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.get('/home',(req,res)=>{
-
-        if (req.session.email) {
-            res.render('home');
+    app.get('/myProfileUser', (req, res) => {
+        if(req.session.type === 'normal') {
+            User.findById(req.session.userId)
+            .populate('medecin')
+            .then((user) => {
+                res.render('myProfileUser', {user: user})
+            })
+        }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
         }
         else {
-            console.log("Not logged");
-            res.redirect('/login');
+            res.redirect('/');
         }
-        
     });
 
     app.get('/logout',(req,res)=>{
@@ -152,6 +218,5 @@ module.exports = function (app , mongoose) {
             }
         });
     });
-
    
 }
