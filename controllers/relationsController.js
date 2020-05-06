@@ -2,6 +2,7 @@ module.exports = function (app , mongoose) {
 
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
+    var url = require('url');
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
@@ -15,6 +16,18 @@ module.exports = function (app , mongoose) {
                 res.render('medecins',{medecins : medecins});
             });
         }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else {
+            console.log('not logged')
+            res.redirect('/login');
+        }
     });
 
     app.get('/medecinProfile',(req,res)=>{
@@ -22,8 +35,20 @@ module.exports = function (app , mongoose) {
             id = req.query.id;
             Medecin.findById(id)
             .then((medecin)=>{
-            res.render('medecinProfile',{medecin : medecin});
-        })
+                res.render('medecinProfile',{medecin : medecin});
+            })
+        }
+        else if(req.session.type === 'medecin') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else {
+            console.log('not logged')
+            res.redirect('/login');
         }
         
     });
@@ -59,47 +84,82 @@ module.exports = function (app , mongoose) {
 
     app.get('/demandes',(req,res)=>{
         if (req.session.type === 'medecin') {
-            Medecin.findById(req.session.medecinId)
+            Medecin.findById(req.session.userId)
             .populate('demandes')
             .then((medecin)=>{
                 res.render('demandes',{demandes : medecin.demandes});
             })
         }
+        else if(req.session.type === 'normal') {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else {
+            console.log('not logged');
+            res.redirect('/login');
+        }
     })
 
     app.get('/userProfile',(req,res)=>{
         if (req.session.type === 'medecin') {
+            console.log("hELLO");
             id = req.query.id
             User.findById(id)
             .then((user)=>{
-                res.render('userProfile',{user : user});
+                Medecin.findById(req.session.userId)
+                .then((medecin) => {
+                    var isInArray = medecin.utilisateurs.some((user)=>{
+                        return user.equals(id);
+                    })
+                    if(isInArray) {
+                        res.render('userProfile',{user : user, estPatient: "yes"});
+                    }
+                    else {
+                        res.render('userProfile',{user : user, estPatient: "no"});
+                    }
+                });
             })
+        }
+        else {
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
         }
     });
 
     app.post('/userProfile',urlencodedParser,(req,res)=>{
         if (req.session.type === 'medecin') {
-            userId = req.query.id;
+            patientId = req.query.id;
             action = req.query.action
             console.log(action)
             if (action === 'yes') {
-                Medecin.findById(req.session.medecinId)
+                Medecin.findById(req.session.userId)
                 .then((medecin)=>{
-                    medecin.utilisateurs.push(userId);
-                    medecin.demandes.pull(userId);
+                    medecin.utilisateurs.push(patientId);
+                    medecin.demandes.pull(patientId);
                     medecin.save();
-                    User.findById(userId)
+                    User.findById(patientId)
                     .then((user)=>{
-                        user.medecin = req.session.medecinId;
+                        console.log("HI HERE");
+                        console.log(user.nom);
+                        user.medecin = req.session.userId;
                         user.save();
+                        console.log("User medecin:" + user.medecin);
                         Medecin.find({})
                         .then((medecins)=>{
                             medecins.forEach((medecin)=>{
                                 var isInArray = medecin.demandes.some((user)=>{
-                                    return user.equals(userId);
+                                    return user.equals(patientId);
                                 })
                                 if (isInArray) {
-                                    medecin.demandes.pull(userId);
+                                    medecin.demandes.pull(patientId);
                                     medecin.save();
                                 }
                             })
@@ -107,15 +167,49 @@ module.exports = function (app , mongoose) {
                     });
                 })
             }
-            if (action === 'no') {
-                Medecin.findById(req.session.medecinId)
+            else if (action === 'no') {
+                Medecin.findById(req.session.userId)
                 .then((medecin)=>{
-                    medecin.demandes.pull(userId)
+                    medecin.demandes.pull(patientId)
                     medecin.save();
+                })
+            }
+            else if(action === 'end') {
+                Medecin.findById(req.session.userId)
+                .then((medecin)=>{
+                    medecin.utilisateurs.pull(patientId);
+                    medecin.save();
+                    User.findById(patientId)
+                    .then((user)=>{
+                        user.medecin = undefined;
+                        user.save();
+                    });
                 })
             }
             res.redirect('demandes')
         }
     })
 
+    app.get('/patients', (req, res) => {
+        if(req.session.type === 'normal'){
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else if(req.session.type === 'medecin') {
+            Medecin.findById(req.session.userId)
+            .populate('utilisateurs')
+            .then((medecin) => {
+                res.render('patients', {patients: medecin.utilisateurs});
+            })
+        }
+        else {
+            res.redirect('/');
+        }
+    })
+
 }
+
