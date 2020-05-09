@@ -25,8 +25,8 @@
             <nav>
                 <ul>
                     <li><a href="home">Home</a></li>
-                    <li><a id="medecins" href="medecins">Medecins</a></li>
-                    <li><a id="newValues" href="newvalues">New values</a></li>
+                    <li><a href="medecins">Medecin</a></li>
+                    <li><a href="newvalues">New values</a></li>
                 </ul>
                 <ul class="log-out">
                     <li><a href="/logout">Log out</a></li>
@@ -35,32 +35,27 @@
         </div>
 
         <div class="content-wrapper">
-            
             <table>
                 <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Email</th>
-                    <th>Pays</th>
-                    <th>Ville</th>
+                    <th>Date</th>
+                    <th>Temps</th>
+                    <th>Mesure</th>
+                    <th>Alert</th>
+                    <th>Difference</th>
                 </tr>
-                <% patients.forEach((patient)=>{ %>
-                    <tr>
-                        <td><%= patient.nom %></td>
-                        <td><%= patient.prenom %></td>
-                        <td><%= patient.email %></td>
-                        <td><%= patient.pays %></td>
-                        <td><%= patient.ville %></td>
-                        <td><a href='userProfile?id=<%= patient._id %>' style="text-decoration: none; color: black;">Profile</a></td>
-                        <td><a href='patientValues?id=<%= patient._id %>' style="text-decoration: none; color: black;">Prelevement</a></td>
-                        <td><a href='userAlerts?id=<%= patient._id %>' style="text-decoration: none; color: black;">Alerts</a></td>
-                    </tr>
-                <% }); %>
+                    <% alerts.forEach((alert)=>{ %>
+                        <tr>
+                            <td><%= alert.date %></td>
+                            <td><%= alert.temps %></td>
+                            <td><%= alert.mesure %></td>
+                            <td><%= alert.text %></td>
+                            <td><%= alert.difference %></td>
+                        </tr>
+                    <% }); %>
                 
             </table>
         </div>
         
-
     </div>
     
 </body>

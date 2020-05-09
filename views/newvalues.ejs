@@ -26,6 +26,7 @@
             <div>
                 <label for="tensionSystolique">Tension</label>
                 <input name="tensionSystolique" placeholder="Tension systolique" required>
+                /
                 <label for="tensionDiastolique">Tension</label>
                 <input name="tensionDiastolique" placeholder="Tension diastolique" required>
             </div>
@@ -36,6 +37,16 @@
             <div>
                 <label for="tauxGlucose">Taux glucose</label>
                 <input name="tauxGlucose" placeholder="Taux glucose" required>
+                <div class="radio" style="display: flex;">
+                    <div >
+                        <input class="typeTest" type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun" >
+                        <label for="typeTest" style="color: #999;" >A jeun</label>
+                    </div>
+                    <div style="margin-left: 50px;">
+                        <input class="typeTest" type="radio" name="typeTest" id="postPrandial" value="postPrandial">
+                        <label for="typeTest" style="color: #999" >Post prandial</label>
+                    </div>
+                </div>
             </div>
             <input type="submit" value="Valider">
         </form>

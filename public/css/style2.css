@@ -44,12 +44,11 @@ a:hover{
 .content-wrapper{
     max-width: 80%;
     margin: 0 auto;
+}  
+
+#formValues {
+    margin-top: 20px;
 }
-
-
-
-
-  
 
 @media screen and (min-width : 600px){
 

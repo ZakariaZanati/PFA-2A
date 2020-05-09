@@ -208,6 +208,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
+
     app.get('/logout',(req,res)=>{
         
         req.session.destroy(function(err) {

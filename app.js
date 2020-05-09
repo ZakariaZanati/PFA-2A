@@ -15,7 +15,7 @@ var userController = require('./controllers/userController');
 var newValuesController = require("./controllers/newValuesController");
 var prelevementsController = require("./controllers/prelevementsController");
 var relationsController = require('./controllers/relationsController');
-var seuisController = require('./controllers/seuilsController');
+var seuilsController = require('./controllers/seuilsController');
 
 app.set('view engine','ejs');
 app.use('/public',express.static('public'));
@@ -32,11 +32,11 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }).then(
     console.log(err);
 });
 
+seuilsController(app, mongoose);
 userController(app, mongoose);
 newValuesController(app, mongoose);
 prelevementsController(app, mongoose);
 relationsController(app,mongoose);
-seuisController(app, mongoose);
 
  const server = http.createServer(app);
  

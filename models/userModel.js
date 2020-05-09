@@ -16,6 +16,13 @@ var utilisateurSchema = new Schema({
     password: String,
     groupeSanguin: String,
     maladies: [String],
+    alerts: [{
+        date: Date,
+        temps: String,
+        mesure: String,
+        text: String,
+        difference: Number
+    }],
     medecin: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'medecin',

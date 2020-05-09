@@ -209,7 +209,7 @@ module.exports = function (app , mongoose) {
         else {
             res.redirect('/');
         }
-    })
+    });
 
 }
 

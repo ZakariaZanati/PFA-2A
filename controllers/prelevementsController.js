@@ -5,7 +5,7 @@ module.exports = function (app , mongoose) {
 
     app.get('/patientValues', (req,res)=>{
         if (req.session.type === 'normal') {
-            if(req.query.id != req.session.userId) {
+            if(req.query.id != req.session.userId && req.query.id != null) {
                 res.render('home', {userType: req.session.type});
             }
             else {
@@ -44,6 +44,38 @@ module.exports = function (app , mongoose) {
             res.redirect('/login');
         }
         
+    });
+
+    app.get('/userAlerts', (req, res) => {
+        if(req.session.type === 'normal') {
+            User.findById(req.session.userId)
+            .then((user) => {
+                res.render('userAlerts', {alerts: user.alerts});
+            });
+            
+        }
+        else if(req.session.type === 'medecin') {
+            patientId = req.query.id;
+            User.findById(patientId)
+            .then((user) => {
+                if(user.medecin != null) {
+                    if(user.medecin == req.session.userId){
+                        res.render('userAlerts',{alerts : user.alerts, userType: req.session.type});
+                    }
+                    else {
+                        res.render('home', {userType: req.session.type});
+                    }
+                }
+                else {
+                    res.render('home', {userType: req.session.type});
+                }
+                
+            })
+            
+        }
+        else {
+            res.redirect('/');
+        }
     });
 
     app.get('/home', (req, res) => {
