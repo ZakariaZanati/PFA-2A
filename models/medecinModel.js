@@ -15,9 +15,16 @@ var medecinSchema = new Schema({
     adresse_lieu_travail : String,
     utilisateurs : [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "utilisateur",
-            default : null
+            utilisateur: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "utilisateur",
+                default : null
+            },
+            debutContrat: {
+                type: Date,
+                default: Date.now
+            },
+            finContrat: Date
         } 
     ],
     demandes: [
