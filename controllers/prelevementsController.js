@@ -1,6 +1,7 @@
 module.exports = function (app , mongoose) {
     const Prelevements = require('../models/valuesModel');
     const User = require('../models/userModel');
+    const Alert = require('../models/alertModel');
     var url = require('url');
 
     app.get('/patientValues', (req,res)=>{
@@ -48,10 +49,14 @@ module.exports = function (app , mongoose) {
 
     app.get('/userAlerts', (req, res) => {
         if(req.session.type === 'normal') {
-            User.findById(req.session.userId)
+            Alert.find({utilisateur: req.session.userId})
+            .then((alerts) => {
+                res.render('userAlerts', {alerts: alerts});
+            })
+            /*User.findById(req.session.userId)
             .then((user) => {
                 res.render('userAlerts', {alerts: user.alerts});
-            });
+            });*/
             
         }
         else if(req.session.type === 'medecin') {
@@ -60,7 +65,11 @@ module.exports = function (app , mongoose) {
             .then((user) => {
                 if(user.medecin != null) {
                     if(user.medecin == req.session.userId){
-                        res.render('userAlerts',{alerts : user.alerts, userType: req.session.type});
+                        Alert.find({utilisateur: patientId})
+                        .then((alerts) => {
+                            res.render('userAlerts', {alerts: alerts});
+                        })
+                        //res.render('userAlerts',{alerts : user.alerts, userType: req.session.type});
                     }
                     else {
                         res.render('home', {userType: req.session.type});
