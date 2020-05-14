@@ -26,7 +26,7 @@ app.use(session({
     resave : false
 }));
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }).then((db)=>{
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }).then((db)=>{
     console.log('Connected correctly to server');
 },(err)=>{
     console.log(err);
