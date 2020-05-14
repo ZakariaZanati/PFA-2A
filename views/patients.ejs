@@ -35,25 +35,59 @@
         </div>
 
         <div class="content-wrapper">
+
+                <div style="margin: 20px auto;" >
+                    <input class="patients" type="radio" checked="true" name="patients" id="current" value="current" onclick="getPatients()">
+                    <label for="current" style="color: #000;" >Patients actuels</label>
+                    <input class="patients" type="radio" name="patients" id="old" value="old" onclick="getPatients()">
+                    <label for="old" style="color: #000" >Anciens patients</label>
+                </div>
             
-            <table>
+            <table id="currentPatients">
                 <tr>
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Email</th>
                     <th>Pays</th>
                     <th>Ville</th>
+                    <th>Debut contrat</th>
                 </tr>
-                <% patients.forEach((patient)=>{ %>
+                <% currentPatients.forEach((patient)=>{ %>
                     <tr>
-                        <td><%= patient.nom %></td>
-                        <td><%= patient.prenom %></td>
-                        <td><%= patient.email %></td>
-                        <td><%= patient.pays %></td>
-                        <td><%= patient.ville %></td>
-                        <td><a href='userProfile?id=<%= patient._id %>' style="text-decoration: none; color: black;">Profile</a></td>
-                        <td><a href='patientValues?id=<%= patient._id %>' style="text-decoration: none; color: black;">Prelevement</a></td>
-                        <td><a href='userAlerts?id=<%= patient._id %>' style="text-decoration: none; color: black;">Alerts</a></td>
+                        <td><%= patient.utilisateur.nom %></td>
+                        <td><%= patient.utilisateur.prenom %></td>
+                        <td><%= patient.utilisateur.email %></td>
+                        <td><%= patient.utilisateur.pays %></td>
+                        <td><%= patient.utilisateur.ville %></td>
+                        <td><%= patient.debutContrat %></td>
+                        <td><a href='userProfile?id=<%= patient.utilisateur._id %>' style="text-decoration: none; color: black;">Profile</a></td>
+                        <td><a href='patientValues?id=<%= patient.utilisateur._id %>' style="text-decoration: none; color: black;">Prelevement</a></td>
+                        <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' style="text-decoration: none; color: black;">Alerts</a></td>
+                    </tr>
+                <% }); %>
+                
+            </table>
+
+            <table id="oldPatients" style="display: none;">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Pays</th>
+                    <th>Ville</th>
+                    <th>Debut contrat</th>
+                    <th>Fin contrat</th>
+                </tr>
+                <% oldPatients.forEach((patient)=>{ %>
+                    <tr>
+                        <td><%= patient.utilisateur.nom %></td>
+                        <td><%= patient.utilisateur.prenom %></td>
+                        <td><%= patient.utilisateur.email %></td>
+                        <td><%= patient.utilisateur.pays %></td>
+                        <td><%= patient.utilisateur.ville %></td>
+                        <td><%= patient.debutContrat %></td>
+                        <td><%= patient.finContrat %></td>
+                        <td><a href='userProfile?id=<%= patient.utilisateur._id %>' style="text-decoration: none; color: black;">Profile</a></td>
                     </tr>
                 <% }); %>
                 
@@ -62,6 +96,17 @@
         
 
     </div>
-    
+    <script type="text/javascript">
+        function getPatients() {
+            if(document.getElementById("current").checked) {
+                document.getElementById("currentPatients").style.display = "block";
+                document.getElementById("oldPatients").style.display = "none";
+            }
+            else {
+                document.getElementById("currentPatients").style.display = "none";
+                document.getElementById("oldPatients").style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>

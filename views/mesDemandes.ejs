@@ -44,6 +44,7 @@
                     <th>Pays</th>
                     <th>Ville</th>
                     <th>Type demande</th>
+                    <th>Statut</th>
                 </tr>
                 <% demandes.forEach((demande)=>{ %>
                     <tr>
@@ -53,7 +54,7 @@
                         <td><%= demande.user.pays %></td>
                         <td><%= demande.user.ville %></td>
                         <td><%= demande.type %></td>
-                        <td><a href='userProfile?id=<%= demande.user._id %>' style="text-decoration: none; color: black;">Consulter</a></td>
+                        <td></td>
                     </tr>
                 <% }); %>
                 

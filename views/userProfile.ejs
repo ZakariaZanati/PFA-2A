@@ -46,17 +46,30 @@
                     <% user.maladies.forEach((maladie) => { %>
                         Nom de la maladie : <input type="text" value="<%= maladie%>" readonly><br>
                     <%})%>
-                    <% if(estPatient == "no") {%>
-                    <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
-                        <input type="submit" value="Accepter" >
-                    </form>
-                    <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
-                        <input type="submit" value="Rejeter" >
-                    </form>
+                    <br>
+                    <br>
+                    <% if(!estPatient) {%>
+                        Demande de nouveau de contrat:
+                        <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
+                            <input type="submit" value="Accepter" >
+                        </form>
+                        <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
+                            <input type="submit" value="Rejeter" >
+                        </form>
                     <%} else { %>
-                    <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
-                        <input type="submit" value="Fin contrat" >
-                    </form>
+                        <% if(demandeFin) {%>
+                            Demande de fin de contrat:
+                            <form action="/userProfile?id=<%= user._id%>&action=yesEnd" method="post">
+                                <input type="submit" value="Accepter" >
+                            </form>
+                            <form action="/userProfile?id=<%= user._id%>&action=noEnd" method="post">
+                                <input type="submit" value="Rejeter" >
+                            </form>
+                        <%} else { %>
+                            <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
+                                <input type="submit" value="Fin contrat" >
+                            </form>
+                        <%}%>
                     <%}%>
                 
             

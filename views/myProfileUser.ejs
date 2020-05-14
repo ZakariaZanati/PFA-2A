@@ -25,9 +25,6 @@
         </div>
 
         <div class="content-wrapper">
-            
-            
-                
                     Nom :
                     <input type="text" value="<%= user.nom %>" readonly> <br>
                     Prenom :
@@ -48,10 +45,12 @@
                     <input type="text" value="<%= user.sexe %>" readonly><br>
                     Groupe sanguin:
                     <input type="text" value="<%= user.groupeSanguin %>" readonly><br>
-                    Medecin :
-                    <% if(user.medecin != null) { %>
-                    <a href='medecinProfile?id=<%= user.medecin.id %>' style="text-decoration: none; color: black; width: fit-content;"><%= user.medecin.nom %> <%= user.medecin.prenom %></a>
+                    Medecin actuel :
+                    <% if(currentMedecin) { %>
+                        <a href='medecinProfile?id=<%= currentMedecin.id %>' style="text-decoration: none; color: black; width: fit-content;"><%= currentMedecin.nom %> <%= currentMedecin.prenom %></a>
                     <%}%><br>
+                    Anciens medecins:
+                    <a href='oldMedecins' style="text-decoration: none; color: black; width: fit-content;">Anciens Medecin</a>
                     Maladies:
                     <% user.maladies.forEach((maladie) => { %>
                         Nom de la maladie : <input type="text" value="<%= maladie%>" readonly><br>
