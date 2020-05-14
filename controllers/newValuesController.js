@@ -3,6 +3,7 @@ module.exports = (app , mongoose) => {
     const Prelevements = require('../models/valuesModel');
     const User = require('../models/userModel');
     const Seuils = require('../models/seuilsModel');
+    const Alert = require('../models/alertModel');
     var url = require('url');
     const bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -13,7 +14,7 @@ module.exports = (app , mongoose) => {
         var dateArray = Date().split(' ');
         var _month = new Date().getMonth() + 1;
         var month = _month < 10 ? '0' + _month : _month;
-        var date = dateArray[3] + '-' + _month + '-' + dateArray[2];
+        var date = dateArray[3] + '-' + month + '-' + dateArray[2];
         var time = dateArray[4];  
         return [date, time];
     }
@@ -128,7 +129,26 @@ module.exports = (app , mongoose) => {
             var unite = mesure.abreviation;
             var seuilMin = mesure.valMin;
             var seuilMax = mesure.valMax;
-            User.findById(userId)
+            var valSeuil;
+            var comparaison;
+            if(valeur < seuilMin) {
+                valSeuil = seuilMin;
+                comparaison = " est inferieure au seuil min ";
+            }
+            if(valeur > seuilMax) {
+                valSeuil = seuilMax;
+                comparaison = " est superieure au seuil max ";
+            }
+            var alert = new Alert({
+                utilisateur: userId,
+                date: _date, 
+                temps: _time, 
+                mesure: nomMesure,
+                text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                difference: valeur - valSeuil         
+            });
+            Alert.create(alert);
+            /*User.findById(userId)
             .then( async (user) => {
                 var valSeuil;
                 var comparaison;
@@ -147,9 +167,7 @@ module.exports = (app , mongoose) => {
                     $position: 0});
 
                 user.save();
-            });
-            
-
+            });*/
         })
     }
 
