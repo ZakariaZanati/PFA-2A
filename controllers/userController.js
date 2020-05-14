@@ -190,9 +190,16 @@ module.exports = function (app , mongoose) {
     app.get('/myProfileUser', (req, res) => {
         if(req.session.type === 'normal') {
             User.findById(req.session.userId)
-            .populate('medecin')
+            .populate('medecins.medecin')
             .then((user) => {
-                res.render('myProfileUser', {user: user})
+                var currentMedecin = user.medecins.find(medecin => medecin.finContrat == null);
+                if(currentMedecin) {
+                    res.render('myProfileUser', {user: user, currentMedecin: currentMedecin.medecin});
+                }
+                else {
+                    res.render('myProfileUser', {user: user, currentMedecin: null})
+                }
+                
             })
         }
         else if(req.session.type === 'medecin') {
@@ -207,6 +214,31 @@ module.exports = function (app , mongoose) {
             res.redirect('/');
         }
     });
+
+    app.get('/oldMedecins', (req, res) => {
+        if(req.session.type === 'normal') {
+            User.findById(req.session.userId)
+            .populate('medecins.medecin')
+            .then(user => {
+                var oldMedecins = [];
+                user.medecins.forEach(medecin => {
+                    if(medecin.finContrat != null ) oldMedecins.unshift(medecin);
+                })
+                res.render('oldMedecins', {oldMedecins: oldMedecins});
+            })
+        }
+        else if(req.session.type === 'medecin'){
+            res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));
+        }
+        else {
+            res.redirect('/');
+        }
+    })
 
 
     app.get('/logout',(req,res)=>{
