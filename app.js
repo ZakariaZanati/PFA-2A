@@ -9,7 +9,7 @@ var app = express();
 const hostname = 'localhost';
 const port = 3000;
 
-const url = 'mongodb://localhost:27017/pfa';
+const url = 'mongodb://localhost:27017/capteurs';
 
 var userController = require('./controllers/userController');
 var newValuesController = require("./controllers/newValuesController");

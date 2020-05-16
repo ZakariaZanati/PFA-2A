@@ -4,6 +4,7 @@ module.exports = (app , mongoose) => {
     const User = require('../models/userModel');
     const Seuils = require('../models/seuilsModel');
     const Alert = require('../models/alertModel');
+    const moyenneSemaine = require('../moyennes');
     var url = require('url');
     const bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -16,7 +17,8 @@ module.exports = (app , mongoose) => {
         var month = _month < 10 ? '0' + _month : _month;
         var date = dateArray[3] + '-' + month + '-' + dateArray[2];
         var time = dateArray[4];  
-        return [date, time];
+        var day = new Date().getDay();
+        return [date, time,day];
     }
 
     app.get('/newvalues', (req, res) => {
@@ -44,6 +46,7 @@ module.exports = (app , mongoose) => {
         var currentDate = getFormatDate();
         var _date = currentDate[0];
         var _time = currentDate[1];
+        var _day = currentDate[2];
         Prelevements.findOne({utilisateur: userId, date: _date}, (err, values) => {
             if(values) {
                 var length = values.temperature.length;
@@ -51,6 +54,7 @@ module.exports = (app , mongoose) => {
                     console.log("You cannot add more, Max = 4 is reached ")
                 }   
                 else {
+                    
                     values.temperature.push({
                         $each: [{temps: _time, valeur: req.body.temperature}],
                         $position: 0});
@@ -92,10 +96,16 @@ module.exports = (app , mongoose) => {
                         values.moyennesJour.push(newMoyenne);
                     }
                     values.save();
+                    if(values.temperature.length === 4){
+                        moyenneSemaine(userId,_day,_date,values.moyennesJour);
+                    }
+                    
                     sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun)
+                
                 } 
             }
             else {
+                moyennesjour = [req.body.temperature, req.body.tensionSystolique, req.body.tensionDiastolique, req.body.tauxOxygene, req.body.tauxGlucose]
                 console.log(req.body.tensionSystolique + " " + req.body.tensionDiastolique);
                 var _values = new Prelevements({
                     utilisateur: userId,
@@ -105,7 +115,7 @@ module.exports = (app , mongoose) => {
                     tensionDiastolique: [{temps: _time, valeur: req.body.tensionDiastolique}],
                     tauxOxygen: [{temps: _time, valeur: req.body.tauxOxygene}],
                     tauxGlucose: [{temps: _time, valeur: req.body.tauxGlucose}],
-                    moyennesJour: [req.body.temperature, req.body.tensionSystolique, req.body.tensionDiastolique, req.body.tauxOxygene, req.body.tauxGlucose]
+                    moyennesJour: moyennesjour
                 });
                 Prelevements.create(_values);
                 var aJeun = req.body.typeTest === 'aJeun';
