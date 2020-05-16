@@ -21,8 +21,6 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
     .then(value =>{
         
         if (value) {
-            console.log('valueeeeeeeeee'+value);
-            console.log('day : ' +day);
             if (day === 1) {
                 var moyenne = {
                     debutSemaine : date,
@@ -36,12 +34,11 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                 Statistics.update({utilisateur : userId}, {$push : {MoyennesSemaines : moyenne}});
             }
             else {
-                console.log('days to retrieve'+daysToRetrieve);
                 
                 Statistics.findOne({utilisateur : userId, 'MoyennesSemaines.debutSemaine' : retrieveDays(date,daysToRetrieve)})
                 .then(result =>{
-                    var test = result.MoyennesSemaines[0].moyenneTemperature;
-                    console.log('resuuuuuuuuuuuuult '+test);
+                    //var test = result.MoyennesSemaines[0].moyenneTemperature;
+                    //console.log('resuuuuuuuuuuuuult '+test);
                    
                     Statistics.update({utilisateur : userId, 'MoyennesSemaines.debutSemaine' : retrieveDays(date,daysToRetrieve)},
                     {$set : {
@@ -58,7 +55,6 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                 });
             }
         } else {
-            console.log(7-day);
             var moyenne = {
                 debutSemaine : retrieveDays(date,daysToRetrieve),
                 finSemaine : addDays(date,7-day),
@@ -70,8 +66,6 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
             
             };  
             Statistics.create(new Statistics({utilisateur : userId,MoyennesSemaines : moyenne}));
-            console.log('statistic created');
-            //Statistics.update({utilisateur : userId}, {$push : {MoyennesSemaines : moyenne}});
         }
     })
 }
