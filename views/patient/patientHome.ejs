@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul>
+            <li><a class="active">Accueil</a></li>
+            <li><a href="patientValues">Prelevements</a></li>
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="medecins">Médecins</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileUser">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container-home">
+        <div class="container-header container-img-header">
+            <div class="overlay"></div>
+            <img src="public/images/happy.jpg" class="img-header">
+            <h1 class="text-header">VOTRE SANTE, VOTRE PRIORITE</h1>
+        </div>
+        <div class="bg-modal" id="modal">
+            <div class="modal-content">
+                <div class="close" id="close">+</div>
+                <div class="container-header container-img-header">
+                    <img src="public/images/red.jpg" class="img-header">
+                    <h1 class="text-header">Votre liste des alertes</h1>
+                </div>
+
+                <div class="container-body">
+                    <table class="table table-sortable table-5">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Temps</th>
+                                <th>Mesure</th>
+                                <th>Alert</th>
+                                <th>Différence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tr>
+                            <% alerts.forEach((alert)=>{ %>
+                            <tr>
+                                <td data-label="Date"><%= alert.date %></td>
+                                <td data-label="Temps"><%= alert.temps %></td>
+                                <td data-label="Mesure"><%= alert.mesure %></td>
+                                <td data-label="Alert"><%= alert.text %></td>
+                                <td data-label="Différence"><%= alert.difference %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="col col-3 container-add">
+                <div class="container-header add-header">
+                    <p class="add-info">N'oubliez pas d'ajouter vos informations 4 fois par jour</p>
+                </div>
+                <div class="container-body">
+
+                    <form id="formValues" method="POST">
+                        <input class="login-input" name="temperature" placeholder="Température" required>
+                        <input class="login-input" name="tensionSystolique" placeholder="Tension systolique" required>
+                        <input class="login-input" name="tensionDiastolique" placeholder="Tension diastolique" required>
+                        <input class="login-input" name="tauxOxygene" placeholder="Taux oxygène" required>
+                        <input class="login-input" name="tauxGlucose" placeholder="Taux glucose" required>
+                        <div class="radio-group">
+                            <label class="radio">
+                                <input class="typeTest" type="radio" checked="true" name="typeTest" id="aJeun"
+                                    value="aJeun">
+                                <span>A jeun</span>
+                            </label>
+                            <label class="radio">
+                                <input class="typeTest" type="radio" name="typeTest" id="postPrandial"
+                                    value="postPrandial">
+                                <span>Post prandial</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-round submit">Valider</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col col-1 container-alert">
+                <div class="container-header alert-header">
+                    <p class="add-info">Alertes</p>
+                </div>
+                <div class="container-body">
+                    <p class="alert-para">
+                        Vous recevez une alerte quand la valeur d'une mesure ajoutée est anormale et cette alerte va
+                        être
+                        envoyer automatiquement à votre médecin.
+                    </p>
+                    <p class="alert-para">Pour consulter vos alertes cliquez ici</p>
+
+                    <button class="btn btn-echec" id="alerte">Alertes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="public/js/sortedTable.js"></script>
+<script src="public/js/pop-up.js"></script>
+
+</html>

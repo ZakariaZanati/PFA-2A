@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul>
+            <li><a href="medecinHome">Accueil</a></li>
+            <li><a href="dayValues">Prelevements</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a class="active">Patients</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div>
+        <div class="container-img-header container-header">
+            <div class="overlay"></div>
+            <img src="public/images/patient.jpg" class="img-header">
+            <h1 class="text-header" id="date"></h1>
+        </div>
+
+        <div class="container-body">
+
+            <div style="margin: 20px auto;" >
+                <input class="patients" type="radio" checked="true" name="patients" id="current" value="current" onclick="getPatients()">
+                <label for="current" style="color: #000;" >Patients actuels</label>
+                <input class="patients" type="radio" name="patients" id="old" value="old" onclick="getPatients()">
+                <label for="old" style="color: #000" >Anciens patients</label>
+            </div>
+
+            <table id="currentPatients" class="table table-sortable table-7">
+                <thead id="table-head">
+                    <tr>
+                        <th>Nom et prénom</th>
+                        <th>Email</th>
+                        <th>Date d'ajout</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% currentPatients.forEach((patient)=>{ %>
+                        <tr>
+                            <td data-label="Nom  et prénom"><a href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %> <%= patient.utilisateur.prenom %></a></td>
+                            <td data-label="Email"><%= patient.utilisateur.email %></td>
+                            <td data-label="Début contrat"><%= patient.debutContrat %></td>
+                            <td><a href='patientValues?id=<%= patient.utilisateur._id %>' class="btn btn-success">Prelevement</a></td>
+                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alerts</a></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+
+            <table id="oldPatients" class="table table-sortable table-7" style="display: none;">
+                <thead id="table-head">
+                    <tr>
+                        <th>Nom et prénom</th>
+                        <th>Email</th>
+                        <th>Date d'ajout</th>
+                        <th>Fin contrat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% oldPatients.forEach((patient)=>{ %>
+                        <tr>
+                            <td data-label="Nom  et prénom"><a href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %> <%= patient.utilisateur.prenom %></a></td>
+                            <td data-label="Email"><%= patient.utilisateur.email %></td>
+                            <td data-label="Début contrat"><%= patient.debutContrat %></td>
+                            <td data-label="Fin contrat"><%= patient.finContrat %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function getPatients() {
+            if(document.getElementById("current").checked) {
+                document.getElementById("currentPatients").style.display = "block";
+                document.getElementById("oldPatients").style.display = "none";
+            }
+            else {
+                document.getElementById("currentPatients").style.display = "none";
+                document.getElementById("oldPatients").style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+<script src="public/js/sortedTable.js"></script>
+<script src="public/js/date.js"></script>
+
+
+</html>

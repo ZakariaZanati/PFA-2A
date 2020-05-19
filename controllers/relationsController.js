@@ -25,12 +25,13 @@ module.exports = function (app , mongoose) {
             });
         }
         else if(req.session.type === 'medecin') {
-            res.redirect(url.format({
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             console.log('not logged')
@@ -70,12 +71,13 @@ module.exports = function (app , mongoose) {
             })
         }
         else if(req.session.type === 'medecin') {
-            res.redirect(url.format({
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             console.log('not logged')
@@ -83,10 +85,13 @@ module.exports = function (app , mongoose) {
         }
         
     });
+    
 
     app.post('/medecinProfile',urlencodedParser,(req,res,next)=>{
         id = req.query.id;
         action = req.query.action;
+        console.log(id)
+        console.log(action);
         if (req.session.type === 'normal') {
             if(action === 'yes') {
                 User.findById(req.session.userId)
@@ -125,11 +130,24 @@ module.exports = function (app , mongoose) {
 
                 }) 
             }
+            else if(action === 'no') {
+                Medecin.findById(id)
+                .then((medecin)=>{
+                    var isInArray = medecin.demandes.some((user)=>{
+                        return user.equals(req.session.userId);
+                    })
+                    if (isInArray) {
+                        medecin.demandes.pull(req.session.userId);
+                        medecin.save();
+                    }
+
+                }) 
+            }
         }
         res.redirect('medecins');
     })
 
-    app.get('/demandes',(req,res)=>{
+    app.get('/demandes', (req,res)=>{
         if (req.session.type === 'medecin') {
             Medecin.findById(req.session.userId)
             .populate('demandes')
@@ -147,18 +165,21 @@ module.exports = function (app , mongoose) {
             })
         }
         else if(req.session.type === 'normal') {
-            res.redirect(url.format({
+            res.redirect('patientHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             console.log('not logged');
             res.redirect('/login');
         }
     })
+
+    
 
     app.get('/userProfile',(req,res)=>{
         if (req.session.type === 'medecin') {
@@ -186,12 +207,13 @@ module.exports = function (app , mongoose) {
             })
         }
         else {
-            res.redirect(url.format({
+            res.redirect('patientHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
     });
 
@@ -235,7 +257,6 @@ module.exports = function (app , mongoose) {
                 })
             }
             else if(action === 'end') {   
-                var currentDate = getFormatDate();
                 Medecin.findByIdAndUpdate(req.session.userId, 
                     {$set: {"utilisateurs.$[user].finContrat": new Date()}},
                     {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
@@ -254,7 +275,6 @@ module.exports = function (app , mongoose) {
                     medecin.demandes.pull(patientId)
                     medecin.save();
                 });
-                var currentDate = getFormatDate();
                 Medecin.findByIdAndUpdate(req.session.userId, 
                     {$set: {"utilisateurs.$[user].finContrat": new Date()}},
                     {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
@@ -280,12 +300,13 @@ module.exports = function (app , mongoose) {
 
     app.get('/patients', (req, res) => {
         if(req.session.type === 'normal'){
-            res.redirect(url.format({
+            res.redirect('patientHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else if(req.session.type === 'medecin') {
             Medecin.findById(req.session.userId)

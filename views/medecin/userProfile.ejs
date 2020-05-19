@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul>
+            <li><a href="medecinHome">Accueil</a></li>
+            <li><a href="dayValues">Prelevements</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a class="patients">Patients</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="container-header container-img-header">
+            <div class="overlay"></div>
+            <img src="public/images/profil.jpg" class="img-header">
+            <h1 class="text-header">Profil du patient</h1>
+        </div>
+        <div class="container-body">
+            <div class="container-body">
+                <div class="profil">
+                    <label>
+                        <span>Nom</span>
+                        <input class="login-input" type="text" name="nom" value="<%= user.nom %>" readonly>
+                    </label>
+                    <label>
+                        <span>Prénom</span>
+                        <input class="login-input" type="text" name="prenom" value="<%= user.prenom %>" readonly>
+                    </label>
+                    <label>
+                        <span>Email</span>
+                        <input class="login-input" type="text" name="email" value="<%= user.email %>" readonly>
+                    </label>
+                    <label>
+                        <span>Téléphone</span>
+                        <input class="login-input" type="number" name="phone" value="<%= user.telephone %>" readonly>
+                    </label>
+                    <label>
+                        <span>Pays</span>
+                        <input class="login-input" type="text" name="pays" value="<%= user.pays %>" readonly>
+                    </label>
+                <label>
+                        <span>Ville</span>
+                        <input class="login-input" type="text" name="ville" value="<%= user.age %>">
+                    </label>
+                    <div class="cadre">
+                        <label>
+                            <span>MALADIES</span>
+                            <% user.maladies.forEach((maladie) => { %>
+                            <input class="login-input" type="text" value="<%= maladie %>" readonly>
+                            <%})%>
+                    </div>
+                    <% if(!estPatient) {%>
+                    <div class="cadre">
+                        <label>
+                            <span> Demande de nouveau de contrat</span>
+                        </label>
+                        <div class="buttons-inline">
+                            <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
+                                <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
+                            </form>
+                            <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
+                                <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
+                            </form>
+                        </div>
+                    </div>
+                    <%} else { %>
+                    <% if(demandeFin) {%>
+                    <div class="cadre">
+                        <label>
+                            <span>Demande de fin de contrat</span>
+                        </label>
+                        <div class="buttons-inline">
+                            <form action="/userProfile?id=<%= user._id%>&action=yesEnd" method="post">
+                                <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
+                            </form>
+                            <form action="/userProfile?id=<%= user._id%>&action=noEnd" method="post">
+                                <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
+                            </form>
+                            <%} else { %>
+                            <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
+                                <button class="btn btn-echec" type="submit" value="Fin contrat">Fin contrat</button>
+                            </form>
+                        </div>
+                        <%}%>
+                    <%}%>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+
+<script src="public/js/app.js"></script>
+
+</html>

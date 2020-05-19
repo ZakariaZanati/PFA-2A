@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demandes</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul>
+            <li><a href="medecinHome">Accueil</a></li>
+            <li><a href="dayValues">Prelevements</a></li>
+            <li><a class="active">Demandes</a></li>
+            <li><a href="patients">Patients</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="container-header container-img-header">
+            <div class="overlay"></div>
+            <img src="public/images/list.jpg" class="img-header">
+            <h1 class="text-header">La liste des demandes</h1>
+        </div>
+        <div class="container-body">
+            <table class="table table-sortable table-3">
+                <thead>
+                    <tr>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Email</th>
+                            <th>Pays</th>
+                            <th>Ville</th>
+                            <th>Type demande</th>
+                        </tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% demandes.forEach((demande)=>{ %>
+                        <tr>
+                            <td><%= demande.user.nom %></td>
+                            <td><%= demande.user.prenom %></td>
+                            <td><%= demande.user.email %></td>
+                            <td><%= demande.user.pays %></td>
+                            <td><%= demande.user.ville %></td>
+                            <td><%= demande.type %></td>
+                            <td data-label="Profil"><a class="btn" href='userProfile?id=<%= demande.user._id %>' >Consulter</a></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+<script src="public/js/sortedTable.js"></script>
+<script src="public/js/app.js"></script>
+
+</html>

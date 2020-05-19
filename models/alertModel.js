@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var alrtSchema = new Schema({
+var alertSchema = new Schema({
     utilisateur: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "utilisateur",
@@ -14,6 +14,6 @@ var alrtSchema = new Schema({
     difference: Number
 })
 
-var alert = mongoose.model('alert', alrtSchema);
+var alert = mongoose.model('alert', alertSchema);
 
 module.exports = alert;

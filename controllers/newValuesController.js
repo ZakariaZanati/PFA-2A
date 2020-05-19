@@ -41,7 +41,7 @@ module.exports = (app , mongoose) => {
     })
 
     
-    app.post('/newvalues', urlencodedParser, (req, res) => {
+    app.post('/patientHome', urlencodedParser, (req, res) => {
         var userId = req.session.userId;
         var currentDate = getFormatDate();
         var _date = currentDate[0];
@@ -146,7 +146,7 @@ module.exports = (app , mongoose) => {
                 console.log('moyenne ajouté');
             }
         });
-        res.redirect('newvalues');
+        res.redirect('patientHome');
     }); 
 
 

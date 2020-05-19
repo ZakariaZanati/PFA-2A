@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var session = require('express-session');
 var http = require('http');
+const path = require('path')
 
 var app = express();
 
@@ -19,6 +20,7 @@ var seuilsController = require('./controllers/seuilsController');
 
 app.set('view engine','ejs');
 app.use('/public',express.static('public'));
+app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'views/medecin'), path.join(__dirname, 'views/patient')]);
 
 app.use(session({
     secret: '0123456789',

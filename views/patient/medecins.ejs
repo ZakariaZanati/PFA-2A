@@ -15,11 +15,10 @@
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
         <ul>
-            <li><a href="medecinHome">Accueil</a></li>
-            <li><a href="dayValues">Prelevements</a></li>
+            <li><a href="patientHome">Accueil</a></li>
             <li><a href="#">Statistiques</a></li>
-            <li><a href="medecins">Médecins</a></li>
-            <li><a class="active">Seuils</a></li>
+            <li><a class="active">Médecins</a></li>
+            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -28,31 +27,28 @@
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
-            <h1 class="text-header">Les seuils normal</h1>
+            <h1 class="text-header">La liste des médecins disponibles</h1>
         </div>
         <div class="container-body">
-            <table class="table table-sortable table-7">
+            <table class="table table-sortable table-5">
                 <thead>
                     <tr>
-                        <th>Nom de la mesure</th>
-                        <th>Type</th>
-                        <th>Sous type</th>
-                        <th>Valeur min</th>
-                        <th>Valeur max</th>
-                        <th>Unité</th>
-                        <th>Abréviation de l'unité</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Pays</th>
+                        <th>Ville</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% seuils.forEach((seuil)=>{ %>
+                    <% medecins.forEach((medecin)=>{ %>
                     <tr>
-                        <td data-label="Nom de la mesure"><%= seuil.nom %></td>
-                        <td data-label="Type"><%= seuil.type %></td>
-                        <td data-label="Sous type"><%= seuil.sousType %></td>
-                        <td data-label="Valeur min"><%= seuil.valMin %></td>
-                        <td data-label="Valeur-max"><%= seuil.valMax %></td>
-                        <td data-label="Unité"><%= seuil.unite %></td>
-                        <td data-label="Abréviation de l'unité"><%= seuil.abreviation %></td>
+                        <td data-label="Nom"><%= medecin.nom %></td>
+                        <td data-label="Prénom"><%= medecin.prenom %></td>
+                        <td data-label="Email"><%= medecin.email %></td>
+                        <td data-label="Pays"><%= medecin.pays %></td>
+                        <td data-label="Ville"><%= medecin.ville %></td>
+                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= medecin._id %>'>Consulter</a></td>
                     </tr>
                     <% }); %>
                 </tbody>

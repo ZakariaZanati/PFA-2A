@@ -1,302 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../public/css/register.css">
-    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <title>Register</title>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="public/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,600;0,700;1,700&display=swap"
+        rel="stylesheet">
 </head>
 
-<body >
-    <div class="container">
-        
-        <div class="registration-container">
-
-            <form id="user-form" action="/registration" method="POST">
-                <h2>Creer votre compte !</h2>
-                <h5 style="margin: 10px auto ">Vous etes un médecin ? <a id="medecin-link" href="?user=medecin" >Cliquez ici</a></h1>
-                <div class="input-div one ">
-                    <div class="i">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div>
-                        <h5>Nom</h5>
-                        <input class="input" type="text" name="nom" required>
-                    </div>
-                </div>
-                <div class="input-div one ">
-                    <div class="i">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div>
-                        <h5>Prenom</h5>
-                        <input class="input" type="text" name="prenom" required>
-                    </div>
-                </div>
-                <div class="radio" style="display: flex;">
-                    <div >
-                        <input class="gender" type="radio" name="gender" id="male" value="male" >
-                        <label for="male" style="color: #999;" >Masculin</label>
-                    </div>
-                    <div style="margin-left: 50px;">
-                        <input class="gender" type="radio" name="gender" id="female" value="female">
-                        <label for="female" style="color: #999" >Féminin</label>
-                    </div>
-                </div>
-                <div class="input-div two ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Email</h5>
-                        <input class="input" type="text" name="email" required>
-                    </div>
-                </div>
-                <div class="input-div two ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Téléphone</h5>
-                        <input class="input" type="text" name="telephone" required>
-                    </div>
-                </div>
-                <div class="input-div two ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Date de naissance</h5>
-                        <input class="input" type="date" style="content: none; color: transparent; "  name="dateNaissance" required>
-                    </div>
-                </div>
-                <div class="input-div three ">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Ville</h5>
-                        <input class="input" type="text" name="ville" required>
-                    </div>
-                </div>
-                <div class="input-div three ">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Pays</h5>
-                        <input class="input" type="text" name="pays" required>
-                    </div>
-                </div>
-                <div class="grpsang ">
-                    <div>
-                        <label class="sang" for="sang" style="color: #999; margin-right: 20px;">Groupe sanguin</label>
-                        <select id="sang" style="width: 50px;" name="grpsang">
-                            <option></option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="O+">O-</option>
-                            <option value="O-">O-</option>
-                            <option value="AB-">AB-</option>
-                            <option value="AB+">AB+</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="diabete" style="margin-top: 20px;">
-                    <div>
-                        <label class="maladieDiabete" for="maladieDiabete" style="color: #999; margin-right: 20px;">Maladie diabète</label>
-                        <select id="maladieDiabete" style="width: 150px;" name="diabete">
-                            <option value="none"></option>
-                            <option value="Diabete type 1">Diabete type 1</option>
-                            <option value="Diabete type 2">Diabete type 2</option>
-                            <option value="Diabete gestationnel">Diabete gestationnel</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="input-div four">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Mot de passe</h5>
-                        <input class="input" type="password" name="password" required>
-                    </div>
-                </div>
-                <div class="input-div five">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Confirmer le Mot de passe</h5>
-                        <input class="input" type="password" name="confirmation" required>
-                    </div>
-                </div>
-                <input type="text" name="type" value="normal" style="display: none;">
-                <input class="btn" type="submit" value="Envoyer" onclick="return checkPassword()">
-                
-
-            </form>
-
-
-            <form id="medecin-form" action="/registration" method="POST">
-                <h2>Creer votre compte !</h2>
-                <h5 style="margin: 10px auto ">Vous n'etes pas un médecin ? <a id="medecin-link" href="?user=normal" >Cliquez ici</a></h1>
-                <div class="input-div one ">
-                    <div class="i">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div>
-                        <h5>Nom</h5>
-                        <input class="input" type="text" name="nom">
-                    </div>
-                </div>
-
-                <div class="input-div one ">
-                    <div class="i">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div>
-                        <h5>Prenom</h5>
-                        <input class="input" type="text" name="prenom">
-                    </div>
-                </div>
-
-                <div class="radio" style="display: flex;">
-                    <div >
-                        <input class="gender" type="radio" name="gender" id="male" value="male" >
-                        <label for="male" style="color: #999;" >Masculin</label>
-                    </div>
-                    <div style="margin-left: 50px;">
-                        <input class="gender" type="radio" name="gender" id="female" value="female">
-                        <label for="female" style="color: #999" >Féminin</label>
-                    </div>
-                </div>
-                <div class="input-div two ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Email</h5>
-                        <input class="input" type="text" name="email">
-                    </div>
-                </div>
-                <div class="input-div two ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Téléphone</h5>
-                        <input class="input" type="text" name="telephone">
-                    </div>
-                </div>
-                <div class="input-div three ">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Ville</h5>
-                        <input class="input" type="text" name="ville">
-                    </div>
-                </div>
-                <div class="input-div three ">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Pays</h5>
-                        <input class="input" type="text" name="pays">
-                    </div>
-                </div>
-                <div class="input-div three ">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Adresse Hopitale ou Cabinet</h5>
-                        <input class="input" type="text" name="adresse">
-                    </div>
-                </div>
-                
-                <div class="input-div four">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Mot de passe</h5>
-                        <input id="password" class="input" type="password" name="password">
-                    </div>
-                </div>
-                <div class="input-div five">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Confirmer le Mot de passe</h5>
-                        <input id="confirmation" class="input" type="password" name="confirmation">
-                    </div>
-                </div>
-                <input type="text" name="type" id="type" value="medecin" style="display: none;">
-                <input class="btn" type="submit" value="Envoyer" onclick="return checkPassword()">
-                
-    
-            </form>
-
-        </div>
-        
-
-        <div class="image-container">
+<body>
+    <div class="login-container">
+        <div class="columns">
             <div class="img">
-                <img src="../public/img/register.svg" alt="img">
+                <img src="public/images/health.jpg" id="imginscription">
             </div>
-            <div class="sign-in" style="margin: 90px auto;">
-                <p >
-                    Vous avez déjà un compte ? <a href="/login">connectez-vous d'ici !</a>
-                </p>
+            
+            <div class="form-cont" action="/registration" method="POST">
+                <div class="form">
+                    <h1 class="logo-img"><a href="index">LOGO</a></h1>
+                    <h1>S'inscrire</h1>
+                    <p>Bienvenue avec nous</p>
+                    <p>Vous avez déjà un compte? <a class="link" href="login">S'identifier</a></p>
+                    <label>
+                        <span>Type d'utilisateur</span>
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio">
+                            <input type="radio" name="type" id="patient" value="patient" checked="true">
+                            <span>Patient</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type" id="med" value="medecin">
+                            <span class="cercle"></span>
+                            <span>Médecin</span>
+                        </label>
+                    </div>
+                    <form class="form-user" id="form-user" action="/registration?user=normal" method="POST">
+                        <label>
+                            <span>Nom</span>
+                            <input class="login-user-input" type="text" name="nom" required>
+                        </label>
+                        <label>
+                            <span>Prénom</span>
+                            <input class="login-user-input" type="text" name="prenom" required>
+                        </label>
+                        <div class="radio-group">
+                            <label class="radio">
+                                <input type="radio" name="gender" id="homme" value="homme" checked>
+                                <span>Homme</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="gender" id="femme" value="femme">
+                                <span class="cercle"></span>
+                                <span>Femme</span>
+                            </label>
+                        </div>
+                        <label>
+                            <span>Pays</span>
+                            <input class="login-user-input" type="text" name="pays" required>
+                        </label>
+                        <label>
+                            <span>Ville</span>
+                            <input class="login-user-input" type="text" name="ville" required>
+                        </label>
+                        <label>
+                            <span>Téléphone</span>
+                            <input class="login-user-input" type="number" name="telephone" required>
+                        </label>
+                        <label>
+                            <span>Date de naissance</span>
+                            <input class="login-user-input" type="date" name="dateNaissance" required>
+                        </label>
+                        <label>
+                            <span>Groupe sanguin</span>
+                            <!-- <input class="login-input" type="text" name="gs" required> -->
+                            <select name="grpsang" id="gs">
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Maladie diabète</span>
+                            <select name="diabete" id="maladie">
+                                <option value="none">Aucune Maladie</option>
+                                <option value="diabète géstionnel">Diabète géstionnel</option>
+                                <option value="diabète type 1">diabète type 1</option>
+                                <option value="diabète type 2">diabète type 2</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Email</span>
+                            <input class="login-user-input" type="text" name="email" required>
+                        </label>
+                        <label>
+                            <span>Mot de passe</span>
+                            <input class="login-user-input" type="password" name="password" required>
+                        </label>
+                        <label>
+                            <span>Confirmer le mot de passe</span>
+                            <input class="login-user-input" type="password" name="confirmation" required>
+                        </label>
+                        <button class="btn btn-round submit" type="submit">S'inscrire</button>
+                    </form>
+                    <form class="form-doc" id="form-doc" action="/registration?user=medecin" method="POST">
+                        <label>
+                            <span>Nom</span>
+                            <input class="login-medecin-input" type="text" name="nom" required>
+                        </label>
+                        <label>
+                            <span>Prenom</span>
+                            <input class="login-medecin-input" type="text" name="prenom" required>
+                        </label>
+                        <label>
+                            <span>Pays</span>
+                            <input class="login-medecin-input" type="text" name="pays" required>
+                        </label>
+                        <label>
+                            <span>Ville</span>
+                            <input class="login-medecin-input" type="text" name="ville" required>
+                        </label>
+                        <label>
+                            <span>Téléphone</span>
+                            <input class="login-medecin-input" type="number" name="telephone" required>
+                        </label>
+                        <label>
+                            <span>Adresse du lieu de travail</span>
+                            <input class="login-medecin-input" type="text" name="adresse" required>
+                        </label>
+                        <label>
+                            <span>Email</span>
+                            <input class="login-medecin-input" type="text" name="email" required>
+                        </label>
+                        <label>
+                            <span>Mot de passe</span>
+                            <input class="login-medecin-input" type="password" name="password" required>
+                        </label>
+                        <label>
+                            <span>Confirmer le mot de passe</span>
+                            <input class="login-medecin-input" type="password" name="confirmation" required>
+                        </label>
+                        <button class="btn btn-round submit" type="submit">S'inscrire</button>
+                    </form>
+                </div>
             </div>
         </div>
 
-        
     </div>
-    <script type="text/javascript" src="../public/js/main.js"></script>
-    <script type="text/javascript">
-       
-           var url_string = window.location.href;
-           var url = new URL(url_string);
-           var param = url.searchParams.get("user");
-           var medecin = document.getElementById('medecin-form');
-           var user = document.getElementById('user-form');
-           
-           if(param === "normal" || param === null){
-                medecin.style.display = "none";
-           }
-
-           if(param === "medecin"){
-               user.style.display = "none";
-           }
-        
-    </script>
-    <script type="text/javascript">
-
-        function checkPassword(){
-            var password = document.getElementById('password').value;
-            var confirmation = document.getElementById('confirmation').value;
-
-            if (password != confirmation) {
-                alert('Confirmation de mot de passe incorrecte');
-                return false;
-            }
-
-            return true;
-        }
-    
-    </script>
-    
+    <script src="public/js/radio.js"></script>
 </body>
+
 
 </html>

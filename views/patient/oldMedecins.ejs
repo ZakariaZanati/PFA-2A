@@ -15,44 +15,44 @@
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
         <ul>
-            <li><a href="medecinHome">Accueil</a></li>
-            <li><a href="dayValues">Prelevements</a></li>
+            <li><a href="patientHome">Accueil</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="medecins">Médecins</a></li>
-            <li><a class="active">Seuils</a></li>
+            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div class="big-container">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
-            <h1 class="text-header">Les seuils normal</h1>
+            <h1 class="text-header">Vos Médecins </h1>
         </div>
         <div class="container-body">
             <table class="table table-sortable table-7">
                 <thead>
                     <tr>
-                        <th>Nom de la mesure</th>
-                        <th>Type</th>
-                        <th>Sous type</th>
-                        <th>Valeur min</th>
-                        <th>Valeur max</th>
-                        <th>Unité</th>
-                        <th>Abréviation de l'unité</th>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>Email</th>
+                        <th>Pays</th>
+                        <th>Ville</th>
+                        <th>Debut contrat</th>
+                        <th>Fin contrat</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% seuils.forEach((seuil)=>{ %>
+                    <% oldMedecins.forEach((_medecin)=>{ %>
                     <tr>
-                        <td data-label="Nom de la mesure"><%= seuil.nom %></td>
-                        <td data-label="Type"><%= seuil.type %></td>
-                        <td data-label="Sous type"><%= seuil.sousType %></td>
-                        <td data-label="Valeur min"><%= seuil.valMin %></td>
-                        <td data-label="Valeur-max"><%= seuil.valMax %></td>
-                        <td data-label="Unité"><%= seuil.unite %></td>
-                        <td data-label="Abréviation de l'unité"><%= seuil.abreviation %></td>
+                        <td data-label="Nom"><%= _medecin.medecin.nom %></td>
+                        <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
+                        <td data-label="Email"><%= _medecin.medecin.email %></td>
+                        <td data-label="Pays"><%= _medecin.medecin.pays %></td>
+                        <td data-label="Ville"><%= _medecin.medecin.ville %></td>
+                        <td data-label="Début contrat"><%= _medecin.debutContrat %></td>
+                        <td data-label="Fin contrat"><%= _medecin.finContrat %></td>
+                        <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
                     </tr>
                     <% }); %>
                 </tbody>
@@ -66,6 +66,6 @@
 </body>
 
 <script src="public/js/sortedTable.js"></script>
-<script src="public/js/app.js"></script>
+<script src="ppublic/js/app.js"></script>
 
 </html>

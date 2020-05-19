@@ -3,7 +3,6 @@ module.exports = function (app , mongoose) {
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
     var Statistics = require('../models/statisticsModel');
-
     var url = require('url');
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -20,42 +19,40 @@ module.exports = function (app , mongoose) {
 
     app.get('/',(req,res)=>{
         if(req.session.type === 'normal') {
-            res.redirect(url.format({
-                pathname:"/home",
-                query: {
-                    "user": req.session.type
-                }
-            }));
+            res.redirect('patientHome');
         }
         else if(req.session.type === 'medecin') {
-            res.redirect(url.format({
-                pathname:"/home",
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
+                pathname:"medecin/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
-            res.render('login');
+            res.render('index');
         }
     });
 
     app.get('/login',function(req,res){
         if(req.session.type === 'normal') {
-            res.redirect(url.format({
+            res.redirect('patientHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else if(req.session.type === 'medecin') {
-            res.redirect(url.format({
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             res.render('login');
@@ -80,13 +77,13 @@ module.exports = function (app , mongoose) {
                         Statistics.create({utilisateur : user._id});
                     }
                 })
-                
-                res.redirect(url.format({
-                    pathname:"/home",
+                res.redirect('patientHome');
+                /*res.redirect(url.format({
+                    pathname:"home",
                     query: {
                         "user": req.session.type
                     }
-                }));
+                }));*/
             }
             else{
                 Medecin.findOne({email : req.body.email , password : req.body.password},(err,medecin)=>{
@@ -99,12 +96,13 @@ module.exports = function (app , mongoose) {
                         req.session.type = 'medecin';
 
                         console.log('medecin connecté');
-                        res.redirect(url.format({
-                            pathname:"/home",
+                        res.redirect('medecinHome')
+                        /*res.redirect(url.format({
+                            pathname:"home",
                             query: {
                                 "user": req.session.type
                             }
-                        }));
+                        }));*/
                     } else {
                         console.log('echec de connexion');
                         res.render('login',{err : 'Email ou mot de passe incorrecte'});
@@ -118,8 +116,91 @@ module.exports = function (app , mongoose) {
         console.log(req.query);
         res.render('registration');
     })
-    
+
     app.post('/registration',urlencodedParser, function(req,res,next){
+        console.log(req.body);
+        
+        var data = req.body;
+        var type = req.query.user;
+        console.log(type);
+        User.findOne({email : data.email})
+        .then((user)=>{
+            if(user != null) {
+                res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
+                var err = new Error("L'émail "+ data.email + " exist déjà !");
+                err.status = 500;
+                next(err);
+            }
+            else{
+                if(data.password != data.confirmation) {
+                    res.render('registration',{error : "Confirmation du mot de passe n'est pas correcte"});
+                    var err = new Error("Confirmation du mot de passe n'est pas correcte");
+                    err.status = 500;
+                    next(err);
+                }
+                else if (type === 'normal' || type == null) {
+                    if(data.diabete === "none"){
+                        var user = new User({
+                            nom : data.nom,
+                            prenom : data.prenom,
+                            sexe : data.gender,
+                            telephone : data.telephone,
+                            dateNaissance : data.dateNaissance,
+                            email : data.email,
+                            age : get_age(data.dateNaissance),
+                            ville : data.ville,
+                            pays : data.pays,
+                            password : data.password,
+                            groupeSanguin : data.grpsang,
+                        });
+                        User.create(user);
+                    }
+                    else {
+                        var user = new User({
+                            nom : data.nom,
+                            prenom : data.prenom,
+                            sexe : data.gender,
+                            telephone : data.telephone,
+                            dateNaissance : data.dateNaissance,
+                            email : data.email,
+                            age : get_age(data.dateNaissance),
+                            ville : data.ville,
+                            pays : data.pays,
+                            password : data.password,
+                            groupeSanguin : data.grpsang,
+                            maladies: [data.diabete]
+                        });
+                        User.create(user);
+                    }
+                    console.log('patient created');
+                    res.redirect('/login');
+                }
+                else if(type === 'medecin'){
+                    var medecin = new Medecin({
+                        nom : data.nom,
+                        prenom: data.prenom,
+                        sexe: data.gender,
+                        telephone: data.telephone,
+                        email: data.email,
+                        ville: data.ville,
+                        pays: data.pays,
+                        password: data.password,
+                        adresse_lieu_travail : data.adresse
+                    })
+        
+                    Medecin.create(medecin);
+                    console.log('Medecin created');
+                    res.redirect('/login');
+                }
+
+                
+            }
+        })
+        .catch((err)=>next(err));
+        
+    });
+
+    /*app.post('/registration',urlencodedParser, function(req,res,next){
         console.log(req.body);
         
      
@@ -194,6 +275,27 @@ module.exports = function (app , mongoose) {
         })
         .catch((err)=>next(err));
         
+    });*/
+
+    app.get('/myProfileMedecin', (req, res) => {
+        if(req.session.type === 'medecin') {
+            Medecin.findById(req.session.userId)
+            .then((medecin) => {
+                res.render('myProfileMedecin', {medecin: medecin});
+            })
+        }
+        else if(req.session.type === 'normal') {
+            res.redirect('patientHome');
+            /*res.redirect(url.format({
+                pathname:"/home",
+                query: {
+                    "user": req.session.type
+                }
+            }));*/
+        }
+        else {
+            res.redirect('/');
+        }
     });
 
     app.get('/myProfileUser', (req, res) => {
@@ -212,12 +314,13 @@ module.exports = function (app , mongoose) {
             })
         }
         else if(req.session.type === 'medecin') {
-            res.redirect(url.format({
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             res.redirect('/');
@@ -237,12 +340,13 @@ module.exports = function (app , mongoose) {
             })
         }
         else if(req.session.type === 'medecin'){
-            res.redirect(url.format({
+            res.redirect('medecinHome');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
         else {
             res.redirect('/');

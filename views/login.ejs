@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:600i&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
-    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <title>Login page</title>
+    <title>Join us</title>
+    <link rel="stylesheet" href="public/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,600;0,700;1,700&display=swap"
+        rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <div class="image-container">
-            <div class="img">
-                <img class="img" src="../public/img/vacation.svg" alt="img">
-            </div>
-            <div class="sign-in" style="margin: 90px auto;">
-                <p>
-                    Vous n'avez pas un compte ? <a href="registration/?user=normal">créer un maintenant !</a>
-                </p>
-            </div>
-        </div>
-        
-        <div class="login-container">
-            <form action="/login" method="POST">
-                <img class="avatar" src="../public/img/avatar.svg" alt="avatar">
-                <h2>Bienvenue !</h2>
-                <div class="input-div one ">
-                    <div class="i">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div>
-                        <h5>Email</h5>
-                        <input class="input" type="text" name="email">
-                    </div>
-                </div>
-                <div class="input-div two">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Mot de passe</h5>
-                        <input class="input" type="password" name="password">
-                    </div>
-                </div>
-                <input class="btn" type="submit" value="Se connecter">
-                
 
-            </form>
+<body>
+    <div class="login-container">
+        <div class="columns">
+            <div class="img">
+                <img src="public/images/health.jpg">
+            </div>
+            <div class="form-cont">
+                <div class="form">
+                    <h1 class="logo-img"><a href="index">LOGO</a></h1>
+                    <h1>S'identifier</h1>
+                    <p>Bon retour</p>
+                    <form action="/login" method="POST">
+                        <label>
+                            <span>Email</span>
+                            <input class="login-input" type="text" name="email" required>
+                        </label>
+                        <label>
+                            <span>Mot de passe</span>
+                            <input class="login-input" type="password" name="password" required>
+                        </label>
+                        <p class="forgot-pass">Mot de passe oublié ?</p>
+                        <button class="btn btn-round submit" type="submit">S'identifier</button>
+                        <br>
+                        <p>Vous n'avez pas de compte? <a href="registration" class="link">Joindre</a></p>
+                    </form>
+                </div>
+            </div>
         </div>
+
     </div>
-    <script type="text/javascript" src="../public/js/main.js"></script>
-    
 </body>
+
 </html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul>
+            <li><a class="active">Accueil</a></li>
+            <li><a href="dayValues">Prelevements</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a href="patients">Patients</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="container-header container-img-header">
+            <img src="public/images/red.jpg" class="img-header">
+            <h1 class="text-header">La liste des alertes</h1>
+        </div>
+
+        <div class="container-body">
+            <table class="table table-sortable table-5">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Temps</th>
+                        <th>Mesure</th>
+                        <th>Alert</th>
+                        <th>Différence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tr>
+                    <% alerts.forEach((alert)=>{ %>
+                    <tr>
+                        <td data-label="Nom  et prénom"><a class="btn" href='userProfile?id=<%= alert.utilisateur._id %>' ><%= alert.utilisateur.nom %> <%= alert.utilisateur.prenom %></a></td>
+                        <td data-label="Date"><%= alert.date %></td>
+                        <td data-label="Temps"><%= alert.temps %></td>
+                        <td data-label="Mesure"><%= alert.mesure %></td>
+                        <td data-label="Alert"><%= alert.text %></td>
+                        <td data-label="Différence"><%= alert.difference %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</body>
+
+<script src="public/js/sortedTable.js"></script>
+<script src="public/js/pop-up.js"></script>
+
+</html>

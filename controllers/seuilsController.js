@@ -52,12 +52,13 @@ module.exports = function (app , mongoose) {
             }) 
         }
         else {
-            res.redirect(url.format({
+            res.redirect('/');
+            /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
                     "user": req.session.type
                 }
-            }));
+            }));*/
         }
     });
 
