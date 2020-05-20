@@ -4,6 +4,7 @@ module.exports = (app , mongoose) => {
     const User = require('../models/userModel');
     const Seuils = require('../models/seuilsModel');
     const Alert = require('../models/alertModel');
+    const Statistics = require('../models/statisticsModel');
     const moyenneSemaine = require('../moyennes');
     var url = require('url');
     const bodyParser = require('body-parser');
@@ -22,7 +23,6 @@ module.exports = (app , mongoose) => {
     }
 
     app.get('/newvalues', (req, res) => {
-        console.log("new values from new values controller");
         if(req.session.type === 'normal') {
             res.render('newvalues');
         }
@@ -49,6 +49,7 @@ module.exports = (app , mongoose) => {
         var _day = currentDate[2];
         Prelevements.findOne({utilisateur: userId, date: _date}, (err, values) => {
             if(values) {
+                
                 var length = values.temperature.length;
                 if(length == 4) {
                     console.log("You cannot add more, Max = 4 is reached ")
@@ -70,35 +71,46 @@ module.exports = (app , mongoose) => {
                     values.tauxGlucose.push({
                         $each: [{temps: _time, valeur: req.body.tauxGlucose}],
                         $position: 0});  
+                        values.save();
                     
-                    for (i = 0; i < values.moyennesJour.length; i++) {
-                        var newMoyenne = values.moyennesJour[0] * length;
-                        //values.moyennesJour.remove(values.moyennesJour[0]);
-                        values.moyennesJour.shift();
-                        switch(i) {
-                            case 0:
-                                newMoyenne += parseFloat(req.body.temperature);
-                                break;
-                            case 1:
-                                newMoyenne += parseFloat(req.body.tensionSystolique);
-                                break;
-                            case 2:
-                                newMoyenne += parseFloat(req.body.tensionDiastolique);
-                                break;    
-                            case 3:
-                                newMoyenne += parseFloat(req.body.tauxOxygene);
-                                break;
-                            case 4:
-                                newMoyenne += parseFloat(req.body.tauxGlucose);
-                                break;
+                    Statistics.findOne({utilisateur : userId} ,{ "MoyennesJours" : {$elemMatch : {"jour" : _date.toString()}}})
+                    .then(result =>{
+                        
+                        for (i = 0; i < result.MoyennesJours[0].moyennesJour.length; i++) {
+                            var newMoyenne = result.MoyennesJours[0].moyennesJour[0] * length;
+                            //values.moyennesJour.remove(values.moyennesJour[0]);
+                            result.MoyennesJours[0].moyennesJour.shift();
+                            switch(i) {
+                                case 0:
+                                    newMoyenne += parseFloat(req.body.temperature);
+                                    break;
+                                case 1:
+                                    newMoyenne += parseFloat(req.body.tensionSystolique);
+                                    break;
+                                case 2:
+                                    newMoyenne += parseFloat(req.body.tensionDiastolique);
+                                    break;    
+                                case 3:
+                                    newMoyenne += parseFloat(req.body.tauxOxygene);
+                                    break;
+                                case 4:
+                                    newMoyenne += parseFloat(req.body.tauxGlucose);
+                                    break;
+                            }
+                            newMoyenne = newMoyenne / (length + 1);
+                            result.MoyennesJours[0].moyennesJour.push(newMoyenne);
+                            
                         }
-                        newMoyenne = newMoyenne / (length + 1);
-                        values.moyennesJour.push(newMoyenne);
-                    }
-                    values.save();
-                    if(values.temperature.length === 4){
-                        moyenneSemaine(userId,_day,_date,values.moyennesJour);
-                    }
+                        result.save();
+                        console.log(values.temperature.length);
+                        
+                        if(values.temperature.length === 4){
+                            moyenneSemaine(userId,_day,_date,result.MoyennesJours[0].moyennesJour);
+                        }
+                    })
+
+                    
+                    
                     
                     sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun)
                 
@@ -115,16 +127,25 @@ module.exports = (app , mongoose) => {
                     tensionDiastolique: [{temps: _time, valeur: req.body.tensionDiastolique}],
                     tauxOxygen: [{temps: _time, valeur: req.body.tauxOxygene}],
                     tauxGlucose: [{temps: _time, valeur: req.body.tauxGlucose}],
-                    moyennesJour: moyennesjour
                 });
                 Prelevements.create(_values);
                 var aJeun = req.body.typeTest === 'aJeun';
                 sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun)
 
                 console.log("Values created");
+
+                Statistics.findOne({utilisateur : userId})
+                .then(result=>{
+                    
+                    console.log(result);
+                    _moyenne = {jour : _date, moyennesJour : moyennesjour};
+                    result.MoyennesJours.push(_moyenne);
+                    result.save();
+                });
+
+                console.log('moyenne ajouté');
             }
         });
-        console.log("Post function");
         res.redirect('newvalues');
     }); 
 

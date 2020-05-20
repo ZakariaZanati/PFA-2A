@@ -20,7 +20,7 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
     Statistics.findOne({utilisateur:userId})
     .then(value =>{
         
-        if (value) {
+        if (value.MoyennesSemaines[0]) {
             if (day === 1) {
                 var moyenne = {
                     debutSemaine : date,
@@ -31,11 +31,15 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                     moyenneTauxOxygen : moyenneJour[3],
                     moyenneTauxGlucose : moyenneJour[4]
                 };
-                Statistics.update({utilisateur : userId}, {$push : {MoyennesSemaines : moyenne}});
+                Statistics.findOne({utilisateur : userId})
+                .then(value=>{
+                    value.MoyennesSemaines.push(moyenne);
+                    value.save();
+                });
             }
             else {
                 
-                Statistics.findOne({utilisateur : userId, 'MoyennesSemaines.debutSemaine' : retrieveDays(date,daysToRetrieve)})
+                Statistics.findOne({utilisateur : userId}, {"MoyennesSemaines": {$elemMatch : {"debutSemaine" : retrieveDays(date,daysToRetrieve)}}})
                 .then(result =>{
                     //var test = result.MoyennesSemaines[0].moyenneTemperature;
                     //console.log('resuuuuuuuuuuuuult '+test);
@@ -49,9 +53,6 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                         'MoyennesSemaines.$.moyenneTauxGlucose' : (result.MoyennesSemaines[0].moyenneTauxGlucose*daysToRetrieve + moyenneJour[4])/(daysToRetrieve+1)
                         }
                     },res =>{console.log(res+'\n')});
-                    
-                    
-
                 });
             }
         } else {
@@ -65,7 +66,12 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                 moyenneTauxGlucose : moyenneJour[4] 
             
             };  
-            Statistics.create(new Statistics({utilisateur : userId,MoyennesSemaines : moyenne}));
+            Statistics.findOne({utilisateur : userId})
+            .then(value=>{
+                value.MoyennesSemaines.push(moyenne);
+                value.save();
+            })
+            
         }
     })
 }

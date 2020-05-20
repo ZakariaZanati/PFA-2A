@@ -34,6 +34,16 @@ var statisticSchema = new Schema({
         default : null
     },
 
+    MoyennesJours : [{
+        jour : {
+            type : String,
+            default : null
+        },
+
+        moyennesJour: [Number]
+
+    }],
+
     MoyennesSemaines : [
         {
             debutSemaine : {

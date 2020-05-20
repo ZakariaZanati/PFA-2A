@@ -19,8 +19,7 @@ var valuesSchema = new Schema({
     tensionSystolique: [oneValueSchema],
     tensionDiastolique: [oneValueSchema],
     tauxOxygen: [oneValueSchema],
-    tauxGlucose: [oneValueSchema],
-    moyennesJour: [Number],
+    tauxGlucose: [oneValueSchema]
 })
 
 var prelevements = mongoose.model('prelevements', valuesSchema)

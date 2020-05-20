@@ -2,6 +2,8 @@ module.exports = function (app , mongoose) {
 
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
+    var Statistics = require('../models/statisticsModel');
+
     var url = require('url');
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -72,6 +74,13 @@ module.exports = function (app , mongoose) {
                 req.session.userId = user._id;
                 req.session.type = 'normal';
                 console.log('user connecté');
+                Statistics.findOne({utilisateur : user._id})
+                .then(value =>{
+                    if (!value) {
+                        Statistics.create({utilisateur : user._id});
+                    }
+                })
+                
                 res.redirect(url.format({
                     pathname:"/home",
                     query: {
