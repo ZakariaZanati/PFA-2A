@@ -16,6 +16,7 @@
         <label class="logo">LOGO</label>
         <ul>
             <li><a href="patientHome">Accueil</a></li>
+            <li><a href="patientValues">Prélévements</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
@@ -26,7 +27,7 @@
     <div class="container">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
-            <img src="public/images/doctor.jpg" class="img-header">
+            <img src="public/images/profil.jpg" class="img-header">
             <h1 class="text-header">Profil</h1>
         </div>
         <div class="container-body">
@@ -59,33 +60,30 @@
                     <span>Groupe sanguin</span>
                     <input class="login-input" type="text" value="<%= user.groupeSanguin %>">
                 </label>
-            
+                <% if(user.maladies[0]!=null) { %>
                 <label>
-                    <span>Medecin actuel</span><br>
-                    <% if(currentMedecin) { %>
-                        <div class="buttons">
-                            <a class="btn btn-success" href='medecinProfile?id=<%= currentMedecin.id %>' ><%= currentMedecin.nom %> <%= currentMedecin.prenom %></a>
-                        </div>
-                    <%}%>
+                    <span>Maladies</span>
+                    <% user.maladies.forEach((maladie) => { %>
+                    <input class="login-input" type="text" value="<%= maladie%>">
+                    <%})%>
                 </label>
-                <!-- <% if(user.maladies != null) { %>
-                <label>-->
+                <%}%>
+                <label>
+                    <% if(currentMedecin) { %>
+                <span>Medecin actuel</span><br>
+                <div class="buttons-inline">
+                    <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
+                        <%= currentMedecin.prenom %></a>
+                </div>
+                <%}%>
+                </label>
                 <label>
                     <span>Anciens medecins</span>
-                    <div class="buttons">
-                        <a class="btn btn-success" href='oldMedecins'>Anciens Medecin</a>
+                    <div class="buttons-inline">
+                        <a class="btn btn-success" href='oldMedecins'>Consulter</a>
                     </div>
-                <label>
-                <span>Maladies</span>
-                <% user.maladies.forEach((maladie) => { %> -->
-                    <input class="login-input" type="text" value="<%= maladie%>">
-                <%})%>
                 </label>
-                <!-- <%}%> -->
-                <!--<div class="buttons">
-                    <button type="submit" href="#" class="btn btn-success">Sauvegarder</button>
-
-                </div>-->
+                
             </form>
         </div>
     </div>

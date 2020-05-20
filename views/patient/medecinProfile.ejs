@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PFA</title>
+    <title><%= medecin.nom %> <%=medecin.prenom %> | Profil</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
     <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
 </head>
@@ -16,10 +16,11 @@
         <label class="logo">LOGO</label>
         <ul>
             <li><a href="patientHome">Accueil</a></li>
+            <li><a href="patientValues">Prélévements</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a class="active" href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
-            <li><a href="#">Profil</a></li>
+            <li><a href="myProfileUser">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
@@ -34,7 +35,8 @@
             <div class="profil">
                 <label>
                     <span>Nom complet</span>
-                    <input class="login-input" type="text" name="fullname" value="<%= medecin.nom %> <%=medecin.prenom %>" readonly>
+                    <input class="login-input" type="text" name="fullname"
+                        value="<%= medecin.nom %> <%=medecin.prenom %>" readonly>
                 </label>
                 <label>
                     <span>Email</span>
@@ -60,36 +62,40 @@
 
                 </label>
                 <% if(estMedecin == null) { %>
-                    <% if(sentDemande) {%>
-                        Demande nouveau contrat envoyée
-                        <form action="/medecinProfile?id=<%= medecin._id%>&action=no" method="post"> 
-                            <input class="btn btn-success" type="submit" value="Annuler la demande">
-                            <a href="medecins" class="btn btn-echec">Retour</a>
-                        </form>
+                <% if(sentDemande) {%>
+                <label>
+                    <span>Demande nouveau contrat envoyée</span>
+                    <form action="/medecinProfile?id=<%= medecin._id%>&action=no" method="post">
+                        <input class="btn btn-success" type="submit" value="Annuler la demande">
+                        <a href="medecins" class="btn btn-echec">Retour</a>
+                    </form>
                     <% } else if(sentDemande == false) { %>
-                        <div class="buttons">
-                            <form action="/medecinProfile?id=<%= medecin._id%>&action=yes" method="post">
-                                <input class="btn btn-success" type="submit" value="Envoyer la demande">
-                            </form>
-                            <a href="medecins" class="btn btn-echec">Retour</a>
-                        </div>
-                        
-                <% }} else if(estMedecin == true) { %> 
-                    <label>
-                        <span>Date debut contrat:</span>
-                        <input class="login-input" type="text" name="adresse" value="<%= debutContrat %>"readonly>
-                    </label>
-                    <% if(sentDemande) {%>
-                        Demande fin contrat envoyée
-                        <form action="/medecinProfile?id=<%= medecin._id%>&action=no" method="post"> 
-                            <input class="btn btn-success" type="submit" value="Annuler la demande">
-                            <a href="medecins" class="btn btn-echec">Retour</a>
+                    <div class="buttons-inline">
+                        <form action="/medecinProfile?id=<%= medecin._id%>&action=yes" method="post">
+                            <button class="btn btn-success" type="submit" value="Envoyer la demande">Envoyer la
+                                demande</button>
                         </form>
+                        <a href="medecins" class="btn btn-echec">Retour</a>
+                    </div>
+                </label>
+                <% }} else if(estMedecin == true) { %>
+                <label>
+                    <span>Date debut contrat</span>
+                    <input class="login-input" type="text" name="adresse" value="<%= debutContrat %>" readonly>
+                </label>
+                <% if(sentDemande) {%>
+                <label>
+                    <span>Demande fin contrat envoyée</span>
+                    <form action="/medecinProfile?id=<%= medecin._id%>&action=no" method="post">
+                        <input class="btn btn-success" type="submit" value="Annuler la demande">
+                        <a href="medecins" class="btn btn-echec">Retour</a>
+                    </form>
                     <% } else if(sentDemande == false) { %>
-                        <form action="/medecinProfile?id=<%= medecin._id%>&action=end" method="post"> 
-                            <input class="btn btn-success" type="submit" value="Fin contrat">
-                            <a href="medecins" class="btn btn-echec">Retour</a>
-                        </form>
+                    <form action="/medecinProfile?id=<%= medecin._id%>&action=end" method="post">
+                        <input class="btn btn-success" type="submit" value="Fin contrat">
+                        <a href="medecins" class="btn btn-echec">Retour</a>
+                    </form>
+                </label>
                 <% }} %>
             </div>
         </div>

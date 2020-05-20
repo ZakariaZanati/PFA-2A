@@ -19,7 +19,6 @@
             <li><a href="dayValues">Prelevements</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a class="patients">Patients</a></li>
-            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -27,7 +26,7 @@
     <div class="container">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
-            <img src="public/images/profil.jpg" class="img-header">
+            <img src="public/images/doctor.jpg" class="img-header">
             <h1 class="text-header">Profil du patient</h1>
         </div>
         <div class="container-body">
@@ -53,17 +52,18 @@
                         <span>Pays</span>
                         <input class="login-input" type="text" name="pays" value="<%= user.pays %>" readonly>
                     </label>
-                <label>
+                    <label>
                         <span>Ville</span>
                         <input class="login-input" type="text" name="ville" value="<%= user.age %>">
                     </label>
-                    <div class="cadre">
-                        <label>
-                            <span>MALADIES</span>
-                            <% user.maladies.forEach((maladie) => { %>
-                            <input class="login-input" type="text" value="<%= maladie %>" readonly>
-                            <%})%>
-                    </div>
+                    <% if(user.maladies[0]!=null) {%>
+                    <label>
+                        <span>MALADIES</span>
+                        <% user.maladies.forEach((maladie) => { %>
+                        <input class="login-input" type="text" value="<%= maladie %>" readonly>
+                        <%})%>
+                    </label>
+                    <%}%>
                     <% if(!estPatient) {%>
                     <div class="cadre">
                         <label>
@@ -92,9 +92,12 @@
                                 <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
                             </form>
                             <%} else { %>
-                            <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
-                                <button class="btn btn-echec" type="submit" value="Fin contrat">Fin contrat</button>
-                            </form>
+                            <div class="buttons-inline">
+                                <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
+                                    <button class="btn btn-echec" type="submit" value="Fin contrat">Fin contrat</button>
+                                </form>
+                                <a href="dayValues" class="btn">Retour</a>
+                            </div>
                         </div>
                         <%}%>
                     <%}%>

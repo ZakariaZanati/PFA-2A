@@ -2,7 +2,7 @@ document.getElementById('patient').addEventListener('click',
     function () {
         document.getElementById("form-doc").style.display = "none";
         document.getElementById("form-user").style.display = "block";
-        document.getElementById("imginscription").src = "public/images/health.jpg"; 
+        document.getElementById("imginscription").src = "public/images/happy.jpg";
     });
 
 document.getElementById('med').addEventListener('click',
@@ -29,3 +29,13 @@ if(param === "medecin"){
     medecin.style.display= "block";
     document.getElementById("imginscription").src = "public/images/doctor.jpg";
 }*/
+function getPatients() {
+    if (document.getElementById("current").checked) {
+        document.getElementById("currentPatients").style.display = "block";
+        document.getElementById("oldPatients").style.display = "none";
+    }
+    else {
+        document.getElementById("currentPatients").style.display = "none";
+        document.getElementById("oldPatients").style.display = "block";
+    }
+}

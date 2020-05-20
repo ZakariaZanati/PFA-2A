@@ -19,12 +19,11 @@
             <li><a href="dayValues">Prelevements</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div class="big-container">
         <div class="container-header container-img-header">
             <img src="public/images/red.jpg" class="img-header">
             <h1 class="text-header">La liste des alertes</h1>
@@ -46,7 +45,9 @@
                     </tr>
                     <% alerts.forEach((alert)=>{ %>
                     <tr>
-                        <td data-label="Nom  et prénom"><a class="btn" href='userProfile?id=<%= alert.utilisateur._id %>' ><%= alert.utilisateur.nom %> <%= alert.utilisateur.prenom %></a></td>
+                        <td id="patient" data-label="Patient"><a class="btn"
+                                href='userProfile?id=<%= alert.utilisateur._id %>'><%= alert.utilisateur.nom %>
+                                <%= alert.utilisateur.prenom %></a></td>
                         <td data-label="Date"><%= alert.date %></td>
                         <td data-label="Temps"><%= alert.temps %></td>
                         <td data-label="Mesure"><%= alert.mesure %></td>

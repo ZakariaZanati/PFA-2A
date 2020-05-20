@@ -19,7 +19,6 @@
             <li><a href="dayValues">Prelevements</a></li>
             <li><a class="active">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -34,27 +33,28 @@
             <table class="table table-sortable table-3">
                 <thead>
                     <tr>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
-                            <th>Email</th>
-                            <th>Pays</th>
-                            <th>Ville</th>
-                            <th>Type demande</th>
-                        </tr>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>Email</th>
+                        <th>Pays</th>
+                        <th>Ville</th>
+                        <th>Type demande</th>
+                    </tr>
                     </tr>
                 </thead>
                 <tbody>
                     <% demandes.forEach((demande)=>{ %>
-                        <tr>
-                            <td><%= demande.user.nom %></td>
-                            <td><%= demande.user.prenom %></td>
-                            <td><%= demande.user.email %></td>
-                            <td><%= demande.user.pays %></td>
-                            <td><%= demande.user.ville %></td>
-                            <td><%= demande.type %></td>
-                            <td data-label="Profil"><a class="btn" href='userProfile?id=<%= demande.user._id %>' >Consulter</a></td>
-                        </tr>
+                    <tr>
+                        <td data-label="Nom"><%= demande.user.nom %></td>
+                        <td data-label="Prénom"><%= demande.user.prenom %></td>
+                        <td data-label="Email"><%= demande.user.email %></td>
+                        <td data-label="Pays"><%= demande.user.pays %></td>
+                        <td data-label="Ville"><%= demande.user.ville %></td>
+                        <td data-label="Type demande"><%= demande.type %></td>
+                        <td data-label="Profil"><a class="btn"
+                                href='userProfile?id=<%= demande.user._id %>'>Consulter</a></td>
+                    </tr>
                     <% }); %>
                 </tbody>
             </table>

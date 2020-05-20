@@ -16,6 +16,7 @@
         <label class="logo">LOGO</label>
         <ul>
             <li><a href="patientHome">Accueil</a></li>
+            <li><a href="patientValues">Prélévements</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a class="active">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
@@ -48,7 +49,8 @@
                         <td data-label="Email"><%= medecin.email %></td>
                         <td data-label="Pays"><%= medecin.pays %></td>
                         <td data-label="Ville"><%= medecin.ville %></td>
-                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= medecin._id %>'>Consulter</a></td>
+                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= medecin._id %>'>Consulter</a>
+                        </td>
                     </tr>
                     <% }); %>
                 </tbody>

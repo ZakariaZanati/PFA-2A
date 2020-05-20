@@ -19,7 +19,6 @@
             <li><a href="dayValues">Prelevements</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils">Seuils</a></li>
             <li><a class="active">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -34,7 +33,8 @@
             <form class="profil" method="POST">
                 <label>
                     <span>Nom complet</span>
-                    <input class="login-input" type="text" name="fullname" value="<%= medecin.nom %> <%=medecin.prenom %>">
+                    <input class="login-input" type="text" name="fullname"
+                        value="<%= medecin.nom %> <%=medecin.prenom %>">
                 </label>
                 <label>
                     <span>Email</span>
@@ -54,16 +54,17 @@
                 </label>
                 <label>
                     <span>Adresse lieu travail</span>
-                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required>
+                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
+                        required>
                 </label>
-            
+
                 <label>
-                    <span>Patients</span>
-                    <div class="buttons">
-                        <a class="btn btn-success" href='patients'>Patients</a>
+                    <span>Mes Patients</span>
+                    <div class="buttons-inline">
+                        <a class="btn" href='patients'>Consulter</a>
                     </div>
-                <label>
-                
+                    <label>
+
             </form>
         </div>
     </div>

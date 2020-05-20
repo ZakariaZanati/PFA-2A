@@ -19,7 +19,6 @@
             <li><a class="active">Prelevements</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -35,7 +34,7 @@
             <table class="table table-sortable table-7">
                 <thead id="table-head">
                     <tr>
-                        <th>Nom et prénom</th>
+                        <th>Patient</th>
                         <th>temps</th>
                         <th>Température</th>
                         <th>Tension systolique</th>
@@ -46,18 +45,20 @@
                 </thead>
                 <tbody>
                     <% values.forEach(value => {%>
-                            <% for(i = 0; i < value.temperature.length; i++) { %>
-                                <tr>
-                                    <td data-label="Nom  et prénom"><a href='userProfile?id=<%= value.utilisateur._id %>' class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
-                                    <td data-label="Temps"><%= value.temperature[i].temps %></td>
-                                    <td data-label="Température"><%= value.temperature[i].valeur %></td>
-                                    <td data-label="Tension"><%= value.tensionSystolique[i].valeur %></td>
-                                    <td data-label="Tension"><%= value.tensionDiastolique[i].valeur %></td>
-                                    <td data-label="Oxygène"><%= value.tauxOxygen[i].valeur %></td>
-                                    <td data-label="Glucose"><%= value.tauxGlucose[i].valeur %></td>
-                                    <td data-label="Prélévements"><a href='patientValues?id=<%= value.utilisateur._id %>' class="btn btn-success">Prélévements</a></td>
-                                </tr>
-                            <% } %>
+                    <% for(i = 0; i < value.temperature.length; i++) { %>
+                    <tr>
+                        <td id="patient" data-label="Patient"><a href='userProfile?id=<%= value.utilisateur._id %>'
+                                class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
+                        <td data-label="Temps"><%= value.temperature[i].temps %></td>
+                        <td data-label="Température"><%= value.temperature[i].valeur %></td>
+                        <td data-label="Tension"><%= value.tensionSystolique[i].valeur %></td>
+                        <td data-label="Tension"><%= value.tensionDiastolique[i].valeur %></td>
+                        <td data-label="Oxygène"><%= value.tauxOxygen[i].valeur %></td>
+                        <td data-label="Glucose"><%= value.tauxGlucose[i].valeur %></td>
+                        <td data-label="Prélévements"><a href='patientValues?id=<%= value.utilisateur._id %>'
+                                class="btn btn-success">Prélévements</a></td>
+                    </tr>
+                    <% } %>
                     <% }) %>
                     <!--<tr>
                         <td data-label="Nom  et prénom"><a href="#" class="btn">Zakaria amar</a></td>
