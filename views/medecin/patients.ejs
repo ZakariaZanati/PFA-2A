@@ -60,8 +60,8 @@
                             <td data-label="Email"><%= patient.utilisateur.email %></td>
                             <td data-label="Début contrat"><%= patient.debutContrat %></td>
                             <td><a href='patientValues?id=<%= patient.utilisateur._id %>'
-                                    class="btn btn-success">Prelevement</a></td>
-                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alerts</a>
+                                    class="btn btn-success">Prélévement</a></td>
+                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a>
                             </td>
                         </tr>
                         <% }); %>
@@ -72,7 +72,7 @@
                 <table class="table table-sortable table-4">
                     <thead id="table-head">
                         <tr>
-                            <th>Nom et prénom</th>
+                            <th>Patient</th>
                             <th>Email</th>
                             <th>Date d'ajout</th>
                             <th>Fin contrat</th>
@@ -81,7 +81,7 @@
                     <tbody>
                         <% oldPatients.forEach((patient)=>{ %>
                         <tr>
-                            <td data-label="Nom  et prénom"><a
+                            <td id="patient" data-label="Patient"><a
                                     href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
                                     <%= patient.utilisateur.prenom %></a></td>
                             <td data-label="Email"><%= patient.utilisateur.email %></td>

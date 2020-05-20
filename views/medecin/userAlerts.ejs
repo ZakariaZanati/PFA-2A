@@ -15,7 +15,7 @@
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
         <ul>
-            <li><a class="active">Accueil</a></li>
+            <li><a href="medecinHome">Accueil</a></li>
             <li><a href="dayValues">Prelevements</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
@@ -26,18 +26,17 @@
     <div class="big-container">
         <div class="container-header container-img-header">
             <img src="public/images/red.jpg" class="img-header">
-            <h1 class="text-header">La liste des alertes</h1>
+            <h1 class="text-header">La liste des alertes "Nom"</h1>
         </div>
 
         <div class="container-body">
             <table class="table table-sortable table-5">
                 <thead>
                     <tr>
-                        <th>Patient</th>
                         <th>Date</th>
                         <th>Heure</th>
                         <th>Mesure</th>
-                        <th>Alert</th>
+                        <th>Alerte</th>
                         <th>Différence</th>
                     </tr>
                 </thead>
@@ -45,13 +44,10 @@
                     </tr>
                     <% alerts.forEach((alert)=>{ %>
                     <tr>
-                        <td id="patient" data-label="Patient"><a class="btn"
-                                href='userProfile?id=<%= alert.utilisateur._id %>'><%= alert.utilisateur.nom %>
-                                <%= alert.utilisateur.prenom %></a></td>
                         <td data-label="Date"><%= alert.date %></td>
-                        <td data-label="Heure"><%= alert.temps %></td>
+                        <td data-label="Temps"><%= alert.temps %></td>
                         <td data-label="Mesure"><%= alert.mesure %></td>
-                        <td data-label="Alert"><%= alert.text %></td>
+                        <td data-label="Alerte"><%= alert.text %></td>
                         <td data-label="Différence"><%= alert.difference %></td>
                     </tr>
                     <% }); %>
