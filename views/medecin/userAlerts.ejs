@@ -26,7 +26,7 @@
     <div class="big-container">
         <div class="container-header container-img-header">
             <img src="public/images/red.jpg" class="img-header">
-            <h1 class="text-header">La liste des alertes "Nom"</h1>
+            <h1 class="text-header">La liste des alertes du patient <%= utilisateur.nom %> <%= utilisateur.prenom %></h1>
         </div>
 
         <div class="container-body">
@@ -44,7 +44,7 @@
                     </tr>
                     <% alerts.forEach((alert)=>{ %>
                     <tr>
-                        <td data-label="Date"><%= alert.date %></td>
+                        <td data-label="Date"><%= alert.date.toISOString().split('T')[0] %></td>
                         <td data-label="Temps"><%= alert.temps %></td>
                         <td data-label="Mesure"><%= alert.mesure %></td>
                         <td data-label="Alerte"><%= alert.text %></td>
