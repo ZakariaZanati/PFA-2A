@@ -36,7 +36,7 @@ var statisticSchema = new Schema({
 
     MoyennesJours : [{
         jour : {
-            type : String,
+            type : Date,
             default : null
         },
 

@@ -73,7 +73,7 @@ module.exports = (app , mongoose) => {
                         $position: 0});  
                         values.save();
                     
-                    Statistics.findOne({utilisateur : userId} ,{ "MoyennesJours" : {$elemMatch : {"jour" : _date.toString()}}})
+                    Statistics.findOne({utilisateur : userId} ,{ "MoyennesJours" : {$elemMatch : {"jour" : _date}}})
                     .then(result =>{
                         
                         for (i = 0; i < result.MoyennesJours[0].moyennesJour.length; i++) {

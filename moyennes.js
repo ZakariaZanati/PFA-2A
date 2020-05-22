@@ -41,18 +41,27 @@ var moyenneSemaine = (userId, day , date , moyenneJour) => {
                 
                 Statistics.findOne({utilisateur : userId}, {"MoyennesSemaines": {$elemMatch : {"debutSemaine" : retrieveDays(date,daysToRetrieve)}}})
                 .then(result =>{
-                    //var test = result.MoyennesSemaines[0].moyenneTemperature;
-                    //console.log('resuuuuuuuuuuuuult '+test);
-                   
-                    Statistics.update({utilisateur : userId, 'MoyennesSemaines.debutSemaine' : retrieveDays(date,daysToRetrieve)},
-                    {$set : {
-                        'MoyennesSemaines.$.moyenneTemperature' : (result.MoyennesSemaines[0].moyenneTemperature*daysToRetrieve + moyenneJour[0])/(daysToRetrieve+1) ,
-                        'MoyennesSemaines.$.moyenneTensionSystolique' : (result.MoyennesSemaines[0].moyenneTensionSystolique*daysToRetrieve + moyenneJour[1])/(daysToRetrieve+1),
-                        'MoyennesSemaines.$.moyenneTensionDiastolique' : (result.MoyennesSemaines[0].moyenneTensionDiastolique*daysToRetrieve + moyenneJour[2])/(daysToRetrieve+1),
-                        'MoyennesSemaines.$.moyenneTauxOxygen' : (result.MoyennesSemaines[0].moyenneTauxOxygen*daysToRetrieve + moyenneJour[3])/(daysToRetrieve+1),
-                        'MoyennesSemaines.$.moyenneTauxGlucose' : (result.MoyennesSemaines[0].moyenneTauxGlucose*daysToRetrieve + moyenneJour[4])/(daysToRetrieve+1)
-                        }
-                    },res =>{console.log(res+'\n')});
+                   Statistics.findOne({utilisateur : userId})
+                   .select('MoyennesJours -_id')
+                   .then(val =>{
+                       nbJrs = 0;
+                        val.MoyennesJours.forEach(element => {
+                            if (element.jour >= result.MoyennesSemaines[0].debutSemaine && element.jour <= result.MoyennesSemaines[0].finSemaine) {
+                                console.log(element);
+                                nbJrs++;
+                            }
+                        });
+                        console.log(nbJrs);
+                        Statistics.update({utilisateur : userId, 'MoyennesSemaines.debutSemaine' : retrieveDays(date,daysToRetrieve)},
+                        {$set : {
+                            'MoyennesSemaines.$.moyenneTemperature' : (result.MoyennesSemaines[0].moyenneTemperature*(nbJrs-1) + moyenneJour[0])/nbJrs ,
+                            'MoyennesSemaines.$.moyenneTensionSystolique' : (result.MoyennesSemaines[0].moyenneTensionSystolique*(nbJrs-1) + moyenneJour[1])/nbJrs,
+                            'MoyennesSemaines.$.moyenneTensionDiastolique' : (result.MoyennesSemaines[0].moyenneTensionDiastolique*(nbJrs-1) + moyenneJour[2])/nbJrs,
+                            'MoyennesSemaines.$.moyenneTauxOxygen' : (result.MoyennesSemaines[0].moyenneTauxOxygen*(nbJrs-1) + moyenneJour[3])/nbJrs,
+                            'MoyennesSemaines.$.moyenneTauxGlucose' : (result.MoyennesSemaines[0].moyenneTauxGlucose*(nbJrs-1) + moyenneJour[4])/nbJrs
+                            }
+                        },res =>{console.log(res+'\n')});
+                   }); 
                 });
             }
         } else {
