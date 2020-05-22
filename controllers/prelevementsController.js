@@ -13,7 +13,10 @@ module.exports = function (app , mongoose) {
             else {
                 Prelevements.find({utilisateur: req.session.userId}).sort([['date', -1]])
                 .then((prelevements)=>{
-                    res.render('patientValues',{prelevements : prelevements, userType: req.session.type});
+                    User.findById(req.session.userId)
+                    .then(user => {
+                        res.render('patientValues',{prelevements : prelevements, utilisateur: user});
+                    })
                 });
             }
             
@@ -27,7 +30,11 @@ module.exports = function (app , mongoose) {
                 if(estPatient) {
                     Prelevements.find({utilisateur: patientId}).sort([['date', -1]])
                     .then((prelevements)=>{
-                        res.render('patientValues',{prelevements : prelevements, userType: req.session.type});
+                        User.findById(patientId)
+                        .then(user => {
+                            res.render('patientValues',{prelevements : prelevements, utilisateur: user});
+                        })
+                        
                     });
                 }
                 else {
@@ -47,7 +54,10 @@ module.exports = function (app , mongoose) {
         if(req.session.type === 'normal') {
             Alert.find({utilisateur: req.session.userId})
             .then((alerts) => {
-                res.render('userAlerts', {alerts: alerts});
+                User.findById(req.session.userId)
+                .then(user => {
+                    res.render('userAlerts', {alerts: alerts, utilisateur: user});
+                })
             })
         }
         else if(req.session.type === 'medecin') {
@@ -58,7 +68,10 @@ module.exports = function (app , mongoose) {
                 if(estPatient) {
                     Alert.find({utilisateur: patientId})
                     .then((alerts)=>{
-                        res.render('userAlerts', {alerts: alerts});
+                        User.findById(patientId)
+                        .then(user => {
+                            res.render('userAlerts', {alerts: alerts, utilisateur: user});
+                        })
                     });
                 }
                 else {
