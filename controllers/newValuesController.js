@@ -5,7 +5,7 @@ module.exports = (app , mongoose) => {
     const Seuils = require('../models/seuilsModel');
     const Alert = require('../models/alertModel');
     const Statistics = require('../models/statisticsModel');
-    const moyenneSemaine = require('../moyennes');
+    const {moyenneSemaine,moyenneMoi} = require('../moyennes');
     var url = require('url');
     const bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -106,6 +106,7 @@ module.exports = (app , mongoose) => {
                         
                         if(values.temperature.length === 4){
                             moyenneSemaine(userId,_day,_date,result.MoyennesJours[0].moyennesJour);
+                            moyenneMoi(userId,result.MoyennesJours[0].moyennesJour);
                         }
                     })
 

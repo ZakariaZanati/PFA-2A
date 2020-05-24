@@ -26,6 +26,34 @@ var moyenneSchema = new Schema({
     }
 })
 
+var moyenneMoiSchema = new Schema({
+    moi : {
+        type : Number,
+        default : null
+    },
+    moyenneTemperature : {
+        type : Number,
+        default : null,
+    },
+    moyenneTensionSystolique : {
+        type : Number,
+        default : null,
+    },
+    moyenneTensionDiastolique : {
+        type : Number,
+        default : null,
+    },
+    moyenneTauxOxygen : {
+        type : Number,
+        default : null,
+    },
+    moyenneTauxGlucose : {
+        type : Number,
+        default : null,
+    }
+
+})
+
 var statisticSchema = new Schema({
 
     utilisateur : {
@@ -85,7 +113,7 @@ var statisticSchema = new Schema({
                 default : null,
             },
 
-            moyennesMois : [moyenneSchema],
+            moyennesMois : [moyenneMoiSchema],
 
             moyenneAnnee : moyenneSchema
             
