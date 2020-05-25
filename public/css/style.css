@@ -5,7 +5,9 @@
     margin: 0;
     padding: 0;
 }
-
+html{
+    width: 100vw;
+}
 body {
     margin: 0;
     position: relative;
@@ -23,7 +25,7 @@ body {
     margin: auto;
     width: 90%;
     max-width: 960px;
-    padding: .3em .2em;
+    padding: .5em .2em;
 }
 .container-header, .container-body  {
     border: 5px solid #efefef;
@@ -71,22 +73,17 @@ body {
     z-index: 1;
     opacity: .8;
 }
-.big-container{
-    margin: 0 1em;
-}
 
 .login-container {
     
     padding: 0;
     position: relative;
-    /* border: 2px solid; */
     margin: auto;
     width: 100%;
     height: 100%;
 }
 
 .login-container img {
-    /* border: 2px solid; */
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -154,7 +151,6 @@ p{
 }
 
 .form{
-    /* border: 1px solid; */
     position: relative;
     width: 80%;
     padding: 1em 2em;
@@ -190,12 +186,18 @@ label span{
     align-items: center;
     justify-content: center;  
 }
+
 .margin{
     margin-bottom: 1.5em;
     margin-top: .7em;
 }
 .radio{
     margin: 0 2em;
+    display: flex;
+}
+.radio input{
+    width: 1rem;
+    margin-right: .5em;
 }
 .login-input, .login-medecin-input, .login-user-input,select{
     border: none;
@@ -243,7 +245,7 @@ text-decoration: underline;
 }
 
 
-@media(max-width: 900px ) {
+@media(max-width: 900px ), (orientation: portrait) {
     html{
         font-size: .9rem;
     }
@@ -275,7 +277,7 @@ text-decoration: underline;
     }
 
     h1{
-        font-size: 4vw;
+        font-size: 4.5vw;
     }    
 }
 
@@ -286,14 +288,16 @@ nav{
     top: 0;
     background: #f8f8f8;
     width: 100%;
-    border-bottom: 2px solid #143774;
     z-index: 10;
+    -webkit-box-shadow: 0 8px 6px -6px #707070; ;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
+    box-shadow: 0 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
 label.logo {
     color : #143774;
     font-size: 2rem;
-    line-height: 90px;
+    line-height: 5rem;
     padding: 0 2em;
     font-weight: bold;
 }
@@ -310,7 +314,7 @@ nav a:hover {
 
 nav ul li {
     display: inline-block;
-    line-height: 90px;
+    line-height: 5rem;
     margin-right: .7em;
     font-weight: 700;
 }
@@ -338,9 +342,8 @@ nav a.active, nav a:hover {
     font-size: 1.5rem;
     color:#143774;
     float: right;
-    line-height: 90px;
+    line-height: 5rem;
     margin-right: 1.5em;
-    line-height: 90px;
     cursor: pointer;
     display: none;
 }
@@ -351,15 +354,14 @@ nav a.active, nav a:hover {
 #check{
     display: none;
 }
-
+#navMedecin,#navPatient,#h1Medecin,#h1Patient {
+    display: none;
+}
 
 @media(max-width: 960px) {
     label.logo {
         font-size: 5vw;
         padding-left: 1em;
-    }
-    .navigation-bar ul li a {
-        font-size: 1rem;
     }
     .checkbtn {
         display: block;
@@ -383,7 +385,7 @@ nav a.active, nav a:hover {
         overflow-y: auto;
     }
     .navigation-bar ul::-webkit-scrollbar {
-        width: 0 !important
+        width: 0 
     }
     .element { 
         overflow: -moz-scrollbars-none; 
@@ -400,7 +402,7 @@ nav a.active, nav a:hover {
         display: block;
     }
     .navigation-bar ul li a {
-        font-size: 1rem;
+        font-size: .9rem;
         padding: 0;
         color: white;
     }
@@ -423,6 +425,9 @@ nav a.active, nav a:hover {
     #check:checked  ~ .nav-overlay {
         left: 0;
     }
+    nav ul li a:last-child {
+        padding-right: 0;
+    }
     
 
 }
@@ -430,12 +435,13 @@ nav a.active, nav a:hover {
 /* VIDEO */
 
 .v-header {
-    height: 100vh;
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
+    padding-top: .5em;
 }
 
 
@@ -443,7 +449,7 @@ nav a.active, nav a:hover {
     position:absolute;
     left : 0;
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     overflow: hidden;
 }
 
@@ -454,7 +460,7 @@ nav a.active, nav a:hover {
 }
 
 .header-overlay {
-    height: 100vh;
+    height: 90vh;
     width: 100vw;
     position:absolute;
     left: 0;
@@ -470,7 +476,7 @@ nav a.active, nav a:hover {
 }
 
 .header-content h1{
-    padding: 0 1em;
+    padding: 0;
     font-size: 3.5rem;
     margin-bottom: 0;
 }
@@ -480,6 +486,17 @@ nav a.active, nav a:hover {
     display:  block;
     padding-bottom: 2em;
 }
+@media(max-width: 960px) {
+    .header-content h1{
+        padding: 0 .5em;
+        font-size: 2rem;
+        margin-bottom: 0;
+    }
+    #button{
+        font-size: 1rem;
+    }
+}
+
 /* BUTTON */
 .btn {
     font-family: 'Nunito', sans-serif;
@@ -536,7 +553,7 @@ nav a.active, nav a:hover {
 /* SECTION */
 
 .section {
-    padding: 1em 0;
+    padding: 1em;
     text-align: center;
 }
 
@@ -552,9 +569,25 @@ nav a.active, nav a:hover {
 .section-img{
     display: flex;
     justify-content: space-between;
-    padding: 0 1em;
+    padding: 0;
     margin-top: 1em;
 }
+
+@media(max-width: 900px ) {
+    .widget {
+        height: 20vh;
+        width: 70vh;
+        object-fit: cover;
+    }
+    .laptop{
+        object-position: bottom;
+    }
+    .smartphone{
+        object-position: top;
+    }
+}
+
+
 
 /* TABLE */
 .table{
@@ -601,12 +634,16 @@ nav a.active, nav a:hover {
     white-space: nowrap;
 }
 
-@media(max-width: 800px){
+@media(max-width: 700px){
+  
+    .table .btn{
+        font-size: .7em;
+    }
 
     .table, .table tbody, .table tr, .table td{
         display: block;
         width: 100%;
-        font-size:.9rem;      
+        font-size:2.5vw;      
     }
     .table tr{
         margin-bottom:1.5em;
@@ -623,11 +660,14 @@ nav a.active, nav a:hover {
     }
     .table-6 th{
         width: 16vw;
-        font-size: vw;
+        font-size: 2vw;
     }
     .table-7 th{
         width: 14vw;
         font-size: 2vw;
+    }
+    .table-no-header th{
+        display: none;
     }
 
     .table td{
@@ -635,7 +675,7 @@ nav a.active, nav a:hover {
         text-align: right;
         padding-left: 40%;
         position: relative;
-        min-height: 40px;
+        min-height: 3.5em;
     }
     .table td::before{
         content: attr(data-label);
@@ -673,7 +713,7 @@ nav a.active, nav a:hover {
 
 /* HOME */
 .container-home{
-    padding: 0 1em;
+    padding: .5em 1em;
 }
 .container-add input{
     text-align: center;
@@ -688,8 +728,11 @@ nav a.active, nav a:hover {
     background: rgba(37, 45, 54, 0.856);
     color: white;
 }
+.date-header{
+    font-size: 1.2rem;
+}
 .add-info{
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: 600;
 }
 .alert-para{
@@ -697,12 +740,15 @@ nav a.active, nav a:hover {
     margin-bottom: 1em;
 }
 
-@media(max-width: 900px){
+@media(max-width: 900px), (orientation:portrait){
     .container-add{
         order:2;
     }
     .container-alert{
         order:1;
+    }
+    .add-info{
+        font-size: 1rem;
     }
 }
 
@@ -749,4 +795,20 @@ nav a.active, nav a:hover {
 .cadre{
     border: 2px solid #dad0d0;
     padding: .5em 3em;
+}
+/* FOOTER */
+.footer{
+    width: 100%;
+    padding: 2em 5em;
+    text-align: center;
+    background: rgba(109,93,93,.4);
+    color: #707070;
+}
+/* SMARTWATCH */
+@media (max-device-width: 320px)
+and (max-device-height: 400px),(max-device-height: 320px)
+and (max-device-width: 400px) {
+    html{
+        font-size: 2.2vw;
+    }  
 }

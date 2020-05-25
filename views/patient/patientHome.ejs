@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PFA</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
-    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+    <script src="public/js/icons.js"></script>
 </head>
 
 <body>
@@ -15,8 +15,8 @@
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
         <ul>
-            <li><a class="active">Accueil</a></li>
-            <li><a href="patientValues">Prélévements</a></li>
+            <li><a class="active" href="patientHome">Accueil</a></li>
+            <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
@@ -80,13 +80,11 @@
                         <input class="login-input" name="tauxGlucose" placeholder="Taux glucose" required>
                         <div class="radio-group">
                             <label class="radio">
-                                <input class="typeTest" type="radio" checked="true" name="typeTest" id="aJeun"
-                                    value="aJeun">
+                                <input type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun">
                                 <span>A jeun</span>
                             </label>
                             <label class="radio">
-                                <input class="typeTest" type="radio" name="typeTest" id="postPrandial"
-                                    value="postPrandial">
+                                <input type="radio" name="typeTest" id="postPrandial" value="postPrandial">
                                 <span>Post prandial</span>
                             </label>
                         </div>

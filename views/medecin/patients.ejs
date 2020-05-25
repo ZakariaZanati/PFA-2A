@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PFA</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
-    <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
+    <script src="public/js/icons.js"></script>
 </head>
 
 <body>
@@ -16,14 +16,14 @@
         <label class="logo">LOGO</label>
         <ul>
             <li><a href="medecinHome">Accueil</a></li>
-            <li><a href="dayValues">Prelevements</a></li>
-            <li><a href="demandes">Demandes</a></li>
-            <li><a class="active">Patients</a></li>
+            <li><a href="dayValues">Santé</a></li>
+            <li><a href=" demandes">Demandes</a></li>
+            <li><a href="patients" class="active">Patients</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
-    <div class="big-container">
+    <div class="container-home">
         <div class="container-img-header container-header">
             <div class="overlay"></div>
             <img src="/public/images/patient.jpg" class="img-header">
@@ -33,12 +33,12 @@
         <div class="container-body">
             <div class="radio-group margin">
                 <label class="radio">
-                    <input class="patients" type="radio" checked="true" name="patients" id="current" value="current"
+                    <input type="radio" checked="true" name="patients" id="current" value="current"
                         onclick="getPatients()">
                     <span>Patients actuels</span>
                 </label>
                 <label class="radio">
-                    <input class="patients" type="radio" name="patients" id="old" value="old" onclick="getPatients()">
+                    <input type="radio" name="patients" id="old" value="old" onclick="getPatients()">
                     <span>Anciens patients</span>
                 </label>
             </div>
@@ -60,7 +60,7 @@
                             <td data-label="Email"><%= patient.utilisateur.email %></td>
                             <td data-label="Début contrat"><%= patient.debutContrat %></td>
                             <td><a href='patientValues?id=<%= patient.utilisateur._id %>'
-                                    class="btn btn-success">Prélévement</a></td>
+                                    class="btn btn-success">Santé</a></td>
                             <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a>
                             </td>
                         </tr>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="disabled-adaptations" content="watch">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PFA</title>
   <link rel="shortcut icon" type="image/jpg" href="public/images/doctor.jpg">
   <link rel="stylesheet" href="/public/css/style.css" type="text/css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:400,600,700,800&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/dff21dd380.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
     <label class="logo">LOGO</label>
     <ul>
       <li><a href="registration">S'inscrire</a></li>
-      <li class="sign-in"><a href="login">S'identifier</a></li>
+      <li><a href="login">S'identifier</a></li>
     </ul>
   </nav>
 
@@ -47,21 +47,27 @@
     <div class="container">
       <h1>Une interface résponsive</h1>
       <p>Vous pouvez nous visiter depuis :</p>
-      <div class="section-img">
-        <div>
-          <p>L'ordinateur</p><img src="public/images/laptop.jpg" class="widget">
+      <div class="columns section-img">
+        <div class="col">
+          <p>L'ordinateur</p><img src="public/images/laptop.jpg" class="widget laptop">
         </div>
-        <div>
-          <p>Le smartphone</p><img src="public/images/smartphone.jpg" class="widget">
+        <div class="col">
+          <p>Le smartphone</p><img src="public/images/smartphone.jpg" class="widget smartphone">
         </div>
-        <div>
+        <div class="col">
           <p>La smartwatch</p>
-          <img src="public/images/smartwatch.jpg" class="widget">
+          <img src="public/images/smartwatch.jpg" class="widget smartwatch">
         </div>
       </div>
     </div>
   </section>
 
 </body>
+<footer>
+  <div class="footer">
+    <p>&copy; Copyright Ensias 2020</p>
+    <h1>LOGO</h1>
+  </div>
+</footer>
 
 </html>
