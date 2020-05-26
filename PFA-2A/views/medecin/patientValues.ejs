@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PFA</title>
+    <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <script src="public/js/icons.js"></script>
+</head>
+
+<body>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo">LOGO</label>
+        <ul id="navMedecin">
+            <li><a href="medecinHome">Accueil</a></li>
+            <li><a href="dayValues">Santé</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a class="active" href="patients">Patients</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+        <ul id="navPatient">
+            <li><a href="patientHome">Accueil</a></li>
+            <li><a class="active" href="patientValues">Santé</a></li>
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="medecins">Médecins</a></li>
+            <li><a href="seuils">Seuils</a></li>
+            <li><a href="myProfileUser">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container-home">
+        <div class="container-img-header container-header">
+            <div class="overlay"></div>
+            <img src="public/images/patient.jpg" class="img-header">
+            <h1 id="h1Medecin" class="text-header">Les données du patient <span><%= utilisateur.nom %>
+                    <%= utilisateur.prenom %></span></h1>
+            <h1 id="h1Patient" class="text-header">Vos données</h1>
+
+        </div>
+        <div class="container-body">
+            <% prelevements.forEach((prelevement)=>{ %>
+            <div class="container-header">
+                <h1 class="date-header">Les données du :
+                    <span><%= prelevement.date.toISOString().split('T')[0] %></span> </h1>
+            </div>
+            <div class="container-body">
+                <table class="table table-sortable table-6 table-no-header">
+                    <thead id="table-head">
+                        <tr>
+                            <th>Heure</th>
+                            <th>Température</th>
+                            <th>Tension systolique</th>
+                            <th>Tension diastolique</th>
+                            <th>Taux d'oxygène</th>
+                            <th>Taux de glucose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(i = 0; i < prelevement.temperature.length; i++) { %>
+                        <tr>
+                            <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
+                            <td data-label="Température"><%= prelevement.temperature[i].valeur %></td>
+                            <td data-label="Tension systolique"><%= prelevement.tensionSystolique[i].valeur %></td>
+                            <td data-label="Tension diastolique"><%= prelevement.tensionDiastolique[i].valeur %></td>
+                            <td data-label="Taux d'oxygène"><%= prelevement.tauxOxygen[i].valeur %></td>
+                            <td data-label="Taux de glucose"><%= prelevement.tauxGlucose[i].valeur %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+
+<script src="public/js/userNav.js"></script>
+<script src="public/js/sortedTable.js"></script>
+
+
+
+</html>
