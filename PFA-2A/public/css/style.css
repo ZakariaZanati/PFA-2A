@@ -507,6 +507,7 @@ nav a.active, nav a:hover {
     cursor: pointer;
     text-decoration: none;
     border: none;
+    border-radius: .2em;
 }
 
 .btn-round{
@@ -548,6 +549,8 @@ nav a.active, nav a:hover {
 .buttons-inline * {
     margin: 0 1em;
     min-height: 100%;
+}
+.min-width{
     min-width: 200px;
 }
 /* SECTION */
@@ -584,6 +587,9 @@ nav a.active, nav a:hover {
     }
     .smartphone{
         object-position: top;
+    }
+    .buttons-inline * {
+        font-size: .8em;
     }
 }
 
@@ -709,6 +715,10 @@ nav a.active, nav a:hover {
     font-size: 1rem;
     font-weight: 700;
 }
+.no-display{
+    display: none;
+}
+
 
 
 /* HOME */

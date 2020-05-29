@@ -30,6 +30,9 @@
             <img src="public/images/doctor.jpg" class="img-header">
             <h1 class="text-header">Profil</h1>
         </div>
+        <div class="container-body" id="editDiv">
+            <a class="btn btn-round" href='myProfileMedecin?action=edit'>Modifer le profil</a>
+        </div>
         <div class="container-body">
             <form class="profil" action="/myProfileMedecin" method="POST">
                 <label class="noEditable">
@@ -43,7 +46,8 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required readonly>
+                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required
+                        readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -55,23 +59,21 @@
                 </label>
                 <label>
                     <span>Adresse lieu travail</span>
-                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required readonly>
+                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
+                        required readonly>
                 </label>
                 <label class="noEditable">
                     <span>Mes Patients</span>
                     <div class="buttons-inline">
-                        <a class="btn" href='patients'>Consulter</a>
+                        <a class="btn btn-success" href='patients'>Consulter</a>
                     </div>
                 </label>
-                <div class="buttons-inline" id="editDiv">
-                    <a class="btn" href='myProfileMedecin?action=edit'>Modifer le profil</a>
-                </div>
-
-                <div class="buttons-inline" id="saveDiv" style="display: none;">
-                    <button class="btn btn-round submit" type="submit">Sauvegarder</button>
-                </div>
-                
             </form>
+            <div class="buttons-inline no-display" id="saveDiv">
+                <button class="btn btn-success" type="submit">Sauvegarder</button>
+                <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>
+
+            </div>
         </div>
     </div>
 
