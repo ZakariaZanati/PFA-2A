@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PFA</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
-    <script src="public/js/icons.js"></script>
+    <script src="public/js/icons.js" ></script>
 </head>
 
 <body>
@@ -14,12 +14,21 @@
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
-        <ul>
+        <ul id="navMedecin">
             <li><a href="medecinHome">Accueil</a></li>
             <li><a href="dayValues">Santé</a></li>
-            <li><a href=" #">Statistiques</a></li>
-            <li><a href="medecins">Médecins</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a href="patients">Patients</a></li>
             <li><a class="active">Seuils</a></li>
+            <li><a href="myProfileMedecin">Profil</a></li>
+            <li><a href="/logout">Deconnexion</a></li>
+        </ul>
+        <ul id="navPatient">
+            <li><a href="patientHome">Accueil</a></li>
+            <li><a href="patientValues">Prélévements</a></li>
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="medecins">Médecins</a></li>
+            <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -65,6 +74,7 @@
 
 </body>
 
+<script src="public/js/userNav.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 

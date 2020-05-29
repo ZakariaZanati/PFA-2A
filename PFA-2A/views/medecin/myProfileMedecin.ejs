@@ -17,8 +17,9 @@
         <ul>
             <li><a href="medecinHome">Accueil</a></li>
             <li><a href="dayValues">Santé</a></li>
-            <li><a href=" demandes">Demandes</a></li>
+            <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
+            <li><a href="seuils?id=medecin">Seuils</a></li>
             <li><a href="myProfileMedecin" class="active">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -30,41 +31,46 @@
             <h1 class="text-header">Profil</h1>
         </div>
         <div class="container-body">
-            <form class="profil" method="POST">
-                <label>
+            <form class="profil" action="/myProfileMedecin" method="POST">
+                <label class="noEditable">
                     <span>Nom complet</span>
                     <input class="login-input" type="text" name="fullname"
-                        value="<%= medecin.nom %> <%=medecin.prenom %>">
+                        value="<%= medecin.nom %> <%=medecin.prenom %>" readonly>
                 </label>
                 <label>
                     <span>Email</span>
-                    <input class="login-input" type="text" name="email" value="<%= medecin.email %>">
+                    <input class="login-input" type="text" name="email" value="<%= medecin.email %>" required readonly>
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="phone" value="<%= medecin.telephone %>">
+                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required readonly>
                 </label>
                 <label>
                     <span>Pays</span>
-                    <input class="login-input" type="text" name="pays" value="<%=  medecin.pays %>">
+                    <input class="login-input" type="text" name="pays" value="<%=  medecin.pays %>" required readonly>
                 </label>
                 <label>
                     <span>Ville</span>
-                    <input class="login-input" type="text" name="ville" value="<%=  medecin.ville %>">
+                    <input class="login-input" type="text" name="ville" value="<%=  medecin.ville %>" required readonly>
                 </label>
                 <label>
                     <span>Adresse lieu travail</span>
-                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
-                        required>
+                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required readonly>
                 </label>
-
-                <label>
+                <label class="noEditable">
                     <span>Mes Patients</span>
                     <div class="buttons-inline">
                         <a class="btn" href='patients'>Consulter</a>
                     </div>
-                    <label>
+                </label>
+                <div class="buttons-inline" id="editDiv">
+                    <a class="btn" href='myProfileMedecin?action=edit'>Modifer le profil</a>
+                </div>
 
+                <div class="buttons-inline" id="saveDiv" style="display: none;">
+                    <button class="btn btn-round submit" type="submit">Sauvegarder</button>
+                </div>
+                
             </form>
         </div>
     </div>
@@ -75,6 +81,7 @@
 
 </body>
 
+<script src="public/js/profile.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 

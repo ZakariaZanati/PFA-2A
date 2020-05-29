@@ -200,83 +200,6 @@ module.exports = function (app , mongoose) {
         
     });
 
-    /*app.post('/registration',urlencodedParser, function(req,res,next){
-        console.log(req.body);
-        
-     
-        var type = req.body.type;
-        var data = req.body;
-
-        User.findOne({email : data.email})
-        .then((user)=>{
-            if(user != null) {
-                res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
-                var err = new Error("L'émail "+ data.email + " exist déjà !");
-                err.status = 500;
-                next(err);
-            }
-            else{
-                if (type === 'normal') {
-                    if(data.diabete === "none"){
-                        var user = new User({
-                            nom : data.nom,
-                            prenom : data.prenom,
-                            sexe : data.gender,
-                            telephone : data.telephone,
-                            dateNaissance : data.dateNaissance,
-                            email : data.email,
-                            age : get_age(data.dateNaissance),
-                            ville : data.ville,
-                            pays : data.pays,
-                            password : data.password,
-                            groupeSanguin : data.grpsang,
-                        });
-                        User.create(user);
-                    }
-                    else {
-                        var user = new User({
-                            nom : data.nom,
-                            prenom : data.prenom,
-                            sexe : data.gender,
-                            telephone : data.telephone,
-                            dateNaissance : data.dateNaissance,
-                            email : data.email,
-                            age : get_age(data.dateNaissance),
-                            ville : data.ville,
-                            pays : data.pays,
-                            password : data.password,
-                            groupeSanguin : data.grpsang,
-                            maladies: [data.diabete]
-                        });
-                        User.create(user);
-                    }
-
-                }
-                else if(type === 'medecin'){
-                    var medecin = new Medecin({
-                        nom : data.nom,
-                        prenom: data.prenom,
-                        sexe: data.gender,
-                        telephone: data.telephone,
-                        email: data.email,
-                        ville: data.ville,
-                        pays: data.pays,
-                        password: data.password,
-                        adresse_lieu_travail : data.adresse
-                    })
-        
-                    Medecin.create(medecin);
-                    
-                }
-
-                console.log('user created');
-                res.redirect('/login');
-            }
-        })
-        .catch((err)=>next(err));
-        
-    });*/
-
     app.get('/myProfileMedecin', (req, res) => {
         if(req.session.type === 'medecin') {
             Medecin.findById(req.session.userId)
@@ -327,6 +250,71 @@ module.exports = function (app , mongoose) {
         }
     });
 
+    app.post('/myProfileUser', urlencodedParser, function(req,res,next){
+        console.log(req.body);
+        
+        var data = req.body;
+        var type = req.query.user;
+        
+        User.findOne({email : data.email})
+        .then((user)=>{
+            if(user != null && user.id != req.session.userId) {
+                res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
+                var err = new Error("L'émail "+ data.email + " exist déjà !");
+                err.status = 500;
+                next(err);
+            }
+            else{
+                User.findByIdAndUpdate(req.session.userId, 
+                    {$set: {email: data.email, 
+                            telephone : data.telephone,
+                            dateNaissance : data.dateNaissance,
+                            age : get_age(data.dateNaissance),
+                            ville : data.ville,
+                            pays : data.pays,
+                            groupeSanguin : data.grpsang
+                            }
+                        })
+                .then(user => {
+                    res.redirect('myProfileUser');
+                });
+            }
+        })
+        .catch((err)=>next(err));
+        
+    });
+
+    app.post('/myProfileMedecin', urlencodedParser, function(req,res,next){
+        console.log(req.body);
+        
+        var data = req.body;
+        
+        Medecin.findOne({email : data.email})
+        .then((medecin)=>{
+            if(medecin != null && medecin.id != req.session.userId) {
+                res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
+                var err = new Error("L'émail "+ data.email + " exist déjà !");
+                err.status = 500;
+                next(err);
+            }
+            else{
+                Medecin.findByIdAndUpdate(req.session.userId, 
+                    {$set: {email: data.email, 
+                            telephone: data.telephone,
+                            ville: data.ville,
+                            pays: data.pays,
+                            adresse_lieu_travail : data.adresse
+                        }
+                    })
+                .then(medecin => {
+                    res.redirect('myProfileMedecin');
+                });
+            }
+        })
+        .catch((err)=>next(err));
+        
+    });
+    
     app.get('/oldMedecins', (req, res) => {
         if(req.session.type === 'normal') {
             User.findById(req.session.userId)

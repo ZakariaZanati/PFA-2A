@@ -31,59 +31,81 @@
             <h1 class="text-header">Profil</h1>
         </div>
         <div class="container-body">
-            <form class="profil" method="POST">
-                <label>
+            <form class="profil" action="/myProfileUser" method="POST">
+                <label class="noEditable">
                     <span>Nom complet</span>
-                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>">
+                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>" readonly>
                 </label>
                 <label>
                     <span>Email</span>
-                    <input class="login-input" type="text" name="email" value="<%= user.email %>">
+                    <input class="login-input" type="text" name="email" value="<%= user.email %>" required readonly>
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="phone" value="<%= user.telephone %>">
+                    <input class="login-input" type="number" name="telephone" value="<%= user.telephone %>" required readonly>
                 </label>
                 <label>
                     <span>Pays</span>
-                    <input class="login-input" type="text" name="pays" value="<%=  user.pays %>">
+                    <input class="login-input" type="text" name="pays" value="<%=  user.pays %>" required readonly>
                 </label>
                 <label>
                     <span>Ville</span>
-                    <input class="login-input" type="text" name="ville" value="<%=  user.ville %>">
+                    <input class="login-input" type="text" name="ville" value="<%=  user.ville %>" required readonly>
                 </label>
                 <label>
+                    <span>Date de naissance</span>
+                    <input class="login-input" type="date" name="dateNaissance" value="<%= user.dateNaissance.toISOString().split('T')[0] %>" required readonly>
+                </label>
+                <label class="noEditable">
                     <span>Age</span>
-                    <input class="login-input" type="text" name="birthday" value="<%= user.age %>" required>
+                    <input class="login-input" type="text" name="birthday" value="<%= user.age %>" readonly>
                 </label>
-                <label>
+                <label class="editable">
                     <span>Groupe sanguin</span>
-                    <input class="login-input" type="text" value="<%= user.groupeSanguin %>">
+                    <select name="grpsang" id="gs">
+                        <option value="AB+" >AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="A+" selected>A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </label>
+                <label class="noEditable">
+                    <span>Groupe sanguin</span>
+                    <input class="login-input" id="sang" type="text" value="<%= user.groupeSanguin %>" readonly>
                 </label>
                 <% if(user.maladies[0]!=null) { %>
-                <label>
+                <label class="noEditable">
                     <span>Maladies</span>
                     <% user.maladies.forEach((maladie) => { %>
                     <input class="login-input" type="text" value="<%= maladie%>">
                     <%})%>
                 </label>
                 <%}%>
-                <label>
+                <label class="noEditable">
                     <% if(currentMedecin) { %>
-                <span>Medecin actuel</span><br>
-                <div class="buttons-inline">
-                    <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
-                        <%= currentMedecin.prenom %></a>
-                </div>
-                <%}%>
+                    <span>Medecin actuel</span><br>
+                    <div class="buttons-inline">
+                        <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
+                            <%= currentMedecin.prenom %></a>
+                    </div>
+                    <%}%>
                 </label>
-                <label>
+                <label class="noEditable">
                     <span>Anciens medecins</span>
                     <div class="buttons-inline">
                         <a class="btn btn-success" href='oldMedecins'>Consulter</a>
                     </div>
                 </label>
-                
+                <div class="buttons-inline" id="editDiv">
+                    <a class="btn" href='myProfileUser?action=edit'>Modifer le profil</a>
+                </div>
+                <div class="buttons-inline" id="saveDiv" style="display: none;">
+                    <button class="btn btn-round submit" type="submit">Sauvegarder</button>
+                </div>
             </form>
         </div>
     </div>
@@ -94,6 +116,7 @@
 
 </body>
 
+<script src="public/js/profile.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 
