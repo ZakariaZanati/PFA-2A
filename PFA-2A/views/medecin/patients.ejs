@@ -19,7 +19,6 @@
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a class="active" href="patients">Patients</a></li>
-            <li><a href="seuils?id=medecin">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -55,7 +54,7 @@
                     <tbody>
                         <% currentPatients.forEach((patient)=>{ %>
                         <tr>
-                            <td id="patient" data-label="Patient"><a
+                            <td id="patient" data-label="Patient"><a class="btn"
                                     href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
                                     <%= patient.utilisateur.prenom %></a></td>
                             <td data-label="Email"><%= patient.utilisateur.email %></td>
@@ -82,7 +81,7 @@
                     <tbody>
                         <% oldPatients.forEach((patient)=>{ %>
                         <tr>
-                            <td id="patient" data-label="Patient"><a
+                            <td id="patient" data-label="Patient"><a class="btn"
                                     href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
                                     <%= patient.utilisateur.prenom %></a></td>
                             <td data-label="Email"><%= patient.utilisateur.email %></td>

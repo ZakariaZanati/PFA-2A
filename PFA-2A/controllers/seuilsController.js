@@ -42,30 +42,13 @@ module.exports = function (app , mongoose) {
         }
     })
     
-    app.get('/seuils', urlencodedParser, (req, res) => {
-        var param = req.query.id;
-        if(req.session.type === 'normal' || req.session.type === 'medecin') {
+    app.get('/seuils', (req, res) => {
+        if(req.session.type === 'normal') {
             Seuils.find({}).sort('nom')
             .then((seuils) => {
                 if(seuils != null) {
-                    if(req.session.type === 'normal' && param == null) {
-                        res.render('seuils', {seuils: seuils, userType: req.session.type});
-                    }
-                    else if(req.session.type === 'normal' && param != null) {
-                        res.redirect('/seuils')
-                    }
-                    else if(req.session.type === 'medecin' && param == null) {
-                        res.redirect(url.format({
-                            pathname:"/seuils",
-                            query: {
-                                "id": "medecin"
-                            }
-                        }));
-                    }
-                    else if(req.session.type === 'medecin' && param != null){
-                        res.render('seuils', {seuils: seuils, userType: req.session.type});
-                    }
-                }    
+                    res.render('seuils', {seuils: seuils, userType: req.session.type});
+                }
             }) 
         }
         else {

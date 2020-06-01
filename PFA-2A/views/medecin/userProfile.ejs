@@ -19,7 +19,6 @@
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils?id=medecin">Seuils</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -66,44 +65,47 @@
                     </label>
                     <%}%>
                     <% if(!estPatient) {%>
-                    <div class="cadre">
-                        <label>
-                            <span> Demande de nouveau de contrat</span>
-                        </label>
-                        <div class="buttons-inline">
-                            <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
-                                <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
-                            </form>
-                            <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
-                                <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
-                            </form>
+                        <div class="cadre">
+                            <% if(demandeDebut) {%>
+                                <label>
+                                    <span> Demande de nouveau de contrat</span>
+                                </label>
+                                <div class="buttons-inline">
+                                    <form action="/userProfile?id=<%= user._id%>&action=yes" method="post">
+                                        <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
+                                    </form>
+                                    <form action="/userProfile?id=<%= user._id%>&action=no" method="post">
+                                        <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
+                                    </form>
+                                </div>
+                            <% } else { %>
+                                <a href="patients" class="btn">Retour</a>
+                            <% } %>   
                         </div>
-                    </div>
                     <%} else { %>
-                    <% if(demandeFin) {%>
-                    <div class="cadre">
-                        <label>
-                            <span>Demande de fin de contrat</span>
-                        </label>
-                        <div class="buttons-inline">
-                            <form action="/userProfile?id=<%= user._id%>&action=yesEnd" method="post">
-                                <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
-                            </form>
-                            <form action="/userProfile?id=<%= user._id%>&action=noEnd" method="post">
-                                <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
-                            </form>
-                            <%} else { %>
+                        <div class="cadre">
+                        <% if(demandeFin) {%>
+                            <label>
+                                <span>Demande de fin de contrat</span>
+                            </label>
+                            <div class="buttons-inline">
+                                <form action="/userProfile?id=<%= user._id%>&action=yesEnd" method="post">
+                                    <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>
+                                </form>
+                                <form action="/userProfile?id=<%= user._id%>&action=noEnd" method="post">
+                                    <button class="btn btn-echec" type="submit" value="Rejeter">Rejeter</button>
+                                </form>
+                            </div>
+                        <%} else { %>
                             <div class="buttons-inline">
                                 <form action="/userProfile?id=<%= user._id%>&action=end" method="post">
                                     <button class="btn btn-echec" type="submit" value="Fin contrat">Fin contrat</button>
                                 </form>
-                                <a href="dayValues" class="btn">Retour</a>
+                                <a href="patients" class="btn">Retour</a>
                             </div>
-                        </div>
                         <%}%>
+                        </div>
                     <%}%>
-
-                    </div>
 
                 </div>
             </div>

@@ -19,7 +19,6 @@
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="seuils?id=medecin">Seuils</a></li>
             <li><a href="myProfileMedecin" class="active">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
@@ -46,8 +45,7 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required
-                        readonly>
+                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -59,8 +57,7 @@
                 </label>
                 <label>
                     <span>Adresse lieu travail</span>
-                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
-                        required readonly>
+                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required readonly>
                 </label>
                 <label class="noEditable">
                     <span>Mes Patients</span>
@@ -68,12 +65,12 @@
                         <a class="btn btn-success" href='patients'>Consulter</a>
                     </div>
                 </label>
+               
+                <div class="buttons-inline no-display" id="saveDiv">
+                    <button class="btn btn-success" type="submit">Sauvegarder</button>
+                    <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>
+                </div>
             </form>
-            <div class="buttons-inline no-display" id="saveDiv">
-                <button class="btn btn-success" type="submit">Sauvegarder</button>
-                <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>
-
-            </div>
         </div>
     </div>
 
