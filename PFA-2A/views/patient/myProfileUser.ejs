@@ -37,8 +37,7 @@
             <form class="profil" action="/myProfileUser" method="POST">
                 <label class="noEditable">
                     <span>Nom complet</span>
-                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>"
-                        readonly>
+                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>" readonly>
                 </label>
                 <label>
                     <span>Email</span>
@@ -46,8 +45,7 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= user.telephone %>" required
-                        readonly>
+                    <input class="login-input" type="number" name="telephone" value="<%= user.telephone %>" required readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -59,8 +57,7 @@
                 </label>
                 <label>
                     <span>Date de naissance</span>
-                    <input class="login-input" type="date" name="dateNaissance"
-                        value="<%= user.dateNaissance.toISOString().split('T')[0] %>" required readonly>
+                    <input class="login-input" type="date" name="dateNaissance" value="<%= user.dateNaissance.toISOString().split('T')[0] %>" required readonly>
                 </label>
                 <label class="noEditable">
                     <span>Age</span>
@@ -93,23 +90,24 @@
                 <%}%>
                 <label class="noEditable">
                     <% if(currentMedecin) { %>
-                <span>Medecin actuel</span><br>
-                <div class="buttons-inline">
-                    <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
-                        <%= currentMedecin.prenom %></a>
-                </div>
-                <%}%>
+                    <span>Medecin actuel</span><br>
+                    <div class="buttons-inline">
+                        <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
+                            <%= currentMedecin.prenom %></a>
+                    </div>
+                    <%}%>
                 </label>
                 <label class="noEditable">
                     <span>Anciens medecins</span>
                     <div class="buttons-inline">
                         <a class="btn btn-success" href='oldMedecins'>Consulter</a>
                     </div>
-                </label>               
+                </label>
+                
+                 </label>               
                 <div class="buttons-inline no-display" id="saveDiv" >
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileUser">Annuler</a>
-
                 </div>
             </form>
         </div>

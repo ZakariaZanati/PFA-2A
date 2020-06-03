@@ -190,19 +190,26 @@ module.exports = function (app , mongoose) {
             .then((user)=>{
                 Medecin.findById(req.userInfos.userId)
                 .then((medecin) => {
-                    console.log("HHHHHHHHHHHH");
                     var isInArray = medecin.utilisateurs.some((user)=>{
                         return user.utilisateur.equals(id) && user.finContrat == null;
                     })
-                    console.log("==============  " + isInArray);
+                    var demande = medecin.demandes.find(demande => demande == id);
                     if(isInArray) {
-                        var demandeFin = medecin.demandes.find(demande => demande == id);
-                        console.log(demandeFin);
-                        demandeFin ? res.render('userProfile',{user : user, estPatient: true, demandeFin: true})
+                        demande ? res.render('userProfile',{user : user, estPatient: true, demandeFin: true})
                                    : res.render('userProfile',{user : user, estPatient: true, demandeFin: false});
                     }
                     else {
-                        res.render('userProfile',{user : user, estPatient: false});
+                        var old = medecin.utilisateurs.some((user)=>{
+                            return user.utilisateur.equals(id) && user.finContrat != null;
+                        })
+                        if(old) {
+                            demande ? res.render('userProfile',{user : user, estPatient: false, demandeDebut: true})
+                                    : res.render('userProfile',{user : user, estPatient: false, demandeDebut: false});
+                        }
+                        else {
+                            demande ? res.render('userProfile',{user : user, estPatient: false, demandeDebut: true})
+                                    : res.redirect('/patients');
+                        }
                     }
                 });
             })
