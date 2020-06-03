@@ -8,6 +8,7 @@ module.exports = (app , mongoose) => {
     const {moyenneSemaine,moyenneMoi} = require('../moyennes');
     var url = require('url');
     const bodyParser = require('body-parser');
+    var authenticateToken = require('../authenticateToken');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
     })
@@ -22,15 +23,15 @@ module.exports = (app , mongoose) => {
         return [date, time,day];
     }
 
-    app.get('/newvalues', (req, res) => {
-        if(req.session.type === 'normal') {
+    app.get('/newvalues',authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'normal') {
             res.render('newvalues');
         }
-        else if(req.session.type === 'medecin') {
+        else if(req.userInfos.type === 'medecin') {
             res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));
         }
@@ -41,8 +42,8 @@ module.exports = (app , mongoose) => {
     })
 
     
-    app.post('/patientHome', urlencodedParser, (req, res) => {
-        var userId = req.session.userId;
+    app.post('/patientHome',authenticateToken, urlencodedParser, (req, res) => {
+        var userId = req.userInfos.userId;
         var currentDate = getFormatDate();
         var _date = currentDate[0];
         var _time = currentDate[1];
