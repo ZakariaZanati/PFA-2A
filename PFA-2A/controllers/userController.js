@@ -1,9 +1,6 @@
-
 module.exports = function (app , mongoose) {
 
     require('dotenv').config();
-
-    
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
     var Statistics = require('../models/statisticsModel');
@@ -209,6 +206,7 @@ module.exports = function (app , mongoose) {
                             ville: data.ville,
                             pays: data.pays,
                             password: hashedPassword,
+                            specialite: data.specialite,
                             adresse_lieu_travail : data.adresse
                         })
             
@@ -228,7 +226,7 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.get('/myProfileMedecin',authenticateToken, (req, res) => {
+    app.get('/myProfileMedecin', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'medecin') {
             Medecin.findById(req.userInfos.userId)
             .then((medecin) => {
@@ -240,7 +238,7 @@ module.exports = function (app , mongoose) {
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
@@ -249,12 +247,13 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/myProfileUser',authenticateToken, (req, res) => {
+    app.get('/myProfileUser', authenticateToken, (req, res) => {
+        console.log(req.userInfos.type);
         if(req.userInfos.type === 'normal') {
             User.findById(req.userInfos.userId)
             .populate('medecins.medecin')
             .then((user) => {
-                var currentMedecin = user.medecins.find(medecin => medecin.finContrat == null);
+                var currentMedecin = user.medecins.find(medecin => medecin.finSuivi == null);
                 if(currentMedecin) {
                     res.render('myProfileUser', {user: user, currentMedecin: currentMedecin.medecin});
                 }
@@ -269,7 +268,7 @@ module.exports = function (app , mongoose) {
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
@@ -278,7 +277,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.post('/myProfileUser',authenticateToken, urlencodedParser, function(req,res,next){
+    app.post('/myProfileUser', authenticateToken, urlencodedParser, function(req,res,next){
         console.log(req.body);
         
         var data = req.body;
@@ -312,7 +311,7 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.post('/myProfileMedecin',authenticateToken, urlencodedParser, function(req,res,next){
+    app.post('/myProfileMedecin', authenticateToken, urlencodedParser, function(req,res,next){
         console.log(req.body);
         
         var data = req.body;
@@ -343,16 +342,18 @@ module.exports = function (app , mongoose) {
         
     });
     
-    app.get('/oldMedecins',authenticateToken, (req, res) => {
+    app.get('/myMedecins', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal') {
             User.findById(req.userInfos.userId)
             .populate('medecins.medecin')
             .then(user => {
                 var oldMedecins = [];
+                var currentMedecins = [];
                 user.medecins.forEach(medecin => {
-                    if(medecin.finContrat != null ) oldMedecins.unshift(medecin);
+                    if(medecin.finSuivi != null ) oldMedecins.push(medecin);
+                    else currentMedecins.push(medecin);
                 })
-                res.render('oldMedecins', {oldMedecins: oldMedecins});
+                res.render('myMedecins', {currentMedecins: currentMedecins , oldMedecins: oldMedecins});
             })
         }
         else if(req.userInfos.type === 'medecin'){
@@ -360,7 +361,7 @@ module.exports = function (app , mongoose) {
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }

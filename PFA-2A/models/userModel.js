@@ -18,13 +18,9 @@ var utilisateurSchema = new Schema({
     maladies: [String],
     demandes: [
         {
-            medecin: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "medecin",
-                default : null
-            },
-            type: String,
-            statut: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "medecin",
+            default : null
         }
     ],
     medecins: [
@@ -34,11 +30,11 @@ var utilisateurSchema = new Schema({
                 ref: 'medecin',
                 default : null
             },
-            debutContrat: {
+            debutSuivi: {
                 type: Date,
                 default: Date.now
             },
-            finContrat: Date
+            finSuivi: Date
         }
     ]
 })

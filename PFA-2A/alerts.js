@@ -1,0 +1,88 @@
+var mongoose = require('mongoose');
+const User = require('./models/userModel');
+const Seuils = require('./models/seuilsModel');
+const Alert = require('./models/alertModel');
+
+function getFormatDate(){
+    var dateArray = Date().split(' ');
+    var _month = new Date().getMonth() + 1;
+    var month = _month < 10 ? '0' + _month : _month;
+    var date = dateArray[3] + '-' + month + '-' + dateArray[2];
+    var time = dateArray[4];  
+    var day = new Date().getDay();
+    return [date, time,day];
+}
+
+function sendAlert(userId, valeur, nom, type, sousType, heure, operation) {
+    var currentDate = getFormatDate();
+    var _date = currentDate[0];
+    var _time = currentDate[1];
+    Seuils.findOne({nom: nom, type: type, sousType: sousType})
+    .then((mesure) => {
+        var nomMesure = mesure.nom + " " + type;
+        var unite = mesure.abreviation;
+        var seuilMin = mesure.valMin;
+        var seuilMax = mesure.valMax;
+        var valSeuil;
+        var comparaison;
+        if(valeur < seuilMin) {
+            valSeuil = seuilMin;
+            comparaison = " est inferieure au seuil min ";
+        }
+        if(valeur > seuilMax) {
+            valSeuil = seuilMax;
+            comparaison = " est superieure au seuil max ";
+        }
+        var difference = valeur - valSeuil;
+        if(operation == 'create') {
+            var alert = new Alert({
+                utilisateur: userId,
+                date: _date, 
+                temps: _time, 
+                mesure: nomMesure,
+                text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                difference: difference         
+            });
+            Alert.create(alert);
+        }
+        else if(operation == 'update') {
+            Alert.findOneAndUpdate({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure},
+                {$set: {difference: valeur - valSeuil,
+                    text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite}})
+            .then((doc) => {
+                
+            });
+        }
+        
+        
+    })
+}
+
+var sendAlerts = (userId, temperature, tauxOxygen, tensionArray, tauxGlucose, aJeun, heure, operation) => {
+    sendAlert(userId, temperature, "Temperature", "", "", heure, operation);
+    sendAlert(userId, tauxOxygen, "Taux d'oxygène", "", "", heure, operation);
+    sendAlert(userId, tensionArray[0], "Tension", "systolique", "", heure, operation);
+    sendAlert(userId, tensionArray[1], "Tension", "diastolique", "", heure, operation);
+    User.findById(userId)
+    .then((user) => {
+        if(user.maladies.indexOf("Diabete type 1") != -1) {
+            aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "", heure, operation)
+                    : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 1", heure, operation);
+        }
+        else if(user.maladies.indexOf("Diabete type 2") != -1) {
+            aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "", heure, operation)
+                    : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 2", heure, operation);
+        }
+        else if(user.maladies.indexOf("Diabete gestationnel") != -1) {
+            aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "diabete gestationnel", heure, operation)
+                    : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete gestationnel", heure, operation);
+        }
+        else {
+            aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "", heure, operation)
+                    : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 2", heure, operation);
+        }
+    });
+    
+}
+
+module.exports = sendAlerts;

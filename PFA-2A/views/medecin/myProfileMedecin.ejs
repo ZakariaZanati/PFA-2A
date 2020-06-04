@@ -56,13 +56,23 @@
                     <input class="login-input" type="text" name="ville" value="<%=  medecin.ville %>" required readonly>
                 </label>
                 <label>
+                    <span>Spécialité</span>
+                    <input class="login-input" type="text" name="specialite" value="<%= medecin.specialite %>" required readonly>
+                </label>
+                <label>
                     <span>Adresse lieu travail</span>
                     <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required readonly>
                 </label>
                 <label class="noEditable">
-                    <span>Mes Patients</span>
+                    <span>Mes patients actuels</span>
                     <div class="buttons-inline">
-                        <a class="btn btn-success" href='patients'>Consulter</a>
+                        <a class="btn btn-success" href='patients?filtre=current'>Consulter</a>
+                    </div>
+                </label>
+                <label class="noEditable">
+                    <span>Mes anciens patients</span>
+                    <div class="buttons-inline">
+                        <a class="btn btn-success" href='patients?filtre=old'>Consulter</a>
                     </div>
                 </label>
                

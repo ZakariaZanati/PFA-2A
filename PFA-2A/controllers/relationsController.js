@@ -18,11 +18,21 @@ module.exports = function (app , mongoose) {
         return [date, time];
     }
 
-    app.get('/medecins',authenticateToken,(req,res)=>{
+    app.get('/medecins', authenticateToken, (req,res)=>{
         if (req.userInfos.type === 'normal') {
             Medecin.find({})
             .then((medecins)=>{
-                res.render('medecins',{medecins : medecins});
+                User.findById(req.userInfos.userId)
+                .populate('medecins.medecin')
+                .then(user => {
+                    var oldMedecins = [];
+                    var currentMedecins = [];
+                    user.medecins.forEach(medecin => {
+                        if(medecin.finSuivi != null ) oldMedecins.push(medecin);
+                        else currentMedecins.push(medecin);
+                    })
+                    res.render('medecins', {allMedecins: medecins, currentMedecins: currentMedecins , oldMedecins: oldMedecins});
+                })
             });
         }
         else if(req.userInfos.type === 'medecin') {
@@ -40,34 +50,18 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/medecinProfile',authenticateToken,(req,res)=>{
+    app.get('/medecinProfile', authenticateToken, (req,res)=>{
         if (req.userInfos.type === 'normal') {
             id = req.query.id;
             Medecin.findById(id)
             .then((medecin)=>{
                 User.findById(req.userInfos.userId)
                 .then((user) => {
-                    var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finContrat == null);
-                    var haveMedecin = user.medecins.some((medecin)=>{
-                        return medecin.finContrat == null;
-                    });
+                    var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi == null);
+                    var sentMeDemande = user.demandes.find(demande => demande == id);
                     var sentDemande = medecin.demandes.find(demande => demande == user.id);
-                    if(haveMedecin) {
-                        if(isMedecin) {
-                            var debutContrat = isMedecin.debutContrat;
-                            sentDemande ? 
-                                res.render('medecinProfile',{medecin : medecin, estMedecin: true, sentDemande: true, debutContrat: debutContrat})
-                                : res.render('medecinProfile',{medecin : medecin, estMedecin: true, sentDemande: false, debutContrat: debutContrat});
-                        }
-                        else {
-                            res.render('medecinProfile',{medecin : medecin, estMedecin: false})
-                        }
-                        
-                    }
-                    else {
-                        sentDemande ? res.render('medecinProfile',{medecin : medecin, estMedecin: null, sentDemande: true})
-                                    : res.render('medecinProfile',{medecin : medecin, estMedecin: null, sentDemande: false});
-                    }
+                    var oldMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi != null);
+                    res.render('medecinProfile',{medecin : medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande});   
                 })
             })
         }
@@ -88,91 +82,102 @@ module.exports = function (app , mongoose) {
     });
     
 
-    app.post('/medecinProfile',authenticateToken,urlencodedParser,(req,res,next)=>{
+    app.post('/medecinProfile', authenticateToken, urlencodedParser,(req,res,next)=>{
         id = req.query.id;
         action = req.query.action;
-        console.log(id)
-        console.log(action);
         if (req.userInfos.type === 'normal') {
             if(action === 'yes') {
                 User.findById(req.userInfos.userId)
                 .then((user)=>{
-                    var haveMedecin = user.medecins.find(medecin => medecin.finContrat == null);
-                    if (haveMedecin) {
-                        var err = new Error("Vous disposez déjà d'un medecin ");
-                        next(err);
-                    }
-                    else{
+                    var isInArray = user.demandes.some((medecin)=>{
+                        return medecin.equals(id);
+                    });
+                    if (isInArray) {
+                        user.medecins.push({
+                            $each: [{medecin: id}],
+                            $position: 0});
+                        user.demandes.pull(id);
+                        user.save();
                         Medecin.findById(id)
-                        .then((medecin)=>{
-                            var isInArray = medecin.demandes.some((user)=>{
-                                return user.equals(req.userInfos.userId);
-                            })
-                            if (!isInArray) {
-                                medecin.demandes.push(req.userInfos.userId);
-                                medecin.save();
-                            }
-    
-                        })                    
+                        .then(medecin => {
+                            medecin.utilisateurs.push({
+                                $each: [{utilisateur: req.userInfos.userId}],
+                                $position: 0});
+                            medecin.save();
+                        }) 
                     }
-                })
-                .catch((err)=>next(err));
-            }
-            else if(action === 'end') {
-                Medecin.findById(id)
-                .then((medecin)=>{
-                    var isInArray = medecin.demandes.some((user)=>{
-                        return user.equals(req.userInfos.userId);
-                    })
-                    if (!isInArray) {
-                        medecin.demandes.push(req.userInfos.userId);
-                        medecin.save();
-                    }
-
-                }) 
+                });
             }
             else if(action === 'no') {
+                User.findById(req.userInfos.userId)
+                .then((user)=>{
+                    var isInArray = user.demandes.some((medecin)=>{
+                        return medecin.equals(id);
+                    })
+                    if (isInArray) {
+                        user.demandes.pull(id);
+                        user.save();  
+                    }
+                });
+            }    
+            else if(action === 'end') {
+                User.findByIdAndUpdate(req.userInfos.userId, 
+                    {$set: {"medecins.$[medec].finSuivi": new Date()}},
+                    {arrayFilters: [{"medec.medecin": id, "medec.finSuivi": null}]})
+                    .then((user) => {
+                        Medecin.findByIdAndUpdate(id, 
+                            {$set: {"utilisateurs.$[user].finSuivi": new Date()}},
+                            {arrayFilters: [{"user.utilisateur": req.userInfos.userId, "user.finSuivi": null}]})
+                            .then((doc) => {
+                                console.log(doc);
+                            })
+                    })
+            }
+            else if(action === "annuler") {
                 Medecin.findById(id)
                 .then((medecin)=>{
                     var isInArray = medecin.demandes.some((user)=>{
                         return user.equals(req.userInfos.userId);
-                    })
+                    });
                     if (isInArray) {
-                        medecin.demandes.pull(req.userInfos.userId);
-                        medecin.save();
+                        medecin.demandes.pull(id);
+                        medecin.save();  
                     }
-
-                }) 
+                });
             }
-        }
-        res.redirect('medecins');
+            else if(action === "send") {
+                Medecin.findById(id)
+                .then((medecin)=>{
+                    var isInArray = medecin.demandes.some((user)=>{
+                        return user.equals(req.userInfos.userId);
+                    });
+                    if (!isInArray) {
+                        medecin.demandes.push({
+                            $each: [req.userInfos.userId],
+                            $position: 0});
+                        medecin.save();  
+                    }
+                });
+            }
+        }       
+        res.redirect(url.format({
+            pathname:"/medecinProfile",
+            query: {
+                "id": id
+            }
+        }));
     })
 
-    app.get('/demandes',authenticateToken, (req,res)=>{
+    app.get('/demandes',  authenticateToken, (req,res)=>{
         if (req.userInfos.type === 'medecin') {
             Medecin.findById(req.userInfos.userId)
             .populate('demandes')
             .then((medecin)=>{
-                var allDemandes = [];
-                medecin.demandes.forEach(demande => {
-                    var estMedecin = medecin.utilisateurs.find(user => user.utilisateur == demande.id && user.finContrat == null);
-                    estMedecin ?
-                        allDemandes.unshift({user: demande, type: "Fin contrat"}) 
-                            : allDemandes.unshift({user: demande, type: "Debut contrat"}) 
-                    
-                })
-                console.log(allDemandes);
-                res.render('demandes',{demandes : allDemandes});
+                res.render('demandes',{demandes : medecin.demandes});    
             })
         }
         else if(req.userInfos.type === 'normal') {
             res.redirect('patientHome');
-            /*res.redirect(url.format({
-                pathname:"/home",
-                query: {
-                    "user": req.userInfos.type
-                }
-            }));*/
         }
         else {
             console.log('not logged');
@@ -180,37 +185,122 @@ module.exports = function (app , mongoose) {
         }
     })
 
-    
+    app.get('/patientDemandes',  authenticateToken, (req,res)=>{
+        if (req.userInfos.type === 'normal') {
+            User.findById(req.userInfos.userId)
+            .populate('demandes')
+            .then((user)=>{
+                res.render('patientDemandes',{demandes : user.demandes});    
+            })
+        }
+        else if(req.userInfos.type === 'medecin') {
+            res.redirect('medecinHome');
+        }
+        else {
+            console.log('not logged');
+            res.redirect('/login');
+        }
+    })
 
-    app.get('/userProfile',authenticateToken,(req,res)=>{
+    app.post('/userProfile', authenticateToken, urlencodedParser,(req,res,next)=>{
+        id = req.query.id;
+        action = req.query.action;
         if (req.userInfos.type === 'medecin') {
-            console.log("hELLO");
+            if(action === 'yes') {
+                Medecin.findById(req.userInfos.userId)
+                .then((medecin)=>{
+                    var isInArray = medecin.demandes.some((user)=>{
+                        return user.equals(id);
+                    });
+                    if (isInArray) {
+                        medecin.utilisateurs.push({
+                            $each: [{utilisateur: id}],
+                            $position: 0});
+                        medecin.demandes.pull(id);
+                        medecin.save();
+                        User.findById(id)
+                        .then(user => {
+                            user.medecins.push({
+                                $each: [{medecin: req.userInfos.userId}],
+                                $position: 0});
+                            user.save();
+                        })
+                    }
+                });
+            }
+            else if(action === 'no') {
+                Medecin.findById(req.userInfos.userId)
+                .then((medecin)=>{
+                    var isInArray = medecin.demandes.some((user)=>{
+                        return user.equals(id);
+                    })
+                    if (isInArray) {
+                        medecin.demandes.pull(id);
+                        medecin.save();  
+                    }
+                });
+            }    
+            else if(action === 'end') {
+                Medecin.findByIdAndUpdate(req.userInfos.userId, 
+                    {$set: {"utilisateurs.$[user].finSuivi": new Date()}},
+                    {arrayFilters: [{"user.utilisateur": id, "user.finSuivi": null}]})
+                    .then((medecin) => {
+                        User.findByIdAndUpdate(id, 
+                            {$set: {"medecins.$[medec].finSuivi": new Date()}},
+                            {arrayFilters: [{"medec.medecin": req.userInfos.userId, "medec.finSuivi": null}]})
+                            .then((doc) => {
+                                console.log(doc);
+                            })
+                    })
+            }
+            else if(action === "annuler") {
+                User.findById(id)
+                .then((user)=>{
+                    var isInArray = user.demandes.some((medecin)=>{
+                        return medecin.equals(req.userInfos.userId);
+                    });
+                    if (isInArray) {
+                        user.demandes.pull(req.userInfos.userId);
+                        user.save();  
+                    }
+                });
+            }
+            else if(action === "send") {
+                User.findById(id)
+                .then((user)=>{
+                    var isInArray = user.demandes.some((medecin)=>{
+                        return medecin.equals(req.userInfos.userId);
+                    });
+                    if (!isInArray) {
+                        user.demandes.push({
+                            $each: [req.userInfos.userId],
+                            $position: 0});
+                        user.save();  
+                    }
+                });
+            }
+        }       
+        res.redirect(url.format({
+            pathname:"/userProfile",
+            query: {
+                "id": id
+            }
+        }));
+    })   
+
+    app.get('/userProfile', authenticateToken, (req,res)=>{
+        if (req.userInfos.type === 'medecin') {
             id = req.query.id
             User.findById(id)
             .then((user)=>{
                 Medecin.findById(req.userInfos.userId)
                 .then((medecin) => {
-                    var isInArray = medecin.utilisateurs.some((user)=>{
-                        return user.utilisateur.equals(id) && user.finContrat == null;
-                    })
-                    var demande = medecin.demandes.find(demande => demande == id);
-                    if(isInArray) {
-                        demande ? res.render('userProfile',{user : user, estPatient: true, demandeFin: true})
-                                   : res.render('userProfile',{user : user, estPatient: true, demandeFin: false});
-                    }
-                    else {
-                        var old = medecin.utilisateurs.some((user)=>{
-                            return user.utilisateur.equals(id) && user.finContrat != null;
-                        })
-                        if(old) {
-                            demande ? res.render('userProfile',{user : user, estPatient: false, demandeDebut: true})
-                                    : res.render('userProfile',{user : user, estPatient: false, demandeDebut: false});
-                        }
-                        else {
-                            demande ? res.render('userProfile',{user : user, estPatient: false, demandeDebut: true})
-                                    : res.redirect('/patients');
-                        }
-                    }
+
+                    var isPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi == null);
+                    var sentMeDemande = medecin.demandes.find(demande => demande == id);
+                    var sentDemande = user.demandes.find(demande => demande == medecin.id);
+                    var oldPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi != null);
+                    res.render('userProfile',{user : user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande});
                 });
             })
         }
@@ -225,88 +315,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.post('/userProfile',authenticateToken,urlencodedParser,(req,res)=>{
-        if (req.userInfos.type === 'medecin') {
-            patientId = req.query.id;
-            action = req.query.action
-            console.log(action)
-            if (action === 'yes') {
-                Medecin.findById(req.userInfos.userId)
-                .then((medecin)=>{
-                    medecin.utilisateurs.push({utilisateur: patientId});
-                    medecin.demandes.pull(patientId);
-                    medecin.save();
-                    User.findById(patientId)
-                    .then((user)=>{
-                        console.log("HI HERE");
-                        console.log(user.nom);
-                        user.medecins.push({medecin: req.userInfos.userId});
-                        user.save();
-                        Medecin.find({})
-                        .then((medecins)=>{
-                            medecins.forEach((medecin)=>{
-                                var isInArray = medecin.demandes.some((user)=>{
-                                    return user.equals(patientId);
-                                })
-                                if (isInArray) {
-                                    medecin.demandes.pull(patientId);
-                                    medecin.save();
-                                }
-                            })
-                        })
-                    });
-                })
-            }
-            else if (action === 'no') {
-                Medecin.findById(req.userInfos.userId)
-                .then((medecin)=>{
-                    medecin.demandes.pull(patientId)
-                    medecin.save();
-                })
-            }
-            else if(action === 'end') {   
-                Medecin.findByIdAndUpdate(req.userInfos.userId, 
-                    {$set: {"utilisateurs.$[user].finContrat": new Date()}},
-                    {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
-                    .then((medecin) => {
-                        User.findByIdAndUpdate(patientId, 
-                            {$set: {"medecins.$[medec].finContrat": new Date()}},
-                            {arrayFilters: [{"medec.medecin": req.userInfos.userId, "medec.finContrat": null}]})
-                            .then((doc) => {
-                                console.log(doc);
-                            })
-                    })  
-            }
-            else if(action === 'yesEnd') {
-                Medecin.findById(req.userInfos.userId)
-                .then((medecin)=>{
-                    medecin.demandes.pull(patientId)
-                    medecin.save();
-                });
-                Medecin.findByIdAndUpdate(req.userInfos.userId, 
-                    {$set: {"utilisateurs.$[user].finContrat": new Date()}},
-                    {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
-                    .then((medecin) => {
-                        User.findByIdAndUpdate(patientId, 
-                            {$set: {"medecins.$[medec].finContrat": new Date()}},
-                            {arrayFilters: [{"medec.medecin": req.userInfos.userId, "medec.finContrat": null}]})
-                            .then((doc) => {
-                                console.log(doc);
-                            })
-                    }) 
-            }
-            else if(action === 'noEnd') {
-                Medecin.findById(req.userInfos.userId)
-                .then((medecin)=>{
-                    medecin.demandes.pull(patientId)
-                    medecin.save();
-                })
-            }
-            res.redirect('demandes')
-        }
-    })
-
-    app.get('/patients',authenticateToken, (req, res) => {
+    app.get('/patients',  authenticateToken, (req,res) => {
         if(req.userInfos.type === 'normal'){
             res.redirect('patientHome');
             /*res.redirect(url.format({
@@ -324,14 +333,17 @@ module.exports = function (app , mongoose) {
                 var currentPatients = [];
                 medecin.utilisateurs.forEach((user) =>
                 {
-                    if(user.finContrat == null) {
+                    if(user.finSuivi == null) {
                         currentPatients.push(user);
                     }
                     else {
                         oldPatients.push(user);
                     }
                 })
-                res.render('patients', {allPatients: medecin.utilisateurs, oldPatients: oldPatients, currentPatients: currentPatients});
+                User.find()
+                .then(users => {
+                    res.render('patients', {allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients});
+                })
             })
         }
         else {

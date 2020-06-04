@@ -4,19 +4,24 @@ module.exports = function (app , mongoose) {
     const Medecin = require('../models/medecinModel');
     const Alert = require('../models/alertModel');
     var url = require('url');
+    const sendAlerts = require('../alerts');
     var authenticateToken = require('../authenticateToken');
+    const bodyParser = require('body-parser');
+    var urlencodedParser = bodyParser.urlencoded({
+        extended: false
+    })
 
-    app.get('/patientValues',authenticateToken, (req,res)=>{
+    app.get('/patientValues', authenticateToken, async (req,res)=>{
         if (req.userInfos.type === 'normal') {
             if(req.query.id != req.userInfos.userId && req.query.id != null) {
                 res.redirect('patientHome')
             }
             else {
-                Prelevements.find({utilisateur: req.userInfos.userId}).sort([['date', -1]])
+                await Prelevements.find({utilisateur: req.userInfos.userId}).sort([['date', -1]])
                 .then((prelevements)=>{
                     User.findById(req.userInfos.userId)
                     .then(user => {
-                        res.render('patientValues',{prelevements : prelevements, utilisateur: user});
+                        res.render('patientValues',{prelevements : prelevements, utilisateur: user, patient: true});
                     })
                 });
             }
@@ -27,7 +32,7 @@ module.exports = function (app , mongoose) {
             patientId = req.query.id;
             User.findById(patientId)
             .then((user) => {
-                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finContrat == null);
+                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
                 if(estPatient) {
                     Prelevements.find({utilisateur: patientId}).sort([['date', -1]])
                     .then((prelevements)=>{
@@ -51,7 +56,26 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.get('/userAlerts',authenticateToken, (req, res) => {
+    app.post('/patientValues', authenticateToken, urlencodedParser, async (req, res) => {
+        var heure = req.query.heure;
+        var data = req.body;
+        var userId = req.userInfos.userId;
+        var date = new Date(new Date().toISOString().split('T')[0]);
+        await Prelevements.findOneAndUpdate({utilisateur: req.userInfos.userId, date: date},
+            {$set: {"temperature.$[temp].valeur": data.temperature,
+                    "tensionSystolique.$[temp].valeur": data.tensionSystolique,
+                    "tensionDiastolique.$[temp].valeur": data.tensionDiastolique,
+                    "tauxOxygen.$[temp].valeur": data.tauxOxygen,
+                    "tauxGlucose.$[temp].valeur": data.tauxGlucose}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {
+                var aJeun = req.body.typeTest === 'aJeun';
+                sendAlerts(userId, data.temperature, data.tauxOxygen, [data.tensionSystolique, data.tensionDiastolique], data.tauxGlucose, aJeun, heure, "update")
+            });
+        res.redirect('/patientValues')
+    });
+
+    app.get('/userAlerts', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal') {
             Alert.find({utilisateur: req.userInfos.userId})
             .then((alerts) => {
@@ -65,7 +89,7 @@ module.exports = function (app , mongoose) {
             patientId = req.query.id;
             User.findById(patientId)
             .then((user) => {
-                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finContrat == null);
+                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
                 if(estPatient) {
                     Alert.find({utilisateur: patientId})
                     .then((alerts)=>{
@@ -85,7 +109,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/dayValues',authenticateToken, (req, res) => {
+    app.get('/dayValues', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal'){
             res.redirect('patientHome');
         }
@@ -95,7 +119,7 @@ module.exports = function (app , mongoose) {
             Medecin.findById(req.userInfos.userId)
             .then(medecin => {
                 medecin.utilisateurs.forEach(user => {
-                    if(user.finContrat == null) users.push(user.utilisateur);
+                    if(user.finSuivi == null) users.push(user.utilisateur);
                 })
                 Prelevements.find({utilisateur: {"$in" : users}, date: date})
                 .populate('utilisateur')
@@ -122,7 +146,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/medecinHome',authenticateToken, (req, res) => {
+    app.get('/medecinHome', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal'){
             res.redirect('patientHome');
         }
@@ -135,7 +159,7 @@ module.exports = function (app , mongoose) {
             Medecin.findById(req.userInfos.userId)
             .then(medecin => {
                 medecin.utilisateurs.forEach(user => {
-                    if(user.finContrat == null) users.push(user.utilisateur);
+                    if(user.finSuivi == null) users.push(user.utilisateur);
                 })
                 Alert.find({utilisateur: {"$in" : users}, date: date})
                 .populate('utilisateur')
@@ -158,7 +182,7 @@ module.exports = function (app , mongoose) {
         }
     })
 
-    app.get('/patientHome',authenticateToken, (req, res) => {
+    app.get('/patientHome', authenticateToken, async (req, res) => {
         if(req.userInfos.type === 'medecin'){
             res.redirect('medecinHome');
         }
@@ -166,20 +190,10 @@ module.exports = function (app , mongoose) {
             res.redirect('/');
         }
         else {
-            Alert.find({utilisateur: req.userInfos.userId})
+            await Alert.find({utilisateur: req.userInfos.userId})
+            .sort({date: -1, temps: -1})
             .then((alerts) => {
-                var _alerts = [];
-                alerts.forEach(alert => {
-                    _alerts.push({
-                        utilisateur: alert.utilisateur,
-                        date: alert.date.toISOString().split('T')[0],
-                        temps: alert.temps,
-                        mesure: alert.mesure,
-                        text: alert.text,
-                        difference: alert.difference
-                    })
-                });
-                res.render('patientHome', {alerts: _alerts});
+                res.render('patientHome', {alerts: alerts});
             })
             //res.render('patientHome')
         }

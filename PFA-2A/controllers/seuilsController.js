@@ -43,30 +43,13 @@ module.exports = function (app , mongoose) {
         }
     })
     
-    app.get('/seuils',authenticateToken, urlencodedParser, (req, res) => {
-        var param = req.query.id;
-        if(req.userInfos.type === 'normal' || req.userInfos.type === 'medecin') {
+    app.get('/seuils', authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'normal') {
             Seuils.find({}).sort('nom')
             .then((seuils) => {
                 if(seuils != null) {
-                    if(req.userInfos.type === 'normal' && param == null) {
-                        res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
-                    }
-                    else if(req.userInfos.type === 'normal' && param != null) {
-                        res.redirect('/seuils')
-                    }
-                    else if(req.userInfos.type === 'medecin' && param == null) {
-                        res.redirect(url.format({
-                            pathname:"/seuils",
-                            query: {
-                                "id": "medecin"
-                            }
-                        }));
-                    }
-                    else if(req.userInfos.type === 'medecin' && param != null){
-                        res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
-                    }
-                }    
+                    res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
+                }
             }) 
         }
         else {

@@ -33,14 +33,42 @@
         <div class="container-body">
             <div class="radio-group margin">
                 <label class="radio">
-                    <input type="radio" checked="true" name="patients" id="current" value="current"
-                        onclick="getPatients()">
+                    <input type="radio" checked="true" name="patients" id="all" value="all" onclick="getPatients()">
+                    <span>Tous  les patients</span>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="patients" id="current" value="current" onclick="getPatients()">
                     <span>Patients actuels</span>
                 </label>
                 <label class="radio">
                     <input type="radio" name="patients" id="old" value="old" onclick="getPatients()">
                     <span>Anciens patients</span>
-                </label>
+                </label> 
+            </div>
+            <div id="allPatients">
+                <table class="table table-sortable table-3">
+                    <thead id="table-head">
+                        <tr>
+                            <th>Patient</th>
+                            <th>Email</th>
+                            <th>Pays</th>
+                            <th>Ville</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% allPatients.forEach((patient)=>{ %>
+                        <tr>
+                            <td id="patient" data-label="Patient"><a class="btn"
+                                    href='userProfile?id=<%= patient._id %>'><%= patient.nom %>
+                                    <%= patient.prenom %></a></td>
+                            <td data-label="Email"><%= patient.email %></td>
+                            <td data-label="Pays"><%= patient.pays %></td>
+                            <td data-label="Ville"><%= patient.ville %></td>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
             </div>
             <div id="currentPatients">
                 <table class="table table-sortable table-3">
@@ -58,7 +86,7 @@
                                     href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
                                     <%= patient.utilisateur.prenom %></a></td>
                             <td data-label="Email"><%= patient.utilisateur.email %></td>
-                            <td data-label="Début contrat"><%= patient.debutContrat %></td>
+                            <td data-label="Début suivi"><%= patient.debutSuivi %></td>
                             <td><a href='patientValues?id=<%= patient.utilisateur._id %>'
                                     class="btn btn-success">Santé</a></td>
                             <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a>
@@ -75,7 +103,7 @@
                             <th>Patient</th>
                             <th>Email</th>
                             <th>Date d'ajout</th>
-                            <th>Fin contrat</th>
+                            <th>Fin suivi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,8 +113,8 @@
                                     href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
                                     <%= patient.utilisateur.prenom %></a></td>
                             <td data-label="Email"><%= patient.utilisateur.email %></td>
-                            <td data-label="Début contrat"><%= patient.debutContrat %></td>
-                            <td data-label="Fin contrat"><%= patient.finContrat %></td>
+                            <td data-label="Début suivi"><%= patient.debutSuivi %></td>
+                            <td data-label="Fin suivi"><%= patient.finSuivi %></td>
                         </tr>
                         <% }); %>
                     </tbody>

@@ -25,52 +25,22 @@
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div class="container-home">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
-            <h1 class="text-header">La liste des médecins disponibles</h1>
+            <h1 class="text-header">Vos anciens médecins </h1>
         </div>
         <div class="container-body">
             <div class="radio-group margin">
                 <label class="radio">
-                    <input type="radio" checked="true" name="medecins" id="all" value="all" onclick="getMedecins()">
-                    <span>Tous les Medecins</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="medecins" id="current" value="current" onclick="getMedecins()">
+                    <input type="radio" checked="true" name="medecins" id="current" value="current" onclick="getMedecins()">
                     <span>Medecins actuels</span>
                 </label>
                 <label class="radio">
                     <input type="radio" name="medecins" id="old" value="old" onclick="getMedecins()">
                     <span>Anciens medecins</span>
                 </label> 
-            </div>
-            <div id="allMedecins">
-                <table class="table table-sortable table-7">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Pays</th>
-                            <th>Ville</th>
-                            <th>Spécialité</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% allMedecins.forEach((medecin)=>{ %>
-                        <tr>
-                            <td data-label="Nom"><%= medecin.nom %></td>
-                            <td data-label="Prénom"><%= medecin.prenom %></td>
-                            <td data-label="Pays"><%= medecin.pays %></td>
-                            <td data-label="Ville"><%= medecin.ville %></td>
-                            <td data-label="Spécialité"><%= medecin.specialite %></td>
-                            <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= medecin._id %>'>Consulter</a>
-                            </td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
             </div>
             <div id="currentMedecins"> 
                 <table class="table table-sortable table-7">
@@ -129,7 +99,6 @@
                 </table>
             </div>
             
-            
         </div>
 
 
@@ -137,9 +106,8 @@
 
 
 </body>
-
 <script src="public/js/radio.js"></script>
 <script src="public/js/sortedTable.js"></script>
-<script src="public/js/app.js"></script>
+<script src="ppublic/js/app.js"></script>
 
 </html>

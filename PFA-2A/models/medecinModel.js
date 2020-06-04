@@ -12,6 +12,7 @@ var medecinSchema = new Schema({
     ville: String,
     pays: String,
     password: String,
+    specialite: String,
     adresse_lieu_travail : String,
     utilisateurs : [
         {
@@ -20,11 +21,11 @@ var medecinSchema = new Schema({
                 ref: "utilisateur",
                 default : null
             },
-            debutContrat: {
+            debutSuivi: {
                 type: Date,
                 default: Date.now
             },
-            finContrat: Date
+            finSuivi: Date
         } 
     ],
     demandes: [

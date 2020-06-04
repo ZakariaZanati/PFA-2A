@@ -1,14 +1,12 @@
 module.exports = (app , mongoose) => {
 
     const Prelevements = require('../models/valuesModel');
-    const User = require('../models/userModel');
-    const Seuils = require('../models/seuilsModel');
-    const Alert = require('../models/alertModel');
     const Statistics = require('../models/statisticsModel');
     const {moyenneSemaine,moyenneMoi} = require('../moyennes');
+    const sendAlerts = require('../alerts');
     var url = require('url');
-    const bodyParser = require('body-parser');
     var authenticateToken = require('../authenticateToken');
+    const bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
     })
@@ -23,7 +21,7 @@ module.exports = (app , mongoose) => {
         return [date, time,day];
     }
 
-    app.get('/newvalues',authenticateToken, (req, res) => {
+    app.get('/newvalues', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal') {
             res.render('newvalues');
         }
@@ -42,12 +40,13 @@ module.exports = (app , mongoose) => {
     })
 
     
-    app.post('/patientHome',authenticateToken, urlencodedParser, (req, res) => {
+    app.post('/patientHome', authenticateToken, urlencodedParser, (req, res) => {
         var userId = req.userInfos.userId;
         var currentDate = getFormatDate();
         var _date = currentDate[0];
         var _time = currentDate[1];
         var _day = currentDate[2];
+        var action = req.query.action;
         Prelevements.findOne({utilisateur: userId, date: _date}, (err, values) => {
             if(values) {
                 
@@ -113,8 +112,8 @@ module.exports = (app , mongoose) => {
 
                     
                     
-                    
-                    sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun)
+                    var aJeun = req.body.typeTest === 'aJeun';
+                    sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun, "", "create");
                 
                 } 
             }
@@ -132,7 +131,7 @@ module.exports = (app , mongoose) => {
                 });
                 Prelevements.create(_values);
                 var aJeun = req.body.typeTest === 'aJeun';
-                sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun)
+                sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun, "", "create")
 
                 console.log("Values created");
 
@@ -148,87 +147,7 @@ module.exports = (app , mongoose) => {
                 console.log('moyenne ajouté');
             }
         });
-        res.redirect('patientHome');
+        res.redirect('/patientHome');
     }); 
-
-
-    function sendAlert(userId, valeur, nom, type, sousType) {
-        var currentDate = getFormatDate();
-        var _date = currentDate[0];
-        var _time = currentDate[1];
-        Seuils.findOne({nom: nom, type: type, sousType: sousType})
-        .then((mesure) => {
-            var nomMesure = mesure.nom + " " + type;
-            var unite = mesure.abreviation;
-            var seuilMin = mesure.valMin;
-            var seuilMax = mesure.valMax;
-            var valSeuil;
-            var comparaison;
-            if(valeur < seuilMin) {
-                valSeuil = seuilMin;
-                comparaison = " est inferieure au seuil min ";
-            }
-            if(valeur > seuilMax) {
-                valSeuil = seuilMax;
-                comparaison = " est superieure au seuil max ";
-            }
-            var alert = new Alert({
-                utilisateur: userId,
-                date: _date, 
-                temps: _time, 
-                mesure: nomMesure,
-                text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
-                difference: valeur - valSeuil         
-            });
-            Alert.create(alert);
-            /*User.findById(userId)
-            .then( async (user) => {
-                var valSeuil;
-                var comparaison;
-                if(valeur < seuilMin) {
-                    valSeuil = seuilMin;
-                    comparaison = " est inferieure au seuil min ";
-                }
-                if(valeur > seuilMax) {
-                    valSeuil = seuilMax;
-                    comparaison = " est superieure au seuil max ";
-                }
-                await user.alerts.push({
-                    $each: [{date: _date, temps: _time, mesure: nomMesure,
-                        text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
-                        difference: valeur - valSeuil}],
-                    $position: 0});
-
-                user.save();
-            });*/
-        })
-    }
-
-    function sendAlerts(userId, temperature, tauxOxygen, tensionArray, tauxGlucose, aJeun) {
-        sendAlert(userId, temperature, "Temperature", "", "");
-        sendAlert(userId, tauxOxygen, "Taux d'oxygène", "", "");
-        sendAlert(userId, tensionArray[0], "Tension", "systolique", "");
-        sendAlert(userId, tensionArray[1], "Tension", "diastolique", "");
-        User.findById(userId)
-        .then((user) => {
-            if(user.maladies.indexOf("Diabete type 1") != -1) {
-                aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "")
-                        : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 1");
-            }
-            else if(user.maladies.indexOf("Diabete type 2") != -1) {
-                aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "")
-                        : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 2");
-            }
-            else if(user.maladies.indexOf("Diabete gestationnel") != -1) {
-                aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "diabete gestationnel")
-                        : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete gestationnel");
-            }
-            else {
-                aJeun ? sendAlert(userId, tauxGlucose, "Taux de glucose", "a jeun", "")
-                        : sendAlert(userId, tauxGlucose, "Taux de glucose", "post prandial", "diabete type 2");
-            }
-        });
-        
-    }
 
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PFA</title>
+    <title>Demandes</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
     <script src="public/js/icons.js"></script>
 </head>
@@ -18,42 +18,44 @@
             <li><a href="patientHome">Accueil</a></li>
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
-            <li><a href="medecins" class="active">Médecins</a></li>
+            <li><a class="active" href="patientDemandes">Demandes</a></li>
+            <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
             <li><a href="/logout">Deconnexion</a></li>
         </ul>
     </nav>
-    <div class="container-home">
+    <div class="container">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
-            <h1 class="text-header">Vos anciens médecins </h1>
+            <h1 class="text-header">La liste des demandes</h1>
         </div>
         <div class="container-body">
-            <table class="table table-sortable table-7">
+            <table class="table table-sortable table-6">
                 <thead>
+                    <tr>
                     <tr>
                         <th>Nom</th>
                         <th>Prenom</th>
                         <th>Email</th>
                         <th>Pays</th>
                         <th>Ville</th>
-                        <th>Debut contrat</th>
-                        <th>Fin contrat</th>
+                        <th>Spécialité</th>
+                    </tr>
                     </tr>
                 </thead>
                 <tbody>
-                    <% oldMedecins.forEach((_medecin)=>{ %>
+                    <% demandes.forEach((demande)=>{ %>
                     <tr>
-                        <td data-label="Nom"><%= _medecin.medecin.nom %></td>
-                        <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
-                        <td data-label="Email"><%= _medecin.medecin.email %></td>
-                        <td data-label="Pays"><%= _medecin.medecin.pays %></td>
-                        <td data-label="Ville"><%= _medecin.medecin.ville %></td>
-                        <td data-label="Début contrat"><%= _medecin.debutContrat %></td>
-                        <td data-label="Fin contrat"><%= _medecin.finContrat %></td>
-                        <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
+                        <td data-label="Nom"><%= demande.nom %></td>
+                        <td data-label="Prénom"><%= demande.prenom %></td>
+                        <td data-label="Email"><%= demande.email %></td>
+                        <td data-label="Pays"><%= demande.pays %></td>
+                        <td data-label="Ville"><%= demande.ville %></td>
+                        <td data-label="Spécialité"><%= demande.specialite %></td>
+                        <td data-label="Profil"><a class="btn"
+                                href='medecinProfile?id=<%= demande._id %>'>Consulter</a></td>
                     </tr>
                     <% }); %>
                 </tbody>
@@ -67,6 +69,6 @@
 </body>
 
 <script src="public/js/sortedTable.js"></script>
-<script src="ppublic/js/app.js"></script>
+<script src="public/js/app.js"></script>
 
 </html>

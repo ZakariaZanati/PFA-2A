@@ -18,6 +18,7 @@
             <li><a href="patientHome">Accueil</a></li>
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
+            <li><a href="patientDemandes">Demandes</a></li>
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser" class="active"> Profil</a></li>
@@ -89,22 +90,17 @@
                 </label>
                 <%}%>
                 <label class="noEditable">
-                    <% if(currentMedecin) { %>
-                    <span>Medecin actuel</span><br>
+                    <span>Mes medecins actuels</span>
                     <div class="buttons-inline">
-                        <a class="btn" href='medecinProfile?id=<%= currentMedecin.id %>'><%= currentMedecin.nom %>
-                            <%= currentMedecin.prenom %></a>
+                        <a class="btn btn-success" href='medecins?filtre=current'>Consulter</a>
                     </div>
-                    <%}%>
-                </label>
+                </label> 
                 <label class="noEditable">
-                    <span>Anciens medecins</span>
+                    <span>Mes anciens medecins</span>
                     <div class="buttons-inline">
-                        <a class="btn btn-success" href='oldMedecins'>Consulter</a>
+                        <a class="btn btn-success" href='medecins?filtre=old'>Consulter</a>
                     </div>
-                </label>
-                
-                 </label>               
+                </label>             
                 <div class="buttons-inline no-display" id="saveDiv" >
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileUser">Annuler</a>
