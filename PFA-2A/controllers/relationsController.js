@@ -4,6 +4,7 @@ module.exports = function (app , mongoose) {
     var Medecin = require('../models/medecinModel');
     var url = require('url');
     var bodyParser = require('body-parser');
+    var authenticateToken = require('../authenticateToken');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
     })
@@ -17,19 +18,19 @@ module.exports = function (app , mongoose) {
         return [date, time];
     }
 
-    app.get('/medecins',(req,res)=>{
-        if (req.session.type === 'normal') {
+    app.get('/medecins',authenticateToken,(req,res)=>{
+        if (req.userInfos.type === 'normal') {
             Medecin.find({})
             .then((medecins)=>{
                 res.render('medecins',{medecins : medecins});
             });
         }
-        else if(req.session.type === 'medecin') {
+        else if(req.userInfos.type === 'medecin') {
             res.redirect('medecinHome');
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
@@ -39,12 +40,12 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/medecinProfile',(req,res)=>{
-        if (req.session.type === 'normal') {
+    app.get('/medecinProfile',authenticateToken,(req,res)=>{
+        if (req.userInfos.type === 'normal') {
             id = req.query.id;
             Medecin.findById(id)
             .then((medecin)=>{
-                User.findById(req.session.userId)
+                User.findById(req.userInfos.userId)
                 .then((user) => {
                     var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finContrat == null);
                     var haveMedecin = user.medecins.some((medecin)=>{
@@ -70,12 +71,12 @@ module.exports = function (app , mongoose) {
                 })
             })
         }
-        else if(req.session.type === 'medecin') {
+        else if(req.userInfos.type === 'medecin') {
             res.redirect('medecinHome');
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
@@ -87,14 +88,14 @@ module.exports = function (app , mongoose) {
     });
     
 
-    app.post('/medecinProfile',urlencodedParser,(req,res,next)=>{
+    app.post('/medecinProfile',authenticateToken,urlencodedParser,(req,res,next)=>{
         id = req.query.id;
         action = req.query.action;
         console.log(id)
         console.log(action);
-        if (req.session.type === 'normal') {
+        if (req.userInfos.type === 'normal') {
             if(action === 'yes') {
-                User.findById(req.session.userId)
+                User.findById(req.userInfos.userId)
                 .then((user)=>{
                     var haveMedecin = user.medecins.find(medecin => medecin.finContrat == null);
                     if (haveMedecin) {
@@ -105,10 +106,10 @@ module.exports = function (app , mongoose) {
                         Medecin.findById(id)
                         .then((medecin)=>{
                             var isInArray = medecin.demandes.some((user)=>{
-                                return user.equals(req.session.userId);
+                                return user.equals(req.userInfos.userId);
                             })
                             if (!isInArray) {
-                                medecin.demandes.push(req.session.userId);
+                                medecin.demandes.push(req.userInfos.userId);
                                 medecin.save();
                             }
     
@@ -121,10 +122,10 @@ module.exports = function (app , mongoose) {
                 Medecin.findById(id)
                 .then((medecin)=>{
                     var isInArray = medecin.demandes.some((user)=>{
-                        return user.equals(req.session.userId);
+                        return user.equals(req.userInfos.userId);
                     })
                     if (!isInArray) {
-                        medecin.demandes.push(req.session.userId);
+                        medecin.demandes.push(req.userInfos.userId);
                         medecin.save();
                     }
 
@@ -134,10 +135,10 @@ module.exports = function (app , mongoose) {
                 Medecin.findById(id)
                 .then((medecin)=>{
                     var isInArray = medecin.demandes.some((user)=>{
-                        return user.equals(req.session.userId);
+                        return user.equals(req.userInfos.userId);
                     })
                     if (isInArray) {
-                        medecin.demandes.pull(req.session.userId);
+                        medecin.demandes.pull(req.userInfos.userId);
                         medecin.save();
                     }
 
@@ -147,9 +148,9 @@ module.exports = function (app , mongoose) {
         res.redirect('medecins');
     })
 
-    app.get('/demandes', (req,res)=>{
-        if (req.session.type === 'medecin') {
-            Medecin.findById(req.session.userId)
+    app.get('/demandes',authenticateToken, (req,res)=>{
+        if (req.userInfos.type === 'medecin') {
+            Medecin.findById(req.userInfos.userId)
             .populate('demandes')
             .then((medecin)=>{
                 var allDemandes = [];
@@ -164,12 +165,12 @@ module.exports = function (app , mongoose) {
                 res.render('demandes',{demandes : allDemandes});
             })
         }
-        else if(req.session.type === 'normal') {
+        else if(req.userInfos.type === 'normal') {
             res.redirect('patientHome');
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
@@ -181,12 +182,13 @@ module.exports = function (app , mongoose) {
 
     
 
-    app.get('/userProfile',(req,res)=>{
-        if (req.session.type === 'medecin') {
+    app.get('/userProfile',authenticateToken,(req,res)=>{
+        if (req.userInfos.type === 'medecin') {
+            console.log("hELLO");
             id = req.query.id
             User.findById(id)
             .then((user)=>{
-                Medecin.findById(req.session.userId)
+                Medecin.findById(req.userInfos.userId)
                 .then((medecin) => {
                     var isInArray = medecin.utilisateurs.some((user)=>{
                         return user.utilisateur.equals(id) && user.finContrat == null;
@@ -217,19 +219,19 @@ module.exports = function (app , mongoose) {
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
     });
 
-    app.post('/userProfile',urlencodedParser,(req,res)=>{
-        if (req.session.type === 'medecin') {
+    app.post('/userProfile',authenticateToken,urlencodedParser,(req,res)=>{
+        if (req.userInfos.type === 'medecin') {
             patientId = req.query.id;
             action = req.query.action
             console.log(action)
             if (action === 'yes') {
-                Medecin.findById(req.session.userId)
+                Medecin.findById(req.userInfos.userId)
                 .then((medecin)=>{
                     medecin.utilisateurs.push({utilisateur: patientId});
                     medecin.demandes.pull(patientId);
@@ -238,7 +240,7 @@ module.exports = function (app , mongoose) {
                     .then((user)=>{
                         console.log("HI HERE");
                         console.log(user.nom);
-                        user.medecins.push({medecin: req.session.userId});
+                        user.medecins.push({medecin: req.userInfos.userId});
                         user.save();
                         Medecin.find({})
                         .then((medecins)=>{
@@ -256,45 +258,45 @@ module.exports = function (app , mongoose) {
                 })
             }
             else if (action === 'no') {
-                Medecin.findById(req.session.userId)
+                Medecin.findById(req.userInfos.userId)
                 .then((medecin)=>{
                     medecin.demandes.pull(patientId)
                     medecin.save();
                 })
             }
             else if(action === 'end') {   
-                Medecin.findByIdAndUpdate(req.session.userId, 
+                Medecin.findByIdAndUpdate(req.userInfos.userId, 
                     {$set: {"utilisateurs.$[user].finContrat": new Date()}},
                     {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
                     .then((medecin) => {
                         User.findByIdAndUpdate(patientId, 
                             {$set: {"medecins.$[medec].finContrat": new Date()}},
-                            {arrayFilters: [{"medec.medecin": req.session.userId, "medec.finContrat": null}]})
+                            {arrayFilters: [{"medec.medecin": req.userInfos.userId, "medec.finContrat": null}]})
                             .then((doc) => {
                                 console.log(doc);
                             })
                     })  
             }
             else if(action === 'yesEnd') {
-                Medecin.findById(req.session.userId)
+                Medecin.findById(req.userInfos.userId)
                 .then((medecin)=>{
                     medecin.demandes.pull(patientId)
                     medecin.save();
                 });
-                Medecin.findByIdAndUpdate(req.session.userId, 
+                Medecin.findByIdAndUpdate(req.userInfos.userId, 
                     {$set: {"utilisateurs.$[user].finContrat": new Date()}},
                     {arrayFilters: [{"user.utilisateur": patientId, "user.finContrat": null}]})
                     .then((medecin) => {
                         User.findByIdAndUpdate(patientId, 
                             {$set: {"medecins.$[medec].finContrat": new Date()}},
-                            {arrayFilters: [{"medec.medecin": req.session.userId, "medec.finContrat": null}]})
+                            {arrayFilters: [{"medec.medecin": req.userInfos.userId, "medec.finContrat": null}]})
                             .then((doc) => {
                                 console.log(doc);
                             })
                     }) 
             }
             else if(action === 'noEnd') {
-                Medecin.findById(req.session.userId)
+                Medecin.findById(req.userInfos.userId)
                 .then((medecin)=>{
                     medecin.demandes.pull(patientId)
                     medecin.save();
@@ -304,18 +306,18 @@ module.exports = function (app , mongoose) {
         }
     })
 
-    app.get('/patients', (req, res) => {
-        if(req.session.type === 'normal'){
+    app.get('/patients',authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'normal'){
             res.redirect('patientHome');
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
-        else if(req.session.type === 'medecin') {
-            Medecin.findById(req.session.userId)
+        else if(req.userInfos.type === 'medecin') {
+            Medecin.findById(req.userInfos.userId)
             .populate('utilisateurs.utilisateur')
             .then((medecin) => {
                 var oldPatients = [];

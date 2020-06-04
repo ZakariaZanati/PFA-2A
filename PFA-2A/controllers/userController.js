@@ -1,9 +1,18 @@
+
 module.exports = function (app , mongoose) {
 
+    require('dotenv').config();
+
+    
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
     var Statistics = require('../models/statisticsModel');
+    const cookieParser = require('cookie-parser');
+    const bcrypt = require('bcrypt');
     var url = require('url');
+    const jwt = require('jsonwebtoken');
+    var authenticateToken = require('../authenticateToken');
+    var generateToken = require('../generateToken');
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
@@ -17,60 +26,71 @@ module.exports = function (app , mongoose) {
         return Math.trunc(years_elapsed) ; 
     }
 
-    app.get('/',(req,res)=>{
-        if(req.session.type === 'normal') {
-            res.redirect('patientHome');
-        }
-        else if(req.session.type === 'medecin') {
-            res.redirect('medecinHome');
-            /*res.redirect(url.format({
-                pathname:"medecin/home",
-                query: {
-                    "user": req.session.type
-                }
-            }));*/
-        }
-        else {
+    app.get('/',async (req,res)=>{
+        const token = req.cookies.token || '';
+        console.log(token);
+        if (!token) {
+            console.log(token);
             res.render('index');
         }
+        else{
+            const decrypt = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            
+            if(decrypt.type === 'normal') {
+                res.redirect('patientHome');
+               
+            }
+            else if(decrypt.type === 'medecin') {
+                res.redirect('medecinHome');
+               
+            }
+        }
     });
 
-    app.get('/login',function(req,res){
-        if(req.session.type === 'normal') {
-            res.redirect('patientHome');
-            /*res.redirect(url.format({
-                pathname:"/home",
-                query: {
-                    "user": req.session.type
-                }
-            }));*/
-        }
-        else if(req.session.type === 'medecin') {
-            res.redirect('medecinHome');
-            /*res.redirect(url.format({
-                pathname:"/home",
-                query: {
-                    "user": req.session.type
-                }
-            }));*/
-        }
-        else {
+    app.get('/login', function(req,res){
+        
+        const token = req.cookies.token || '';
+        if (token == '') {
             res.render('login');
         }
+        else{
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
+                if(err) return res.sendStatus(403);
+                req.user = user
+                next();
+            });
+            if(req.userInfos.type === 'normal') {
+                res.redirect('patientHome');
+               
+            }
+            else if(req.userInfos.type === 'medecin') {
+                res.redirect('medecinHome');
+               
+            }
+        }
+        
+       
     });
     
     
-    app.post('/login',urlencodedParser,function(req,res){
-        console.log(req.body);
+    app.post('/login',urlencodedParser , async (req,res)=>{
 
-        User.findOne({email : req.body.email , password : req.body.password},(err,user)=>{
-            if(user){
-                req.session.email = req.body.email;
-                req.session.nom = user.nom;
-                req.session.prenom = user.prenom;
-                req.session.userId = user._id;
-                req.session.type = 'normal';
+        User.findOne({email : req.body.email},async (err,user)=>{
+            if(user && ( bcrypt.compare(req.body.password,user.password))){
+
+                
                 console.log('user connecté');
+
+                userInfos = {
+                    nom : user.nom,
+                    prenom : user.prenom,
+                    email : user.email,
+                    userId : user._id,
+                    type : 'normal'
+                }
+
+                await generateToken(res,user._id,user.nom,user.prenom,user.email,'normal');
+
                 Statistics.findOne({utilisateur : user._id})
                 .then(value =>{
                     if (!value) {
@@ -78,31 +98,25 @@ module.exports = function (app , mongoose) {
                     }
                 })
                 res.redirect('patientHome');
-                /*res.redirect(url.format({
-                    pathname:"home",
-                    query: {
-                        "user": req.session.type
-                    }
-                }));*/
+                
             }
             else{
-                Medecin.findOne({email : req.body.email , password : req.body.password},(err,medecin)=>{
-                    if (medecin) {
+                Medecin.findOne({email : req.body.email},async(err,medecin)=>{
+                    if (medecin && bcrypt.compare(req.body.password,medecin.password)) {
 
-                        req.session.email = req.body.email;
-                        req.session.nom = medecin.nom;
-                        req.session.prenom = medecin.prenom;
-                        req.session.userId = medecin._id;
-                        req.session.type = 'medecin';
+                        userInfos = {
+                            nom : medecin.nom,
+                            prenom : medecin.prenom,
+                            email : medecin.email,
+                            userId : medecin._id,
+                            type : 'medecin'
+                        }
+        
+                        await generateToken(res,medecin._id,medecin.nom,medecin.prenom,medecin.email,'medecin');
 
                         console.log('medecin connecté');
                         res.redirect('medecinHome')
-                        /*res.redirect(url.format({
-                            pathname:"home",
-                            query: {
-                                "user": req.session.type
-                            }
-                        }));*/
+                       
                     } else {
                         console.log('echec de connexion');
                         res.render('login',{err : 'Email ou mot de passe incorrecte'});
@@ -117,14 +131,14 @@ module.exports = function (app , mongoose) {
         res.render('registration');
     })
 
-    app.post('/registration',urlencodedParser, function(req,res,next){
+    app.post('/registration',urlencodedParser,async (req,res,next)=>{
         console.log(req.body);
         
         var data = req.body;
         var type = req.query.user;
         console.log(type);
         User.findOne({email : data.email})
-        .then((user)=>{
+        .then(async(user)=>{
             if(user != null) {
                 res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
                 var err = new Error("L'émail "+ data.email + " exist déjà !");
@@ -139,58 +153,72 @@ module.exports = function (app , mongoose) {
                     next(err);
                 }
                 else if (type === 'normal' || type == null) {
-                    if(data.diabete === "none"){
-                        var user = new User({
-                            nom : data.nom,
-                            prenom : data.prenom,
-                            sexe : data.gender,
-                            telephone : data.telephone,
-                            dateNaissance : data.dateNaissance,
-                            email : data.email,
-                            age : get_age(data.dateNaissance),
-                            ville : data.ville,
-                            pays : data.pays,
-                            password : data.password,
-                            groupeSanguin : data.grpsang,
-                        });
-                        User.create(user);
+                    try {
+                        const hashedPassword = await bcrypt.hash(data.password,10);
+                        if(data.diabete === "none"){
+                            var user = new User({
+                                nom : data.nom,
+                                prenom : data.prenom,
+                                sexe : data.gender,
+                                telephone : data.telephone,
+                                dateNaissance : data.dateNaissance,
+                                email : data.email,
+                                age : get_age(data.dateNaissance),
+                                ville : data.ville,
+                                pays : data.pays,
+                                password : hashedPassword,
+                                groupeSanguin : data.grpsang,
+                            });
+                            User.create(user);
+                        }
+                        else {
+                            var user = new User({
+                                nom : data.nom,
+                                prenom : data.prenom,
+                                sexe : data.gender,
+                                telephone : data.telephone,
+                                dateNaissance : data.dateNaissance,
+                                email : data.email,
+                                age : get_age(data.dateNaissance),
+                                ville : data.ville,
+                                pays : data.pays,
+                                password : hashedPassword,
+                                groupeSanguin : data.grpsang,
+                                maladies: [data.diabete]
+                            });
+                            User.create(user);
+                        }
+                        console.log('patient created');
+                        res.redirect('/login');
+                    } catch {
+                        res.status(500).send();
                     }
-                    else {
-                        var user = new User({
-                            nom : data.nom,
-                            prenom : data.prenom,
-                            sexe : data.gender,
-                            telephone : data.telephone,
-                            dateNaissance : data.dateNaissance,
-                            email : data.email,
-                            age : get_age(data.dateNaissance),
-                            ville : data.ville,
-                            pays : data.pays,
-                            password : data.password,
-                            groupeSanguin : data.grpsang,
-                            maladies: [data.diabete]
-                        });
-                        User.create(user);
-                    }
-                    console.log('patient created');
-                    res.redirect('/login');
+                    
                 }
                 else if(type === 'medecin'){
-                    var medecin = new Medecin({
-                        nom : data.nom,
-                        prenom: data.prenom,
-                        sexe: data.gender,
-                        telephone: data.telephone,
-                        email: data.email,
-                        ville: data.ville,
-                        pays: data.pays,
-                        password: data.password,
-                        adresse_lieu_travail : data.adresse
-                    })
-        
-                    Medecin.create(medecin);
-                    console.log('Medecin created');
-                    res.redirect('/login');
+                    
+                    try {
+                        const hashedPassword = await bcrypt.hash(data.password,10);
+
+                        var medecin = new Medecin({
+                            nom : data.nom,
+                            prenom: data.prenom,
+                            sexe: data.gender,
+                            telephone: data.telephone,
+                            email: data.email,
+                            ville: data.ville,
+                            pays: data.pays,
+                            password: hashedPassword,
+                            adresse_lieu_travail : data.adresse
+                        })
+            
+                        Medecin.create(medecin);
+                        console.log('Medecin created');
+                        res.redirect('/login');
+                    } catch {
+                        res.status(500).send();
+                    }
+                    
                 }
 
                 
@@ -200,14 +228,14 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.get('/myProfileMedecin', (req, res) => {
-        if(req.session.type === 'medecin') {
-            Medecin.findById(req.session.userId)
+    app.get('/myProfileMedecin',authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'medecin') {
+            Medecin.findById(req.userInfos.userId)
             .then((medecin) => {
                 res.render('myProfileMedecin', {medecin: medecin});
             })
         }
-        else if(req.session.type === 'normal') {
+        else if(req.userInfos.type === 'normal') {
             res.redirect('patientHome');
             /*res.redirect(url.format({
                 pathname:"/home",
@@ -221,9 +249,9 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.get('/myProfileUser', (req, res) => {
-        if(req.session.type === 'normal') {
-            User.findById(req.session.userId)
+    app.get('/myProfileUser',authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'normal') {
+            User.findById(req.userInfos.userId)
             .populate('medecins.medecin')
             .then((user) => {
                 var currentMedecin = user.medecins.find(medecin => medecin.finContrat == null);
@@ -236,7 +264,7 @@ module.exports = function (app , mongoose) {
                 
             })
         }
-        else if(req.session.type === 'medecin') {
+        else if(req.userInfos.type === 'medecin') {
             res.redirect('medecinHome');
             /*res.redirect(url.format({
                 pathname:"/home",
@@ -250,7 +278,7 @@ module.exports = function (app , mongoose) {
         }
     });
 
-    app.post('/myProfileUser', urlencodedParser, function(req,res,next){
+    app.post('/myProfileUser',authenticateToken, urlencodedParser, function(req,res,next){
         console.log(req.body);
         
         var data = req.body;
@@ -258,14 +286,14 @@ module.exports = function (app , mongoose) {
         
         User.findOne({email : data.email})
         .then((user)=>{
-            if(user != null && user.id != req.session.userId) {
+            if(user != null && user.id != req.userInfos.userId) {
                 res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
                 var err = new Error("L'émail "+ data.email + " exist déjà !");
                 err.status = 500;
                 next(err);
             }
             else{
-                User.findByIdAndUpdate(req.session.userId, 
+                User.findByIdAndUpdate(req.userInfos.userId, 
                     {$set: {email: data.email, 
                             telephone : data.telephone,
                             dateNaissance : data.dateNaissance,
@@ -284,21 +312,21 @@ module.exports = function (app , mongoose) {
         
     });
 
-    app.post('/myProfileMedecin', urlencodedParser, function(req,res,next){
+    app.post('/myProfileMedecin',authenticateToken, urlencodedParser, function(req,res,next){
         console.log(req.body);
         
         var data = req.body;
         
         Medecin.findOne({email : data.email})
         .then((medecin)=>{
-            if(medecin != null && medecin.id != req.session.userId) {
+            if(medecin != null && medecin.id != req.userInfos.userId) {
                 res.render('registration',{error : "L'émail "+ data.email + " exist déjà !"});
                 var err = new Error("L'émail "+ data.email + " exist déjà !");
                 err.status = 500;
                 next(err);
             }
             else{
-                Medecin.findByIdAndUpdate(req.session.userId, 
+                Medecin.findByIdAndUpdate(req.userInfos.userId, 
                     {$set: {email: data.email, 
                             telephone: data.telephone,
                             ville: data.ville,
@@ -315,9 +343,9 @@ module.exports = function (app , mongoose) {
         
     });
     
-    app.get('/oldMedecins', (req, res) => {
-        if(req.session.type === 'normal') {
-            User.findById(req.session.userId)
+    app.get('/oldMedecins',authenticateToken, (req, res) => {
+        if(req.userInfos.type === 'normal') {
+            User.findById(req.userInfos.userId)
             .populate('medecins.medecin')
             .then(user => {
                 var oldMedecins = [];
@@ -327,7 +355,7 @@ module.exports = function (app , mongoose) {
                 res.render('oldMedecins', {oldMedecins: oldMedecins});
             })
         }
-        else if(req.session.type === 'medecin'){
+        else if(req.userInfos.type === 'medecin'){
             res.redirect('medecinHome');
             /*res.redirect(url.format({
                 pathname:"/home",
@@ -342,15 +370,16 @@ module.exports = function (app , mongoose) {
     })
 
 
-    app.get('/logout',(req,res)=>{
+    app.get('/logout',async (req,res)=>{
         
-        req.session.destroy(function(err) {
-            if(err) {
-                console.log(err);
-            } else {
-                res.redirect('/');
-            }
-        });
+        try{
+            res.clearCookie('token');
+            res.redirect('/');
+        }
+        catch (err){
+            console.log(err)
+            res.status(500).send();
+        }
     });
    
 }

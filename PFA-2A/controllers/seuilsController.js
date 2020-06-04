@@ -3,6 +3,7 @@ module.exports = function (app , mongoose) {
     var Seuils = require('../models/seuilsModel');
     var url = require('url');
     var bodyParser = require('body-parser');
+    var authenticateToken = require('../authenticateToken');
     var urlencodedParser = bodyParser.urlencoded({
         extended: false
     });
@@ -42,13 +43,30 @@ module.exports = function (app , mongoose) {
         }
     })
     
-    app.get('/seuils', (req, res) => {
-        if(req.session.type === 'normal') {
+    app.get('/seuils',authenticateToken, urlencodedParser, (req, res) => {
+        var param = req.query.id;
+        if(req.userInfos.type === 'normal' || req.userInfos.type === 'medecin') {
             Seuils.find({}).sort('nom')
             .then((seuils) => {
                 if(seuils != null) {
-                    res.render('seuils', {seuils: seuils, userType: req.session.type});
-                }
+                    if(req.userInfos.type === 'normal' && param == null) {
+                        res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
+                    }
+                    else if(req.userInfos.type === 'normal' && param != null) {
+                        res.redirect('/seuils')
+                    }
+                    else if(req.userInfos.type === 'medecin' && param == null) {
+                        res.redirect(url.format({
+                            pathname:"/seuils",
+                            query: {
+                                "id": "medecin"
+                            }
+                        }));
+                    }
+                    else if(req.userInfos.type === 'medecin' && param != null){
+                        res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
+                    }
+                }    
             }) 
         }
         else {
@@ -56,7 +74,7 @@ module.exports = function (app , mongoose) {
             /*res.redirect(url.format({
                 pathname:"/home",
                 query: {
-                    "user": req.session.type
+                    "user": req.userInfos.type
                 }
             }));*/
         }
