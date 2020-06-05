@@ -24,7 +24,7 @@ module.exports = function (app , mongoose) {
     }
 
     app.get('/',async (req,res)=>{
-        const token = req.cookies.token || '';
+        const token = req.cookies.mytoken || '';
         console.log(token);
         if (!token) {
             console.log(token);
@@ -46,7 +46,7 @@ module.exports = function (app , mongoose) {
 
     app.get('/login', function(req,res){
         
-        const token = req.cookies.token || '';
+        const token = req.cookies.mytoken || '';
         if (token == '') {
             res.render('login');
         }
@@ -75,17 +75,6 @@ module.exports = function (app , mongoose) {
         User.findOne({email : req.body.email},async (err,user)=>{
             if(user && ( bcrypt.compare(req.body.password,user.password))){
 
-                
-                console.log('user connecté');
-
-                userInfos = {
-                    nom : user.nom,
-                    prenom : user.prenom,
-                    email : user.email,
-                    userId : user._id,
-                    type : 'normal'
-                }
-
                 await generateToken(res,user._id,user.nom,user.prenom,user.email,'normal');
 
                 Statistics.findOne({utilisateur : user._id})
@@ -100,14 +89,6 @@ module.exports = function (app , mongoose) {
             else{
                 Medecin.findOne({email : req.body.email},async(err,medecin)=>{
                     if (medecin && bcrypt.compare(req.body.password,medecin.password)) {
-
-                        userInfos = {
-                            nom : medecin.nom,
-                            prenom : medecin.prenom,
-                            email : medecin.email,
-                            userId : medecin._id,
-                            type : 'medecin'
-                        }
         
                         await generateToken(res,medecin._id,medecin.nom,medecin.prenom,medecin.email,'medecin');
 
@@ -374,7 +355,7 @@ module.exports = function (app , mongoose) {
     app.get('/logout',async (req,res)=>{
         
         try{
-            res.clearCookie('token');
+            res.clearCookie('mytoken');
             res.redirect('/');
         }
         catch (err){

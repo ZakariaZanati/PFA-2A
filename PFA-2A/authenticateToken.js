@@ -3,7 +3,7 @@ require('dotenv').config();
 
 async function authenticateToken(req,res,next){
 
-    const token = req.cookies.token || '';
+    const token = req.cookies.mytoken || '';
 
     try {
         if (!token) {
