@@ -45,13 +45,13 @@
                 <tbody>
                     <% demandes.forEach((demande)=>{ %>
                     <tr>
-                        <td data-label="Nom"><%= demande.user.nom %></td>
-                        <td data-label="Prénom"><%= demande.user.prenom %></td>
-                        <td data-label="Email"><%= demande.user.email %></td>
-                        <td data-label="Pays"><%= demande.user.pays %></td>
-                        <td data-label="Ville"><%= demande.user.ville %></td>
+                        <td data-label="Nom"><%= demande.nom %></td>
+                        <td data-label="Prénom"><%= demande.prenom %></td>
+                        <td data-label="Email"><%= demande.email %></td>
+                        <td data-label="Pays"><%= demande.pays %></td>
+                        <td data-label="Ville"><%= demande.ville %></td>
                         <td data-label="Profil"><a class="btn"
-                                href='userProfile?id=<%= demande.user._id %>'>Consulter</a></td>
+                                href='userProfile?id=<%= demande._id %>'>Consulter</a></td>
                     </tr>
                     <% }); %>
                 </tbody>

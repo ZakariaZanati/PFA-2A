@@ -96,3 +96,36 @@ function getMedecins() {
     }
     
 }
+
+var numberOfFields = -1;
+
+function addField() {
+    var divMaladie = document.getElementById('maladies');
+    if(urlTab[1] == 'myProfileUser') {
+        numberOfFields = document.getElementsByName("maladie").length;
+    }
+    numberOfFields++;
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "maladie"
+    input.id = "maladie" + numberOfFields;
+    divMaladie.appendChild(input);
+    var remove = document.createElement("input");
+    remove.type = "button";
+    remove.value = "supprimer";
+    remove.id = numberOfFields;
+    remove.setAttribute("onclick" , "removeField(this.id)");
+    divMaladie.appendChild(remove);
+    var br = document.createElement("br");
+    br.id = "br" + numberOfFields;
+    divMaladie.appendChild(br);
+}
+
+function removeField(id) {
+    var input = document.getElementById("maladie" + id);
+    var divMaladie = document.getElementById('maladies');
+    var remove = document.getElementById(id);
+    divMaladie.removeChild(input);
+    divMaladie.removeChild(remove);
+    divMaladie.removeChild(document.getElementById("br" + id));
+}

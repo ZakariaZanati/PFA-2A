@@ -89,7 +89,7 @@ module.exports = function (app , mongoose) {
             else{
                 Medecin.findOne({email : req.body.email},async(err,medecin)=>{
                     if (medecin && bcrypt.compare(req.body.password,medecin.password)) {
-        
+
                         await generateToken(res,medecin._id,medecin.nom,medecin.prenom,medecin.email,'medecin');
 
                         console.log('medecin connecté');
@@ -114,7 +114,6 @@ module.exports = function (app , mongoose) {
         
         var data = req.body;
         var type = req.query.user;
-        console.log(type);
         User.findOne({email : data.email})
         .then(async(user)=>{
             if(user != null) {
@@ -134,35 +133,39 @@ module.exports = function (app , mongoose) {
                     try {
                         const hashedPassword = await bcrypt.hash(data.password,10);
                         if(data.diabete === "none"){
+                            var maladies =  data.maladie.filter(m => {return m!='' && m.trim()!='';})
                             var user = new User({
-                                nom : data.nom,
+                                nom : data.nom.toUpperCase(),
                                 prenom : data.prenom,
                                 sexe : data.gender,
                                 telephone : data.telephone,
                                 dateNaissance : data.dateNaissance,
                                 email : data.email,
                                 age : get_age(data.dateNaissance),
-                                ville : data.ville,
-                                pays : data.pays,
+                                ville : data.ville.toLowerCase(),
+                                pays : data.pays.toLowerCase(),
                                 password : hashedPassword,
+                                maladies: maladies,
                                 groupeSanguin : data.grpsang,
                             });
                             User.create(user);
                         }
                         else {
+                            var maladies = [data.diabete];
+                            maladies = maladies.concat(data.maladie.filter(m => {return m!='' && m.trim()!='';}));
                             var user = new User({
-                                nom : data.nom,
+                                nom : data.nom.toUpperCase(),
                                 prenom : data.prenom,
                                 sexe : data.gender,
                                 telephone : data.telephone,
                                 dateNaissance : data.dateNaissance,
                                 email : data.email,
                                 age : get_age(data.dateNaissance),
-                                ville : data.ville,
-                                pays : data.pays,
+                                ville : data.ville.toLowerCase(),
+                                pays : data.pays.toLowerCase(),
                                 password : hashedPassword,
                                 groupeSanguin : data.grpsang,
-                                maladies: [data.diabete]
+                                maladies: maladies
                             });
                             User.create(user);
                         }
@@ -179,15 +182,15 @@ module.exports = function (app , mongoose) {
                         const hashedPassword = await bcrypt.hash(data.password,10);
 
                         var medecin = new Medecin({
-                            nom : data.nom,
+                            nom : data.nom.toUpperCase(),
                             prenom: data.prenom,
                             sexe: data.gender,
                             telephone: data.telephone,
                             email: data.email,
-                            ville: data.ville,
-                            pays: data.pays,
+                            ville: data.ville.toLowerCase(),
+                            pays: data.pays.toLowerCase(),
                             password: hashedPassword,
-                            specialite: data.specialite,
+                            specialite: data.specialite.toLowerCase(),
                             adresse_lieu_travail : data.adresse
                         })
             
@@ -273,6 +276,7 @@ module.exports = function (app , mongoose) {
                 next(err);
             }
             else{
+                var maladies =  data.maladie.filter(m => {return m!='' && m.trim()!='';})
                 User.findByIdAndUpdate(req.userInfos.userId, 
                     {$set: {email: data.email, 
                             telephone : data.telephone,
@@ -280,6 +284,7 @@ module.exports = function (app , mongoose) {
                             age : get_age(data.dateNaissance),
                             ville : data.ville,
                             pays : data.pays,
+                            maladies :  maladies,
                             groupeSanguin : data.grpsang
                             }
                         })

@@ -82,13 +82,22 @@
                     <input class="login-input" id="sang" type="text" value="<%= user.groupeSanguin %>" readonly>
                 </label>
                 <% if(user.maladies[0]!=null) { %>
-                <label class="noEditable">
-                    <span>Maladies</span>
-                    <% user.maladies.forEach((maladie) => { %>
-                    <input class="login-input" type="text" value="<%= maladie%>">
-                    <%})%>
-                </label>
+                    <label>
+                        <span>Maladies</span>
+                        <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
+                        <input id="hide" type="button" value="cacher" onclick="showMaladies(false)" style="display: none;">
+                        <input id="add" type="button" value="ajouter" onclick="addField()" style="display: none;">
+                        <div id="maladies">
+                            <% user.maladies.forEach((maladie, i) => { %>
+                                <input id="maladie<%= i %>" name="maladie" class="maladie" type="text" value="<%= maladie %>" style="display: none;" readonly>
+                                <input type="button" value="supprimer" id="<%= i %>" onclick="removeField(this.id)">
+                                <br>
+                            <%})%>
+                        </div>
+                    </label>
                 <%}%>
+                <br>
+                <br>
                 <label class="noEditable">
                     <span>Mes medecins actuels</span>
                     <div class="buttons-inline">
@@ -114,7 +123,7 @@
 
 
 </body>
-
+<script src="public/js/radio.js"></script>
 <script src="public/js/profile.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>

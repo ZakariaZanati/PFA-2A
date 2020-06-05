@@ -32,6 +32,36 @@
             <h1 class="text-header">La liste des médecins disponibles</h1>
         </div>
         <div class="container-body">
+            <label>
+                <span>Specialite</span>
+                <select id="specialites" name="specialites" onchange="search()">
+                    <option value="-1">tous</option>
+                    <% specialites.forEach(specialite => {%>
+                        <option value="<%= specialite %>"><%= specialite %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="search()">
+            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="search()">
+            <br>
+            <label>
+                <span>Pays</span>
+                <select id="pays" name="pays" onchange="search()">
+                    <option value="-1">tous</option>
+                    <% pays.forEach(pays => {%>
+                        <option value="<%= pays %>"><%= pays %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <label>
+                <span>Villes</span>
+                <select id="villes" name="villes" onchange="search()">
+                    <option value="-1">tous</option>
+                    <% villes.forEach(ville => {%>
+                        <option value="<%= ville %>"><%= ville %></option>
+                    <% }) %>
+                </select>
+            </label>
             <div class="radio-group margin">
                 <label class="radio">
                     <input type="radio" checked="true" name="medecins" id="all" value="all" onclick="getMedecins()">
@@ -138,6 +168,7 @@
 
 </body>
 
+<script src="public/js/filtres.js"></script>
 <script src="public/js/radio.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>

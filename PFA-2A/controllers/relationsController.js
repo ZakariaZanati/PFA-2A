@@ -18,6 +18,7 @@ module.exports = function (app , mongoose) {
         return [date, time];
     }
 
+
     app.get('/medecins', authenticateToken, (req,res)=>{
         if (req.userInfos.type === 'normal') {
             Medecin.find({})
@@ -27,11 +28,28 @@ module.exports = function (app , mongoose) {
                 .then(user => {
                     var oldMedecins = [];
                     var currentMedecins = [];
+                    var specialites = [];
+                    var villes = [];
+                    var pays = [];
+                    medecins.forEach(medecin => {
+                        var isInArray = specialites.find(specialite => specialite == medecin.specialite);
+                        var isInPays = pays.find(pays => pays == medecin.pays);
+                        var isInVille = villes.find(ville => ville == medecin.ville);
+                        if(!isInArray) {
+                            specialites.push(medecin.specialite);
+                        }
+                        if(!isInPays) {
+                            pays.push(medecin.pays);
+                        }
+                        if(!isInVille) {
+                            villes.push(medecin.ville);
+                        }
+                    })
                     user.medecins.forEach(medecin => {
                         if(medecin.finSuivi != null ) oldMedecins.push(medecin);
                         else currentMedecins.push(medecin);
                     })
-                    res.render('medecins', {allMedecins: medecins, currentMedecins: currentMedecins , oldMedecins: oldMedecins});
+                    res.render('medecins', {villes: villes, pays: pays, specialites: specialites, allMedecins: medecins, currentMedecins: currentMedecins , oldMedecins: oldMedecins});
                 })
             });
         }
