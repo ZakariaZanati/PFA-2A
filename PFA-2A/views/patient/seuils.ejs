@@ -32,7 +32,16 @@
             <h1 class="text-header">Les seuils normal</h1>
         </div>
         <div class="container-body">
-            <table class="table table-sortable table-7">
+            <label>
+                <span>Nom Mesure</span>
+                <select id="names" name="names" onchange="searchSeuil()">
+                    <option value="-1">tous</option>
+                    <% names.forEach(name => {%>
+                        <option value="<%= name %>"><%= name %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <table id="seuils" class="table table-sortable table-7">
                 <thead>
                     <tr>
                         <th>Mésure</th>
@@ -66,6 +75,7 @@
 
 </body>
 
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 

@@ -42,21 +42,25 @@ if(urlTab[1] == 'patients' && param == 'old') {
     document.getElementById("currentPatients").style.display = "none";
 }
 
-if(document.getElementById('patient')) {
-    document.getElementById('patient').addEventListener('click',
-    function () {
-        document.getElementById("form-doc").style.display = "none";
-        document.getElementById("form-user").style.display = "block";
-        document.getElementById("imginscription").src = "public/images/happy.jpg";
-    });
 
-    document.getElementById('med').addEventListener('click',
+if(urlTab[1] == 'registration') {
+    if(document.getElementById('patient')) {
+        document.getElementById('patient').addEventListener('click',
         function () {
-            document.getElementById("form-user").style.display = "none";
-            document.getElementById("form-doc").style.display = "block";
-            document.getElementById("imginscription").src = "public/images/doctor.jpg";
+            document.getElementById("form-doc").style.display = "none";
+            document.getElementById("form-user").style.display = "block";
+            document.getElementById("imginscription").src = "public/images/happy.jpg";
         });
+    
+        document.getElementById('med').addEventListener('click',
+            function () {
+                document.getElementById("form-user").style.display = "none";
+                document.getElementById("form-doc").style.display = "block";
+                document.getElementById("imginscription").src = "public/images/doctor.jpg";
+            });
+    }
 }
+
 
 
 

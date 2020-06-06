@@ -38,7 +38,7 @@ module.exports = function (app , mongoose) {
                     .then((prelevements)=>{
                         User.findById(patientId)
                         .then(user => {
-                            res.render('patientValues',{prelevements : prelevements, utilisateur: user});
+                            res.render('patientValues',{prelevements : prelevements, utilisateur: user, patient: false});
                         })
                         
                     });

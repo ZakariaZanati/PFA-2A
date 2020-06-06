@@ -188,10 +188,34 @@ module.exports = function (app , mongoose) {
 
     app.get('/demandes',  authenticateToken, (req,res)=>{
         if (req.userInfos.type === 'medecin') {
-            Medecin.findById(req.userInfos.userId)
-            .populate('demandes')
-            .then((medecin)=>{
-                res.render('demandes',{demandes : medecin.demandes});    
+            User.find()
+            .then(users => {
+                Medecin.findById(req.userInfos.userId)
+                .populate('demandes')
+                .then((medecin) => {
+                    var maladies = [];
+                    var villes = [];
+                    var pays = [];
+                    users.forEach(user => {
+                        user.maladies.forEach(maladie => {
+                            var isInArray = maladies.find(_maladie => _maladie.toLowerCase() == maladie.toLowerCase());
+                            if(!isInArray) {
+                                maladies.push(maladie);
+                            }
+                        })
+                        
+                        var isInPays = pays.find(pays => pays == user.pays);
+                        var isInVille = villes.find(ville => ville == user.ville);
+                        if(!isInPays) {
+                            pays.push(user.pays);
+                        }
+                        if(!isInVille) {
+                            villes.push(user.ville);
+                        }
+                    })
+                    
+                    res.render('demandes', {villes: villes, pays: pays, maladies: maladies, demandes: medecin.demandes});
+                })
             })
         }
         else if(req.userInfos.type === 'normal') {
@@ -208,7 +232,24 @@ module.exports = function (app , mongoose) {
             User.findById(req.userInfos.userId)
             .populate('demandes')
             .then((user)=>{
-                res.render('patientDemandes',{demandes : user.demandes});    
+                var specialites = [];
+                var villes = [];
+                var pays = [];
+                user.demandes.forEach(medecin => {
+                    var isInArray = specialites.find(specialite => specialite == medecin.specialite);
+                    var isInPays = pays.find(pays => pays == medecin.pays);
+                    var isInVille = villes.find(ville => ville == medecin.ville);
+                    if(!isInArray) {
+                        specialites.push(medecin.specialite);
+                    }
+                    if(!isInPays) {
+                        pays.push(medecin.pays);
+                    }
+                    if(!isInVille) {
+                        villes.push(medecin.ville);
+                    }
+                })
+                res.render('patientDemandes',{villes : villes, specialites : specialites, pays : pays , demandes : user.demandes});    
             })
         }
         else if(req.userInfos.type === 'medecin') {
@@ -344,23 +385,43 @@ module.exports = function (app , mongoose) {
             }));*/
         }
         else if(req.userInfos.type === 'medecin') {
-            Medecin.findById(req.userInfos.userId)
-            .populate('utilisateurs.utilisateur')
-            .then((medecin) => {
-                var oldPatients = [];
-                var currentPatients = [];
-                medecin.utilisateurs.forEach((user) =>
-                {
-                    if(user.finSuivi == null) {
-                        currentPatients.push(user);
-                    }
-                    else {
-                        oldPatients.push(user);
-                    }
-                })
-                User.find()
-                .then(users => {
-                    res.render('patients', {allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients});
+            User.find()
+            .then(users => {
+                Medecin.findById(req.userInfos.userId)
+                .populate('utilisateurs.utilisateur')
+                .then((medecin) => {
+                    var oldPatients = [];
+                    var currentPatients = [];
+                    var maladies = [];
+                    var villes = [];
+                    var pays = [];
+                    users.forEach(user => {
+                        user.maladies.forEach(maladie => {
+                            var isInArray = maladies.find(_maladie => _maladie.toLowerCase() == maladie.toLowerCase());
+                            if(!isInArray) {
+                                maladies.push(maladie);
+                            }
+                        })
+                        
+                        var isInPays = pays.find(pays => pays == user.pays);
+                        var isInVille = villes.find(ville => ville == user.ville);
+                        if(!isInPays) {
+                            pays.push(user.pays);
+                        }
+                        if(!isInVille) {
+                            villes.push(user.ville);
+                        }
+                    })
+                    medecin.utilisateurs.forEach((user) =>
+                    {
+                        if(user.finSuivi == null) {
+                            currentPatients.push(user);
+                        }
+                        else {
+                            oldPatients.push(user);
+                        }
+                    })
+                    res.render('patients', {villes: villes, pays: pays, maladies: maladies, allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients});
                 })
             })
         }
