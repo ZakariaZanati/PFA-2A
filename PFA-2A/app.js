@@ -53,4 +53,3 @@ relationsController(app,mongoose);
  server.listen(port,hostname,()=>{
      console.log(`Server runnin at http://${hostname}:${port}`);
  });
-

@@ -22,7 +22,7 @@
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser" class="active"> Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container">
@@ -38,7 +38,8 @@
             <form class="profil" action="/myProfileUser" method="POST">
                 <label class="noEditable">
                     <span>Nom complet</span>
-                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>" readonly>
+                    <input class="login-input" type="text" name="fullname" value="<%= user.nom %> <%=user.prenom %>"
+                        readonly>
                 </label>
                 <label>
                     <span>Email</span>
@@ -46,7 +47,8 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= user.telephone %>" required readonly>
+                    <input class="login-input" type="number" name="telephone" value="<%= user.telephone %>" required
+                        readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -58,7 +60,8 @@
                 </label>
                 <label>
                     <span>Date de naissance</span>
-                    <input class="login-input" type="date" name="dateNaissance" value="<%= user.dateNaissance.toISOString().split('T')[0] %>" required readonly>
+                    <input class="login-input" type="date" name="dateNaissance"
+                        value="<%= user.dateNaissance.toISOString().split('T')[0] %>" required readonly>
                 </label>
                 <label class="noEditable">
                     <span>Age</span>
@@ -82,19 +85,20 @@
                     <input class="login-input" id="sang" type="text" value="<%= user.groupeSanguin %>" readonly>
                 </label>
                 <% if(user.maladies[0]!=null) { %>
-                    <label>
-                        <span>Maladies</span>
-                        <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
-                        <input id="hide" type="button" value="cacher" onclick="showMaladies(false)" style="display: none;">
-                        <input id="add" type="button" value="ajouter" onclick="addField()" style="display: none;">
-                        <div id="maladies">
-                            <% user.maladies.forEach((maladie, i) => { %>
-                                <input id="maladie<%= i %>" name="maladie" class="maladie" type="text" value="<%= maladie %>" style="display: none;" readonly>
-                                <input type="button" value="supprimer" id="<%= i %>" onclick="removeField(this.id)">
-                                <br>
-                            <%})%>
-                        </div>
-                    </label>
+                <label>
+                    <span>Maladies</span>
+                    <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
+                    <input id="hide" type="button" value="cacher" onclick="showMaladies(false)" style="display: none;">
+                    <input id="add" type="button" value="ajouter" onclick="addField()" style="display: none;">
+                    <div id="maladies">
+                        <% user.maladies.forEach((maladie, i) => { %>
+                        <input id="maladie<%= i %>" name="maladie" class="maladie" type="text" value="<%= maladie %>"
+                            style="display: none;" readonly>
+                        <input type="button" value="supprimer" id="<%= i %>" onclick="removeField(this.id)">
+                        <br>
+                        <%})%>
+                    </div>
+                </label>
                 <%}%>
                 <br>
                 <br>

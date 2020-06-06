@@ -20,7 +20,7 @@
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
             <li><a href="myProfileMedecin" class="active">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container">
@@ -45,7 +45,8 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required readonly>
+                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required
+                        readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -57,11 +58,13 @@
                 </label>
                 <label>
                     <span>Spécialité</span>
-                    <input class="login-input" type="text" name="specialite" value="<%= medecin.specialite %>" required readonly>
+                    <input class="login-input" type="text" name="specialite" value="<%= medecin.specialite %>" required
+                        readonly>
                 </label>
                 <label>
                     <span>Adresse lieu travail</span>
-                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>" required readonly>
+                    <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
+                        required readonly>
                 </label>
                 <label class="noEditable">
                     <span>Mes patients actuels</span>
@@ -75,7 +78,7 @@
                         <a class="btn btn-success" href='patients?filtre=old'>Consulter</a>
                     </div>
                 </label>
-               
+
                 <div class="buttons-inline no-display" id="saveDiv">
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>

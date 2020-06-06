@@ -22,7 +22,7 @@
             <li><a href="medecins" class="active">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container-home">
@@ -34,15 +34,16 @@
         <div class="container-body">
             <div class="radio-group margin">
                 <label class="radio">
-                    <input type="radio" checked="true" name="medecins" id="current" value="current" onclick="getMedecins()">
+                    <input type="radio" checked="true" name="medecins" id="current" value="current"
+                        onclick="getMedecins()">
                     <span>Medecins actuels</span>
                 </label>
                 <label class="radio">
                     <input type="radio" name="medecins" id="old" value="old" onclick="getMedecins()">
                     <span>Anciens medecins</span>
-                </label> 
+                </label>
             </div>
-            <div id="currentMedecins"> 
+            <div id="currentMedecins">
                 <table class="table table-sortable table-7">
                     <thead>
                         <tr>
@@ -69,7 +70,7 @@
                     </tbody>
                 </table>
             </div>
-            <div id="oldMedecins"> 
+            <div id="oldMedecins">
                 <table class="table table-sortable table-7">
                     <thead>
                         <tr>
@@ -98,7 +99,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
         </div>
 
 

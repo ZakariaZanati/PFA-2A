@@ -22,7 +22,7 @@
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container">
@@ -54,8 +54,8 @@
                         <td data-label="Pays"><%= demande.pays %></td>
                         <td data-label="Ville"><%= demande.ville %></td>
                         <td data-label="Spécialité"><%= demande.specialite %></td>
-                        <td data-label="Profil"><a class="btn"
-                                href='medecinProfile?id=<%= demande._id %>'>Consulter</a></td>
+                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= demande._id %>'>Consulter</a>
+                        </td>
                     </tr>
                     <% }); %>
                 </tbody>

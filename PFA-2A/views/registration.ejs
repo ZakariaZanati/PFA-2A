@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
+    <link rel="stylesheet" href="/public/pidie-master/pidie-0.0.8.css">
     <link rel="stylesheet" href="/public/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,600;0,700;1,700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;1,300&display=swap"
         rel="stylesheet">
+    <script src="public/js/icons.js"></script>
 </head>
 
 <body>
@@ -19,23 +21,31 @@
 
             <div class="form-cont" action="/registration" method="POST">
                 <div class="form">
-                    <h1 class="logo-img"><a href="/">LOGO</a></h1>
+                    <h1 class="logo-img"><a href="/">
+                            LOGO
+                        </a></h1>
                     <h1>S'inscrire</h1>
                     <p>Bienvenue avec nous</p>
                     <p>Vous avez déjà un compte? <a class="link" href="login">S'identifier</a></p>
                     <label>
-                        <span>Type d'utilisateur</span>
+                        <span class="no-margin">Type d'utilisateur</span>
                     </label>
-                    <div class="radio-group">
-                        <label class="radio">
-                            <input type="radio" name="type" id="patient" value="patient" checked="true">
-                            <span>Patient</span>
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="type" id="med" value="medecin">
-                            <span class="cercle"></span>
-                            <span>Médecin</span>
-                        </label>
+                    <div class="center">
+                        <div class="radio-group">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="type" id="patient" value="patient" checked="true">
+                                    <span>Patient</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label class="radio">
+                                    <input type="radio" name="type" id="med" value="medecin">
+                                    <span class="cercle"></span>
+                                    <span>Médecin</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <form class="form-user" id="form-user" action="/registration?user=normal" method="POST">
                         <label>
@@ -46,28 +56,49 @@
                             <span>Prénom</span>
                             <input class="login-user-input" type="text" name="prenom" required>
                         </label>
-                        <div class="radio-group">
-                            <label class="radio">
-                                <input type="radio" name="gender" id="homme" value="homme" checked>
-                                <span>Homme</span>
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="gender" id="femme" value="femme">
-                                <span class="cercle"></span>
-                                <span>Femme</span>
-                            </label>
+
+                        <div class="center">
+                            <div class="radio-group">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="gender" id="homme" value="homme" checked>
+                                        <span>Homme</span>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="radio">
+                                        <input type="radio" name="gender" id="femme" value="femme">
+                                        <span>Femme</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
+
+
+
+
+
                         <label>
                             <span>Pays</span>
-                            <input class="login-user-input" type="text" name="pays" required>
+                            <div class="pd-flag-select" onclick="cities()">
+                                <select class="pd-countries" name="pays" id="pays"></select>
+                            </div>
+
                         </label>
+
                         <label>
                             <span>Ville</span>
-                            <input class="login-user-input" type="text" name="ville" required>
+                            <div class="pd-cities-select"></div>
+                            <select class="pd-cities login-input" name="ville" id="ville">
+                            </select>
                         </label>
+
                         <label>
                             <span>Téléphone</span>
-                            <input class="login-user-input" type="number" name="telephone" required>
+                            <div class="pd-telephone-input">
+                                <input class="login-user-input" type="tel" name="telephone" required>
+                            </div>
+                            <!-- <input class="login-user-input" type="number" name="telephone" required> -->
                         </label>
                         <label>
                             <span>Date de naissance</span>
@@ -96,11 +127,12 @@
                                 <option value="diabète type 2">diabète type 2</option>
                             </select>
                         </label>
-                        <div id="maladies">
-                            <h3>Autres maladie</h3>
-                            <input type="button" value="ajouter" onclick="addField()">
-                            <br>
-                        </div>
+                        <Label id="maladies">
+                            <div class="buttons-inline">
+                                <span>Ajouter d'autres maladies</span>
+                                <a class="btn-icon btn-success" onclick="addField()"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </Label>
                         <label>
                             <span>Email</span>
                             <input class="login-user-input" type="text" name="email" required>
@@ -126,37 +158,46 @@
                         </label>
                         <label>
                             <span>Pays</span>
-                            <input class="login-medecin-input" type="text" name="pays" required>
+                            <div class="pd-flag-select" onclick="cities()">
+                                <select class="pd-countries" name="pays" id="paysMed"></select>
+                            </div>
+
                         </label>
+                        <div class="pd-cities-select">
+                            <label>
+                                <span>Ville</span>
+                                <select class="pd-cities" name="ville" id="villeMed">
+                                </select>
+                            </label>
+                        </div>
                         <label>
-                            <span>Ville</span>
-                            <input class="login-medecin-input" type="text" name="ville" required>
-                        </label>
-                        <label>
-                            <span>Téléphone</span>
-                            <input class="login-medecin-input" type="number" name="telephone" required>
-                        </label>
-                        <label>
-                            <span>Spécialité</span>
-                            <input class="login-medecin-input" type="text" name="specialite" required>
-                        </label>
-                        <label>
-                            <span>Adresse du lieu de travail</span>
-                            <input class="login-medecin-input" type="text" name="adresse" required>
-                        </label>
-                        <label>
-                            <span>Email</span>
-                            <input class="login-medecin-input" type="text" name="email" required>
-                        </label>
-                        <label>
-                            <span>Mot de passe</span>
-                            <input class="login-medecin-input" type="password" name="password" required>
-                        </label>
-                        <label>
-                            <span>Confirmer le mot de passe</span>
-                            <input class="login-medecin-input" type="password" name="confirmation" required>
-                        </label>
-                        <button class="btn btn-round submit" type="submit">S'inscrire</button>
+                            <label>
+                                <span>Téléphone</span>
+                                <div class="pd-telephone-input">
+                                    <input type="tel" class="login-input" name="telephone">
+                                </div>
+                            </label>
+                            <label>
+                                <span>Spécialité</span>
+                                <input class="login-medecin-input" type="text" name="specialite" required>
+                            </label>
+                            <label>
+                                <span>Adresse du lieu de travail</span>
+                                <input class="login-medecin-input" type="text" name="adresse" required>
+                            </label>
+                            <label>
+                                <span>Email</span>
+                                <input class="login-medecin-input" type="text" name="email" required>
+                            </label>
+                            <label>
+                                <span>Mot de passe</span>
+                                <input class="login-medecin-input" type="password" name="password" required>
+                            </label>
+                            <label>
+                                <span>Confirmer le mot de passe</span>
+                                <input class="login-medecin-input" type="password" name="confirmation" required>
+                            </label>
+                            <button class="btn btn-round submit" type="submit">S'inscrire</button>
                     </form>
                 </div>
             </div>
@@ -164,6 +205,13 @@
 
     </div>
     <script src="public/js/radio.js"></script>
+    <script src="/public/pidie-master/pidie-0.0.8.js"></script>
+    <script src="/public/pidie-master/cities.js"></script>
+
+
+    <script>
+        new Pidie();
+    </script>
 </body>
 
 

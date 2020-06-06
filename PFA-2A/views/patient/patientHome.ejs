@@ -22,7 +22,7 @@
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container-home">
@@ -72,7 +72,7 @@
                     <p class="add-info">N'oubliez pas d'ajouter vos informations 4 fois par jour</p>
                 </div>
                 <div class="container-body">
-                    
+
                     <form id="formValues" method="POST">
                         <input class="login-input" name="temperature" placeholder="Température" required>
                         <input class="login-input" name="tensionSystolique" placeholder="Tension systolique" required>
@@ -81,13 +81,11 @@
                         <input class="login-input" name="tauxGlucose" placeholder="Taux glucose" required>
                         <div class="radio-group">
                             <label class="radio">
-                                <input type="radio" checked="true" name="typeTest" id="aJeun"
-                                    value="aJeun">
+                                <input type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun">
                                 <span>A jeun</span>
                             </label>
                             <label class="radio">
-                                <input type="radio" name="typeTest" id="postPrandial"
-                                    value="postPrandial">
+                                <input type="radio" name="typeTest" id="postPrandial" value="postPrandial">
                                 <span>Post prandial</span>
                             </label>
                         </div>

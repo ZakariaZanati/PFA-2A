@@ -6,78 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PFA</title>
     <link rel="stylesheet" href="public/css/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+        rel="stylesheet">
     <script src="public/js/icons.js"></script>
 </head>
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
+        <label class="logo"><a href="#"></a>LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="patientHome">Accueil</a></li>
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
-            <li><a href="medecins" class="active">Médecins</a></li>
+            <li class="active"><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
-            <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif"><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil"><a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+                <div class="par last-par">
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </div>
+            </ul>
+        </div>
     </nav>
-    <div class="container">
+    <div class="container-home">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
             <h1 class="text-header">La liste des médecins disponibles</h1>
         </div>
         <div class="container-body">
-            <label>
-                <span>Specialite</span>
-                <select id="specialites" name="specialites" onchange="search()">
-                    <option value="-1">tous</option>
-                    <% specialites.forEach(specialite => {%>
-                        <option value="<%= specialite %>"><%= specialite %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="search()">
-            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="search()">
-            <br>
-            <label>
-                <span>Pays</span>
-                <select id="pays" name="pays" onchange="search()">
-                    <option value="-1">tous</option>
-                    <% pays.forEach(pays => {%>
-                        <option value="<%= pays %>"><%= pays %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <label>
-                <span>Villes</span>
-                <select id="villes" name="villes" onchange="search()">
-                    <option value="-1">tous</option>
-                    <% villes.forEach(ville => {%>
-                        <option value="<%= ville %>"><%= ville %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <div class="radio-group margin">
-                <label class="radio">
-                    <input type="radio" checked="true" name="medecins" id="all" value="all" onclick="getMedecins()">
-                    <span>Tous les Medecins</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="medecins" id="current" value="current" onclick="getMedecins()">
-                    <span>Medecins actuels</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="medecins" id="old" value="old" onclick="getMedecins()">
-                    <span>Anciens medecins</span>
-                </label> 
+            <div class=" columns filter-bar">
+                <div class="col filter-input-div">
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input class="filter-input" name="last" id="searchNom" type="text" placeholder="nom"
+                        onkeyup="search()">
+                    <input class="filter-input" name="first" id="searchPrenom" type="text" placeholder="prenom"
+                        onkeyup="search()">
+                </div>
+                <div class="col filter-select-div">
+                    <i class="fas fa-filter filter-icon"></i>
+                    <div class="filter-select-mini">
+                        <span>Specialite</span>
+                        <select class="filter-select" id="specialites" name="specialites" onchange="search()">
+                            <option value="-1">tous</option>
+                            <% specialites.forEach(specialite => {%>
+                            <option value="<%= specialite %>"><%= specialite %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="filter-select-mini">
+                        <span>Pays</span>
+                        <select class="filter-select" id="pays" name="pays" onchange="search()">
+                            <option value="-1">tous</option>
+                            <% pays.forEach(pays => {%>
+                            <option value="<%= pays %>"><%= pays %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="filter-select-mini">
+                        <span>Villes</span>
+                        <select class="filter-select" id="villes" name="villes" onchange="search()">
+                            <option value="-1">tous</option>
+                            <% villes.forEach(ville => {%>
+                            <option value="<%= ville %>"><%= ville %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="center">
+                <div class="radio-group margin">
+                    <label class="radio">
+                        <input type="radio" checked="true" name="medecins" id="all" value="all" onclick="getMedecins()">
+                        <span>Tous les Medecins</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="medecins" id="current" value="current" onclick="getMedecins()">
+                        <span>Medecins actuels</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="medecins" id="old" value="old" onclick="getMedecins()">
+                        <span>Anciens medecins</span>
+                    </label>
+                </div>
             </div>
             <div id="allMedecins">
-                <table class="table table-sortable table-7">
+                <table class="table table-sortable table-5">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -95,14 +147,15 @@
                             <td data-label="Pays"><%= medecin.pays %></td>
                             <td data-label="Ville"><%= medecin.ville %></td>
                             <td data-label="Spécialité"><%= medecin.specialite %></td>
-                            <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= medecin._id %>'>Consulter</a>
+                            <td data-label="Profil"><a class="btn"
+                                    href='medecinProfile?id=<%= medecin._id %>'>Consulter</a>
                             </td>
                         </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
-            <div id="currentMedecins"> 
+            <div id="currentMedecins">
                 <table class="table table-sortable table-7">
                     <thead>
                         <tr>
@@ -123,13 +176,14 @@
                             <td data-label="Ville"><%= _medecin.medecin.ville %></td>
                             <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
                             <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
-                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
+                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a>
+                            </td>
                         </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
-            <div id="oldMedecins"> 
+            <div id="oldMedecins">
                 <table class="table table-sortable table-7">
                     <thead>
                         <tr>
@@ -152,14 +206,15 @@
                             <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
                             <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
                             <td data-label="Fin suivi"><%= _medecin.finSuivi %></td>
-                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
+                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a>
+                            </td>
                         </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
-            
-            
+
+
         </div>
 
 

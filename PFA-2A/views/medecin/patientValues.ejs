@@ -20,7 +20,7 @@
             <li><a href="demandes">Demandes</a></li>
             <li><a class="active" href="patients">Patients</a></li>
             <li><a href="myProfileMedecin">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
         <ul id="navPatient">
             <li><a href="patientHome">Accueil</a></li>
@@ -29,14 +29,15 @@
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
             <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout">Deconnexion</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
     </nav>
     <div class="container-home">
         <div class="container-img-header container-header">
             <div class="overlay"></div>
             <img src="public/images/patient.jpg" class="img-header">
-            <h1 id="h1Medecin" class="text-header">Les données du patient <span><%= utilisateur.nom %> <%= utilisateur.prenom %></span></h1>
+            <h1 id="h1Medecin" class="text-header">Les données du patient <span><%= utilisateur.nom %>
+                    <%= utilisateur.prenom %></span></h1>
             <h1 id="h1Patient" class="text-header">Vos données</h1>
         </div>
         <div class="container-body">
@@ -60,57 +61,60 @@
                     <tbody>
                         <% for(i = 0; i < prelevement.temperature.length; i++) { 
                             var heure = prelevement.temperature[i].temps; %>
-                            <% if(prelevement.date + "" == new Date(new Date().toISOString().split('T')[0]) &&  patient) { %>
-                                <tr>
-                                    <form action="/patientValues?heure=<%= heure %>" method="POST">
-                                        <td data-label="Heure" ><%= prelevement.temperature[i].temps %></td>
-                                        <td data-label="Température" >
-                                            <input class="<%= heure %>" name="temperature" value="<%= prelevement.temperature[i].valeur %>" readonly>
-                                        </td>
-                                        <td data-label="Tension systolique" >
-                                            <input class="<%= heure %>" name="tensionSystolique" value="<%= prelevement.tensionSystolique[i].valeur %>" readonly>
-                                        </td>
-                                        <td data-label="Tension diastolique" >
-                                            <input class="<%= heure %>" name="tensionDiastolique" value="<%= prelevement.tensionDiastolique[i].valeur %>" readonly>
-                                        </td>
-                                        <td data-label="Taux d'oxygène" >
-                                            <input class="<%= heure %>" name="tauxOxygen" value="<%= prelevement.tauxOxygen[i].valeur %>" readonly>
-                                        </td>
-                                        <td data-label="Taux de glucose" >
-                                            <input class="<%= heure %>" name="tauxGlucose" value="<%= prelevement.tauxGlucose[i].valeur %>" readonly>
-                                        </td>
-                                        <td class="<%= heure %>" id="edit<%= heure %>">
-                                            <a class="btn" onclick="showForm('<%= heure %>')">Modifier</a>
-                                        </td>
-                                        <div id="radio" style="display: none;">
-                                            <label class="radio">
-                                                <input type="radio" checked="true" name="typeTest" id="aJeun"
-                                                    value="aJeun">
-                                                <span>A jeun</span>
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="typeTest" id="postPrandial"
-                                                    value="postPrandial">
-                                                <span>Post prandial</span>
-                                            </label>
-                                        </div>
-                                        <td class="<%= heure %>" id="valid<%= heure %>" style="display: none;">
-                                            <button type="submit" class="btn btn-round submit">Valider</button>
-                                        </td>
-                                    
-                                    </form>
-                                </tr>   
+                        <% if(prelevement.date + "" == new Date(new Date().toISOString().split('T')[0]) &&  patient) { %>
+                        <tr>
+                            <form action="/patientValues?heure=<%= heure %>" method="POST">
+                                <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
+                                <td data-label="Température">
+                                    <input class="<%= heure %>" name="temperature"
+                                        value="<%= prelevement.temperature[i].valeur %>" readonly>
+                                </td>
+                                <td data-label="Tension systolique">
+                                    <input class="<%= heure %>" name="tensionSystolique"
+                                        value="<%= prelevement.tensionSystolique[i].valeur %>" readonly>
+                                </td>
+                                <td data-label="Tension diastolique">
+                                    <input class="<%= heure %>" name="tensionDiastolique"
+                                        value="<%= prelevement.tensionDiastolique[i].valeur %>" readonly>
+                                </td>
+                                <td data-label="Taux d'oxygène">
+                                    <input class="<%= heure %>" name="tauxOxygen"
+                                        value="<%= prelevement.tauxOxygen[i].valeur %>" readonly>
+                                </td>
+                                <td data-label="Taux de glucose">
+                                    <input class="<%= heure %>" name="tauxGlucose"
+                                        value="<%= prelevement.tauxGlucose[i].valeur %>" readonly>
+                                </td>
+                                <td class="<%= heure %>" id="edit<%= heure %>">
+                                    <a class="btn" onclick="showForm('<%= heure %>')">Modifier</a>
+                                </td>
+                                <div id="radio" style="display: none;">
+                                    <label class="radio">
+                                        <input type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun">
+                                        <span>A jeun</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="typeTest" id="postPrandial" value="postPrandial">
+                                        <span>Post prandial</span>
+                                    </label>
+                                </div>
+                                <td class="<%= heure %>" id="valid<%= heure %>" style="display: none;">
+                                    <button type="submit" class="btn btn-round submit">Valider</button>
+                                </td>
 
-                            <% } else {%>    
-                                <tr>
-                                    <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
-                                    <td data-label="Température"><%= prelevement.temperature[i].valeur %></td>
-                                    <td data-label="Tension systolique"><%= prelevement.tensionSystolique[i].valeur %></td>
-                                    <td data-label="Tension diastolique"><%= prelevement.tensionDiastolique[i].valeur %></td>
-                                    <td data-label="Taux d'oxygène"><%= prelevement.tauxOxygen[i].valeur %></td>
-                                    <td data-label="Taux de glucose"><%= prelevement.tauxGlucose[i].valeur %></td>
-                                </tr>
-                            <% } %>
+                            </form>
+                        </tr>
+
+                        <% } else {%>
+                        <tr>
+                            <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
+                            <td data-label="Température"><%= prelevement.temperature[i].valeur %></td>
+                            <td data-label="Tension systolique"><%= prelevement.tensionSystolique[i].valeur %></td>
+                            <td data-label="Tension diastolique"><%= prelevement.tensionDiastolique[i].valeur %></td>
+                            <td data-label="Taux d'oxygène"><%= prelevement.tauxOxygen[i].valeur %></td>
+                            <td data-label="Taux de glucose"><%= prelevement.tauxGlucose[i].valeur %></td>
+                        </tr>
+                        <% } %>
                         <% } %>
                     </tbody>
                 </table>
