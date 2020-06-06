@@ -31,6 +31,36 @@
         </div>
 
         <div class="container-body">
+            <label>
+                <span>Maladies</span>
+                <select id="maladies" name="maladies" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% maladies.forEach(maladie => {%>
+                        <option value="<%= maladie %>"><%= maladie %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="searchPatients()">
+            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="searchPatients()">
+            <br>
+            <label>
+                <span>Pays</span>
+                <select id="pays" name="pays" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% pays.forEach(pays => {%>
+                        <option value="<%= pays %>"><%= pays %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <label>
+                <span>Villes</span>
+                <select id="villes" name="villes" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% villes.forEach(ville => {%>
+                        <option value="<%= ville %>"><%= ville %></option>
+                    <% }) %>
+                </select>
+            </label>
             <div class="radio-group margin">
                 <label class="radio">
                     <input type="radio" checked="true" name="patients" id="all" value="all" onclick="getPatients()">
@@ -49,21 +79,29 @@
                 <table class="table table-sortable table-3">
                     <thead id="table-head">
                         <tr>
-                            <th>Patient</th>
-                            <th>Email</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
                             <th>Pays</th>
                             <th>Ville</th>
+                            <th>Maladies</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% allPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient._id %>'><%= patient.nom %>
-                                    <%= patient.prenom %></a></td>
-                            <td data-label="Email"><%= patient.email %></td>
+                                    href='userProfile?id=<%= patient._id %>'><%= patient.nom %></a></td>
+                            <td data-label="Prenom"><%= patient.prenom%></td>
                             <td data-label="Pays"><%= patient.pays %></td>
                             <td data-label="Ville"><%= patient.ville %></td>
+                            <td>    
+                                <input id="showAll<%= patient._id %>" type="button" value="afficher" onclick="showMaladies(true, 'All' , '<%= patient._id %>')">
+                                <input id="hideAll<%= patient._id %>" type="button" value="cacher" onclick="showMaladies(false, 'All' , '<%= patient._id %>')" style="display: none;">
+                                <div id="divMaladies<%= patient._id %>" style="display: none;">
+                                    <% patient.maladies.forEach(maladie => { %>
+                                        <%= maladie %> <br>
+                                    <% }) %>
+                                </div>
                             </td>
                         </tr>
                         <% }); %>
@@ -74,8 +112,11 @@
                 <table class="table table-sortable table-3">
                     <thead id="table-head">
                         <tr>
-                            <th>Patient</th>
-                            <th>Email</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Pays</th>
+                            <th>Ville</th>
+                            <th>Maladies</th>
                             <th>Date d'ajout</th>
                         </tr>
                     </thead>
@@ -83,14 +124,24 @@
                         <% currentPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
-                                    <%= patient.utilisateur.prenom %></a></td>
-                            <td data-label="Email"><%= patient.utilisateur.email %></td>
-                            <td data-label="Début suivi"><%= patient.debutSuivi %></td>
+                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %></a></td>
+                            <td data-label="Prenom"><%= patient.utilisateur.prenom %></td>
+                            <td data-label="Pays"><%= patient.utilisateur.pays %></td>
+                            <td data-label="Ville"><%= patient.utilisateur.ville %></td>
+                            <td>    
+                                <input id="showCurrent<%= patient.utilisateur._id %>" type="button" value="afficher" onclick="showMaladies(true, 'Current' , '<%= patient.utilisateur._id %>')">
+                                <input id="hideCurrent<%= patient.utilisateur._id %>" type="button" value="cacher" onclick="showMaladies(false, 'Current' , '<%= patient.utilisateur._id %>')" style="display: none;">
+                                <div id="divMaladies<%= patient.utilisateur._id %>" style="display: none;">
+                                    <% patient.utilisateur.maladies.forEach(maladie => { %>
+                                        <%= maladie %> <br>
+                                    <% }) %>
+                                </div>
+                            </td>
+                            <td data-label="Début suivi"><%= patient.debutSuivi.toISOString().split('T')[0]; %></td>
                             <td><a href='patientValues?id=<%= patient.utilisateur._id %>'
                                     class="btn btn-success">Santé</a></td>
-                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a>
-                            </td>
+                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a></td>
+                            
                         </tr>
                         <% }); %>
                     </tbody>
@@ -100,8 +151,11 @@
                 <table class="table table-sortable table-4">
                     <thead id="table-head">
                         <tr>
-                            <th>Patient</th>
-                            <th>Email</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Pays</th>
+                            <th>Ville</th>
+                            <th>Maladies</th>
                             <th>Date d'ajout</th>
                             <th>Fin suivi</th>
                         </tr>
@@ -110,11 +164,21 @@
                         <% oldPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
-                                    <%= patient.utilisateur.prenom %></a></td>
-                            <td data-label="Email"><%= patient.utilisateur.email %></td>
-                            <td data-label="Début suivi"><%= patient.debutSuivi %></td>
-                            <td data-label="Fin suivi"><%= patient.finSuivi %></td>
+                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %></a></td>
+                            <td data-label="Prenom"><%= patient.utilisateur.prenom %></td>
+                            <td data-label="Pays"><%= patient.utilisateur.pays %></td>
+                            <td data-label="Ville"><%= patient.utilisateur.ville %></td>
+                            <td>    
+                                <input id="showOld<%= patient.utilisateur._id %>" type="button" value="afficher" onclick="showMaladies(true, 'Old', '<%= patient.utilisateur._id %>')">
+                                <input id="hideOld<%= patient.utilisateur._id %>" type="button" value="cacher" onclick="showMaladies(false, 'Old', '<%= patient.utilisateur._id %>')" style="display: none;">
+                                <div id="divMaladies<%= patient.utilisateur._id %>" style="display: none;">
+                                    <% patient.utilisateur.maladies.forEach(maladie => { %>
+                                        <%= maladie %> <br>
+                                    <% }) %>
+                                </div>
+                            </td>
+                            <td data-label="Début suivi"><%= patient.debutSuivi.toISOString().split('T')[0]; %></td>
+                            <td data-label="Fin suivi"><%= patient.finSuivi.toISOString().split('T')[0]; %></td>
                         </tr>
                         <% }); %>
                     </tbody>
@@ -125,8 +189,8 @@
 
 </body>
 
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
-<script src="public/js/date.js"></script>
 <script src="public/js/radio.js"></script>
 
 

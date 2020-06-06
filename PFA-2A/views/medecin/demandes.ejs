@@ -30,16 +30,44 @@
             <h1 class="text-header">La liste des demandes</h1>
         </div>
         <div class="container-body">
-            <table class="table table-sortable table-6">
+            <label>
+                <span>Maladies</span>
+                <select id="maladies" name="maladies" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% maladies.forEach(maladie => {%>
+                    <option value="<%= maladie %>"><%= maladie %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="searchPatients()">
+            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="searchPatients()">
+            <br>
+            <label>
+                <span>Pays</span>
+                <select id="pays" name="pays" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% pays.forEach(pays => {%>
+                    <option value="<%= pays %>"><%= pays %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <label>
+                <span>Villes</span>
+                <select id="villes" name="villes" onchange="searchPatients()">
+                    <option value="-1">tous</option>
+                    <% villes.forEach(ville => {%>
+                    <option value="<%= ville %>"><%= ville %></option>
+                    <% }) %>
+                </select>
+            </label>
+            <table id="demandes" class="table table-sortable table-6">
                 <thead>
-                    <tr>
                     <tr>
                         <th>Nom</th>
                         <th>Prenom</th>
-                        <th>Email</th>
                         <th>Pays</th>
                         <th>Ville</th>
-                    </tr>
+                        <th>Maladies</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,9 +75,19 @@
                     <tr>
                         <td data-label="Nom"><%= demande.nom %></td>
                         <td data-label="Prénom"><%= demande.prenom %></td>
-                        <td data-label="Email"><%= demande.email %></td>
                         <td data-label="Pays"><%= demande.pays %></td>
                         <td data-label="Ville"><%= demande.ville %></td>
+                        <td>
+                            <input id="showOld<%= demande._id %>" type="button" value="afficher"
+                                onclick="showMaladies(true, 'Old', '<%= demande._id %>')">
+                            <input id="hideOld<%= demande._id %>" type="button" value="cacher"
+                                onclick="showMaladies(false, 'Old', '<%= demande._id %>')" style="display: none;">
+                            <div id="divMaladies<%= demande._id %>" style="display: none;">
+                                <% demande.maladies.forEach(maladie => { %>
+                                <%= maladie %> <br>
+                                <% }) %>
+                            </div>
+                        </td>
                         <td data-label="Profil"><a class="btn" href='userProfile?id=<%= demande._id %>'>Consulter</a>
                         </td>
                     </tr>
@@ -63,7 +101,7 @@
 
 
 </body>
-
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 

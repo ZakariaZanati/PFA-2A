@@ -31,16 +31,30 @@
         </div>
 
         <div class="container-body">
-            <table class="table table-sortable table-7">
+            <div id="choice" onchange="selectChoice()">
+                <input id="temperature" type="checkbox" checked="true" name="temperature" value="temperature">
+                <label for="temperature">temperature</label>
+                <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique" value="tensionSystolique">
+                <label for="tensionSystolique">tension systolique</label>
+                <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique" value="tensionDiastolique">
+                <label for="tensionDiastolique">tension diastolique</label>
+                <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
+                <label for="tauxOxygen">taux oxygen</label>
+                <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
+                <label for="tauxGlucose">taux glucose</label>
+                
+            </div>
+            <input name="name" id="searchNom" type="text" placeholder="nom complet" onkeyup="searchPatient()">
+            <table id="dayValues" class="table table-sortable table-7">
                 <thead id="table-head">
                     <tr>
                         <th>Patient</th>
                         <th>Heure</th>
-                        <th>Température</th>
-                        <th>Tension systolique</th>
-                        <th>Tension diastolique</th>
-                        <th>Taux d'oxygène</th>
-                        <th>Taux de glucose</th>
+                        <th class="temperatureHead">Température</th>
+                        <th class="tensionSysHead">Tension systolique</th>
+                        <th class="tensionDiaHead">Tension diastolique</th>
+                        <th class="oxygenHead">Taux d'oxygène</th>
+                        <th class="glucoseHead">Taux de glucose</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,11 +64,11 @@
                         <td id="patient" data-label="Patient"><a href='userProfile?id=<%= value.utilisateur._id %>'
                                 class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
                         <td data-label="Heure"><%= value.temperature[i].temps %></td>
-                        <td data-label="Température"><%= value.temperature[i].valeur %></td>
-                        <td data-label="Tension systolique"><%= value.tensionSystolique[i].valeur %></td>
-                        <td data-label="Tension diastolique"><%= value.tensionDiastolique[i].valeur %></td>
-                        <td data-label="Taux d'oxygène"><%= value.tauxOxygen[i].valeur %></td>
-                        <td data-label="Taux de glucose"><%= value.tauxGlucose[i].valeur %></td>
+                        <td class="temperatureBody" data-label="Température"><%= value.temperature[i].valeur %></td>
+                        <td class="tensionSysBody" data-label="Tension systolique"><%= value.tensionSystolique[i].valeur %></td>
+                        <td class="tensionDiaBody" data-label="Tension diastolique"><%= value.tensionDiastolique[i].valeur %></td>
+                        <td class="oxygenBody" data-label="Taux d'oxygène"><%= value.tauxOxygen[i].valeur %></td>
+                        <td class="glucoseBody" data-label="Taux de glucose"><%= value.tauxGlucose[i].valeur %></td>
                         <td data-label="Santé"><a href='patientValues?id=<%= value.utilisateur._id %>'
                                 class="btn btn-success">Santé</a></td>
                     </tr>
@@ -69,7 +83,7 @@
 
 
 </body>
-
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/date.js"></script>
 

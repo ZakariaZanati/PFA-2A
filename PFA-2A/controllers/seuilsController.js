@@ -47,8 +47,15 @@ module.exports = function (app , mongoose) {
         if(req.userInfos.type === 'normal') {
             Seuils.find({}).sort('nom')
             .then((seuils) => {
+                var names = [];
+                seuils.forEach(seuil => {
+                    if(names.indexOf(seuil.nom) == -1) {
+                        names.push(seuil.nom)
+                    }
+                })
+                
                 if(seuils != null) {
-                    res.render('seuils', {seuils: seuils, userType: req.userInfos.type});
+                    res.render('seuils', {names : names, seuils: seuils, userType: req.userInfos.type});
                 }
             }) 
         }
