@@ -302,10 +302,3 @@ function removeDesc(id) {
     var desc = document.getElementById("desc-" + id);
     desc.style.display = "none";
 }
-function clear() {
-    console.log("oui");
-    var max = document.getElementById("hello");
-    var min = document.getElementById("dateValueMin");
-    min.style.display = "none"
-    max.value = ""
-}

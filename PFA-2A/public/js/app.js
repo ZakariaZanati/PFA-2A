@@ -6,3 +6,6 @@ function active(id) {
         c.className = "active";
     }
 }
+function goBack() {
+    window.history.back();
+}

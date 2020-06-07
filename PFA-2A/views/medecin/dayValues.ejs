@@ -13,15 +13,60 @@
     <nav class="navigation-bar">
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="medecinHome">Accueil</a></li>
-            <li><a href="dayValues" class="active">Santé</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
+            <li class="active"><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="myProfileMedecin">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
+
     </nav>
     <div class="container-home">
         <div class="container-img-header container-header">
@@ -31,20 +76,61 @@
         </div>
 
         <div class="container-body">
-            <div id="choice" onchange="selectChoice()">
-                <input id="temperature" type="checkbox" checked="true" name="temperature" value="temperature">
-                <label for="temperature">temperature</label>
-                <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique" value="tensionSystolique">
-                <label for="tensionSystolique">tension systolique</label>
-                <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique" value="tensionDiastolique">
-                <label for="tensionDiastolique">tension diastolique</label>
-                <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
-                <label for="tauxOxygen">taux oxygen</label>
-                <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
-                <label for="tauxGlucose">taux glucose</label>
-                
+            <div class=" columns filter-bar">
+                <div class="col filter-input-div">
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input class="filter-input" name="name" id="searchNom" type="text" placeholder="Nom complet"
+                        onkeyup="searchPatient()">
+                </div>
+                <div class="col filter-check" id="choice" onchange="selectChoice()">
+                    <div class="par btn-success">
+                        <p class="desc " id="desc-temp">Température</p>
+                        <label>
+                            <img class="check-icon" id="temp" src="/public/icons/temperature-measure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="temperature" type="checkbox" checked="true" name="temperature"
+                                value="temperature">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ts">Tension Systolique</p>
+                        <label>
+                            <img id="ts" class="check-icon" src="/public/icons/blood-presure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique"
+                                value="tensionSystolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <label>
+                            <p class="desc" id="desc-td">Tension Diastolique</p>
+                            <img id="td" class="check-icon" src="/public/icons/blood-pressure-control-tool.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique"
+                                value="tensionDiastolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ox">Oxygene</p>
+                        <label>
+                            <img id="ox" class="check-icon" src="/public/icons/oxygen-mask.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-tg">Glycémie</p>
+                        <label>
+                            <img id="tg" class="check-icon" src="/public/icons/sugar-blood-level.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
+                        </label>
+                    </div>
+
+
+
+                </div>
             </div>
-            <input name="name" id="searchNom" type="text" placeholder="nom complet" onkeyup="searchPatient()">
             <table id="dayValues" class="table table-sortable table-7">
                 <thead id="table-head">
                     <tr>
@@ -65,8 +151,10 @@
                                 class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
                         <td data-label="Heure"><%= value.temperature[i].temps %></td>
                         <td class="temperatureBody" data-label="Température"><%= value.temperature[i].valeur %></td>
-                        <td class="tensionSysBody" data-label="Tension systolique"><%= value.tensionSystolique[i].valeur %></td>
-                        <td class="tensionDiaBody" data-label="Tension diastolique"><%= value.tensionDiastolique[i].valeur %></td>
+                        <td class="tensionSysBody" data-label="Tension systolique">
+                            <%= value.tensionSystolique[i].valeur %></td>
+                        <td class="tensionDiaBody" data-label="Tension diastolique">
+                            <%= value.tensionDiastolique[i].valeur %></td>
                         <td class="oxygenBody" data-label="Taux d'oxygène"><%= value.tauxOxygen[i].valeur %></td>
                         <td class="glucoseBody" data-label="Taux de glucose"><%= value.tauxGlucose[i].valeur %></td>
                         <td data-label="Santé"><a href='patientValues?id=<%= value.utilisateur._id %>'
@@ -86,6 +174,7 @@
 <script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/date.js"></script>
+<script src="public/js/app.js"></script>
 
 
 </html>

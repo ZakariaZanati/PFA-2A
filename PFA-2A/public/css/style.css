@@ -5,9 +5,7 @@
     margin: 0;
     padding: 0;
 }
-html{
-    width: 100vw;
-}
+
 body {
     margin: 0;
     position: relative;
@@ -308,7 +306,9 @@ label.logo {
     margin: 0 1em;
     font-weight: bold;
 }
-
+.nav-index{
+    padding: 0 1em;
+}
 
 nav ul li {
     display: inline-block;
@@ -339,9 +339,14 @@ nav ul li a {
 }
 .par li {
     background-color: #efefef;
-    border-radius: 10%;
+    border-radius: 10px;
 }
-
+.par i:hover{
+    color: #0082e6;
+}
+.par li:hover{
+background-color: #d3d1d1;
+}
 .active {
     border-bottom: 5px solid #143774;
     border-radius: 3px;
@@ -352,7 +357,6 @@ nav ul li a {
 
 nav li:hover{
     background-color: #efefef;
-    cursor: pointer;
     border-radius: 1rem;
 }
 .active-notif {
@@ -417,27 +421,44 @@ nav .desc{
 }
 
 
-
-
 #check{
     display: none;
 }
 #navMedecin,#navPatient,#h1Medecin,#h1Patient {
     display: none;
 }
+
+#alert-div-items{
+    display: block;
+}
 .notif-div{
     position: absolute;
     background-color: white;
-    border-radius: .5em;
-    width:20vw;
-    top: 4em;
+    width:30vw;
+    max-height: 60vh;
+    top: 4.4em;
     right: 0;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
     display: none;
+    -webkit-box-shadow: 0 8px 6px -6px #707070; ;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
+    box-shadow: 8px 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+.notif-div::-webkit-scrollbar {
+    display: none;
+}
+.notif-line{
+    padding:.3em .5em;
+    display: flex;
+    align-items: center;
+    height: 5em;
 }
 .notif-div ul{    
     display: flex;
     flex-direction: column;
     margin: 0;
+    padding: 0;
 }
 .notif-div li{    
     padding: 0 1em;
@@ -445,9 +466,19 @@ nav .desc{
     font-weight: 500;
     border-top: 1px solid #efefef;
     border-bottom: 1px solid #efefef;
+    background:white ;
+    line-height: 2;
+}
+
+.notif-div li:hover{
+    border-radius: 0;
+    background-color: #efefef;
 }
 .nav-items li {
     padding: .5em 0;
+}
+.notif-img{
+   margin-right: 2em;
 }
 
 
@@ -491,7 +522,7 @@ nav .desc{
         -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
         box-shadow: 8px 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
     }
-    .navigation-bar .nav-items::-webkit-scrollbar {
+    .navigation-bar .nav-items::-webkit-scrollbar{
         width: 0 
     }
     .element { 
@@ -598,6 +629,8 @@ nav .desc{
     display:  block;
     padding-bottom: 2em;
 }
+
+
 @media(max-width: 960px) {
     .header-content h1{
         padding: 0 .5em;
@@ -733,6 +766,7 @@ button{
 .table td, .table th{
     padding: .8em 1em;
     font-size: 1rem;
+    width: min-content;
 }
 
 .table th{
@@ -778,6 +812,15 @@ button{
 }
 .table .radio-group{
     padding: .3em 0;
+}
+.table-maladies{
+    margin: 0;
+    padding: 0;
+    width: min-content;
+}
+#patient a{
+    background: none;
+    color: black;
 }
 
 /* FILTER */
