@@ -20,8 +20,12 @@ module.exports = function (app , mongoose) {
                 await Prelevements.find({utilisateur: req.userInfos.userId}).sort([['date', -1]])
                 .then((prelevements)=>{
                     User.findById(req.userInfos.userId)
+                    .populate('demandes')
                     .then(user => {
-                        res.render('patientValues',{prelevements : prelevements, utilisateur: user, patient: true});
+                        Alert.find({utilisateur : req.userInfos.userId, statutPatient : 0})
+                        .then(alerts => {
+                            res.render('patientValues',{alerts : alerts, demandes : user.demandes, prelevements : prelevements, utilisateur: user, patient: true});
+                        });
                     })
                 });
             }
@@ -80,6 +84,7 @@ module.exports = function (app , mongoose) {
             Alert.find({utilisateur: req.userInfos.userId})
             .then((alerts) => {
                 User.findById(req.userInfos.userId)
+                .populate('demandes')
                 .then(user => {
                     res.render('userAlerts', {alerts: alerts, utilisateur: user});
                 })
@@ -193,7 +198,11 @@ module.exports = function (app , mongoose) {
             await Alert.find({utilisateur: req.userInfos.userId})
             .sort({date: -1, temps: -1})
             .then((alerts) => {
-                res.render('patientHome', {alerts: alerts});
+                User.findById(req.userInfos.userId)
+                .populate('demandes')
+                .then(user => {
+                    res.render('patientHome', {demandes: user.demandes, alerts: alerts});
+                })
             })
             //res.render('patientHome')
         }

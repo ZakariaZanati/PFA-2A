@@ -2,6 +2,7 @@ module.exports = function (app , mongoose) {
 
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
+    var Alert = require('../models/alertModel');
     var url = require('url');
     var bodyParser = require('body-parser');
     var authenticateToken = require('../authenticateToken');
@@ -25,6 +26,7 @@ module.exports = function (app , mongoose) {
             .then((medecins)=>{
                 User.findById(req.userInfos.userId)
                 .populate('medecins.medecin')
+                .populate('demandes')
                 .then(user => {
                     var oldMedecins = [];
                     var currentMedecins = [];
@@ -49,7 +51,10 @@ module.exports = function (app , mongoose) {
                         if(medecin.finSuivi != null ) oldMedecins.push(medecin);
                         else currentMedecins.push(medecin);
                     })
-                    res.render('medecins', {villes: villes, pays: pays, specialites: specialites, allMedecins: medecins, currentMedecins: currentMedecins , oldMedecins: oldMedecins});
+                    Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                    .then(alerts => {
+                        res.render('medecins', {demandes : user.demandes, alerts: alerts, villes: villes, pays: pays, specialites: specialites, allMedecins: medecins, currentMedecins: currentMedecins , oldMedecins: oldMedecins});
+                    })  
                 })
             });
         }
@@ -74,12 +79,16 @@ module.exports = function (app , mongoose) {
             Medecin.findById(id)
             .then((medecin)=>{
                 User.findById(req.userInfos.userId)
+                .populate('demandes')
                 .then((user) => {
                     var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi == null);
                     var sentMeDemande = user.demandes.find(demande => demande == id);
                     var sentDemande = medecin.demandes.find(demande => demande == user.id);
                     var oldMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi != null);
-                    res.render('medecinProfile',{medecin : medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande});   
+                    Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                    .then(alerts => {
+                        res.render('medecinProfile',{demandes: user.demandes, alerts: alerts, medecin : medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande});   
+                    })
                 })
             })
         }
@@ -249,7 +258,10 @@ module.exports = function (app , mongoose) {
                         villes.push(medecin.ville);
                     }
                 })
-                res.render('patientDemandes',{villes : villes, specialites : specialites, pays : pays , demandes : user.demandes});    
+                Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                .then(alerts => {
+                    res.render('patientDemandes',{alerts : alerts, villes : villes, specialites : specialites, pays : pays , demandes : user.demandes});    
+                })
             })
         }
         else if(req.userInfos.type === 'medecin') {

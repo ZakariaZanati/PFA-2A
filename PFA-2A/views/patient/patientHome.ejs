@@ -27,29 +27,33 @@
         <div class="param">
             <ul>
                 <div class="par">
-                    <li id="li-alert" onclick="active(this.id)">
-                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    <li id="li-alert">
+                        <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
                     </li>
                     <p class="desc desc-alert" id="alert">Alertes</p>
-                    <p class="notif">1</p>
-                    <div class="notif-div" id="alert-div-items">
+                    <p id="numberOfAlerts" class="notif"></p>
+                    <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
-                            <li>Alerte 1 </li>
-                            <li>Alerte 2</li>
+                            <% alerts.forEach(alert => { %>
+                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" && alert.statutPatient == 0) { %>
+                                    <li><a href="userAlerts"><%= alert.text %></a></li>
+                                <% } %>
+                            <% }) %>
                         </ul>
                     </div>
 
                 </div>
                 <div class="par">
                     <li id="li-notif" onclick="active(this.id)">
-                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell" aria-hidden="true"></i></a>
                     </li>
                     <p class="desc desc-notif" id="notif">Notifications</p>
-                    <p class="notif">2</p>
-                    <div class="notif-div" id="notif-div-items">
+                    <p id="numberOfNotif" class="notif"></p>
+                    <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <li>Notif 1</li>
-                            <li>Notif 2</li>
+                            <% demandes.forEach(demande => { %>
+                                <li><a href="medecinProfile?id=<%= demande._id %>"><%= demande.nom %> <%= demande.prenom %></a></li>
+                            <% }) %>
                         </ul>
                     </div>
                 </div>
@@ -162,6 +166,7 @@
     </div>
 </body>
 
+<script src="public/js/alerts.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/pop-up.js"></script>
 

@@ -147,6 +147,8 @@ function searchValeur() {
 
 
 function addDate() {
+    var url_string = window.location.pathname;
+    var urlTab = url_string.split('/');
     var dateBtn = document.getElementById("dateBtn");
     var divDates = document.getElementById('dates');
     var arrow = document.createElement("i");
@@ -160,7 +162,7 @@ function addDate() {
         input.className = "filter-input";
         input.name = "dateMax"
         input.id = "dateValueMax";
-        input.setAttribute("onchange", "searchValeur()");
+        urlTab[1] == "userAlerts" ? input.setAttribute("onchange", "searchValeurAlert()") : input.setAttribute("onchange", "searchValeur()");;
         divDates.removeChild(dateBtn);
         divDates.appendChild(arrow);
         divDates.appendChild(input);
@@ -308,4 +310,99 @@ function clear() {
     var min = document.getElementById("dateValueMin");
     min.style.display = "none"
     max.value = ""
+}
+
+
+function searchValeurAlert() {
+    var table = document.getElementById("alerts");
+    var inputMin = document.getElementById("dateValueMin");
+    var dateBtn = document.getElementById("dateBtn");
+
+    var tr = table.getElementsByTagName("tr");
+
+    if (dateBtn.className == "btn-icon btn-success") {
+        if (inputMin.value == '') {
+            for(var i = 0; i < tr.length; i++) {
+                tr[i].style.display = "";
+            }
+        }
+        else {
+            var dateMin = new Date(inputMin.value);
+            for(var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                var txtValue = td.textContent || td.innerText;
+                var date = new Date(txtValue);
+                (date.getTime() == dateMin.getTime()) ? tr[i].style.display = "" : tr[i].style.display = "none";
+            }
+        }
+    }
+    else {
+        var inputMax = document.getElementById("dateValueMax");
+        if (inputMin.value == '' && inputMax.value == '') {
+            for(var i = 0; i < tr.length; i++) {
+                tr[i].style.display = "";
+            }
+        }
+        else if (inputMin.value != '' && inputMax.value == '') {
+            var dateMin = new Date(inputMin.value);
+            for(var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                var txtValue = td.textContent || td.innerText;
+                var date = new Date(txtValue);
+                (date.getTime() >= dateMin.getTime()) ? tr[i].style.display = "" : tr[i].style.display = "none";
+            }
+            
+        }
+        else if (inputMin.value == '' && inputMax.value != '') {
+            var dateMax = new Date(inputMax.value);
+            for(var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                var txtValue = td.textContent || td.innerText;
+                var date = new Date(txtValue);
+                (date.getTime() <= dateMax.getTime()) ? tr[i].style.display = "" : tr[i].style.display = "none";
+            }
+        }
+        else {
+            var dateMax = new Date(inputMax.value);
+            var dateMin = new Date(inputMin.value);
+            for(var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                var txtValue = td.textContent || td.innerText;
+                var date = new Date(txtValue);
+                (dateMin.getTime() <= date.getTime() && date.getTime() <= dateMax.getTime()) ? tr[i].style.display = "" : tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function selectChoiceAlerts() {
+    var table = document.getElementById("alerts");
+    var idNames = ["temperature", "tensionSys", "tensionDia", "glucose", "oxygen"];
+    var mesures = ["Temperature", "Tension systolique", "Tension diastolique", "Taux de glucose", "Taux d'oxygène"];
+    var filters = [];
+    var inputs = [];
+    for (var i = 0; i < idNames.length; i++) {
+        inputs[i] = document.getElementById(idNames[i]);
+    }
+    
+    for(var i = 0; i < inputs.length; i++) {
+        if(inputs[i].checked) {
+            filters.push(mesures[i]);
+            inputs[i].parentElement.parentElement.style.backgroundColor = "#34b3a0"
+        }
+        else {
+            inputs[i].parentElement.parentElement.style.backgroundColor = "#d87474"
+        }
+    }
+    var tr = table.getElementsByTagName("tr");
+    for(var i = 1; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName("td")[2];
+        txtValue = td.textContent || td.innerText;
+        if(filters.some(filter => txtValue.indexOf(filter) > -1)) {
+            tr[i].style.display = "";
+        }
+        else {
+            tr[i].style.display = "none";
+        }
+    }
 }

@@ -14,7 +14,7 @@
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <label class="logo">LOGO</label>
-        <ul>
+        <ul id="na">
             <li><a href="medecinHome">Accueil</a></li>
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
@@ -22,6 +22,7 @@
             <li><a href="myProfileMedecin">Profil</a></li>
             <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
     </nav>
     <div class="container-home">
         <div class="container-header container-img-header">
@@ -31,7 +32,64 @@
         </div>
 
         <div class="container-body">
-            <table class="table table-sortable table-5">
+            <div class=" columns filter-bar">
+                <div class="col filter-input-div" id="dates">
+                    <i class="fas fa-filter search-icon"></i>
+                    <input id="dateValueMin" class="filter-input" type="date" name="dateMin" onchange="searchValeurAlert()"
+                        required>
+
+                    <a id="dateBtn" class="btn-icon btn-success" onclick="addDate()"><i id="addIc"
+                            class="fas fa-plus"></i></a> </div>
+                <div class="col filter-check" id="choice" onchange="selectChoiceAlerts()">
+                    <div class="par btn-success">
+                        <p class="desc " id="desc-temp">Température</p>
+                        <label>
+                            <img class="check-icon" id="temp" src="/public/icons/temperature-measure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="temperature" type="checkbox" checked="true" name="temperature"
+                                value="temperature">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ts">Tension Systolique</p>
+                        <label>
+                            <img id="ts" class="check-icon" src="/public/icons/blood-presure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique"
+                                value="tensionSystolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <label>
+                            <p class="desc" id="desc-td">Tension Diastolique</p>
+                            <img id="td" class="check-icon" src="/public/icons/blood-pressure-control-tool.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique"
+                                value="tensionDiastolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ox">Oxygene</p>
+                        <label>
+                            <img id="ox" class="check-icon" src="/public/icons/oxygen-mask.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-tg">Glycémie</p>
+                        <label>
+                            <img id="tg" class="check-icon" src="/public/icons/sugar-blood-level.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
+                        </label>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <table id="alerts" class="table table-sortable table-5">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -58,7 +116,7 @@
     </div>
     </div>
 </body>
-
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/pop-up.js"></script>
 
