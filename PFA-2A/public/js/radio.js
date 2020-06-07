@@ -135,5 +135,4 @@ function removeField(id) {
     console.log(id);
     console.log(div.getAttribute("id"));
     divMaladie.removeChild(div);
-
 }

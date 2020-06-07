@@ -16,10 +16,9 @@
 
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo"><a href="#"></a>LOGO</a></label>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
 
         <ul class="nav-items">
-            <li><a href="patientHome">Accueil</a></li>
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
@@ -44,7 +43,8 @@
 
                 </div>
                 <div class="par">
-                    <li id="li-notif"><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    <li id="li-notif" onclick="active(this.id)">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
                     </li>
                     <p class="desc desc-notif" id="notif">Notifications</p>
                     <p class="notif">2</p>
@@ -56,14 +56,20 @@
                     </div>
                 </div>
                 <div class="par">
-                    <li id="li-profil"><a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                    <li id="li-profil">
+                        <a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a>
+                    </li>
                     <p class="desc desc-profil" id="profil">Profil</p>
                 </div>
-                <div class="par last-par">
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
                     <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
                     <p class="desc desc-dec" id="dec">Deconnexion</p>
-                </div>
-            </ul>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container-home">
@@ -76,9 +82,9 @@
             <div class=" columns filter-bar">
                 <div class="col filter-input-div">
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
-                    <input class="filter-input" name="last" id="searchNom" type="text" placeholder="nom"
+                    <input class="filter-input" name="last" id="searchNom" type="text" placeholder="Nom"
                         onkeyup="search()">
-                    <input class="filter-input" name="first" id="searchPrenom" type="text" placeholder="prenom"
+                    <input class="filter-input" name="first" id="searchPrenom" type="text" placeholder="Prenom"
                         onkeyup="search()">
                 </div>
                 <div class="col filter-select-div">

@@ -11,19 +11,64 @@
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="patientHome">Accueil</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
-            <li><a href="medecins" class="active">Médecins</a></li>
+            <li class="active"><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
-            <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert" onclick="active(this.id)">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif" onclick="active(this.id)">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container-home">
         <div class="container-header container-img-header">
