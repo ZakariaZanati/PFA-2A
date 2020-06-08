@@ -33,6 +33,7 @@ module.exports = function (app, mongoose) {
                             var specialites = [];
                             var villes = [];
                             var pays = [];
+                            var date = new Date(new Date().toISOString().split('T')[0])
                             medecins.forEach(medecin => {
                                 var isInArray = specialites.find(specialite => specialite == medecin.specialite);
                                 var isInPays = pays.find(pays => pays == medecin.pays);
@@ -51,7 +52,8 @@ module.exports = function (app, mongoose) {
                                 if (medecin.finSuivi != null) oldMedecins.push(medecin);
                                 else currentMedecins.push(medecin);
                             })
-                            Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                            //Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                            Alert.find({ utilisateur: req.userInfos.userId, date: date })
                                 .then(alerts => {
                                     res.render('medecins', { demandes: user.demandes, alerts: alerts, villes: villes, pays: pays, specialites: specialites, allMedecins: medecins, currentMedecins: currentMedecins, oldMedecins: oldMedecins });
                                 })
@@ -81,11 +83,13 @@ module.exports = function (app, mongoose) {
                     User.findById(req.userInfos.userId)
                         .populate('demandes')
                         .then((user) => {
+                            var date = new Date(new Date().toISOString().split('T')[0])
                             var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi == null);
-                            var sentMeDemande = user.demandes.find(demande => demande == id);
+                            var sentMeDemande = user.demandes.find(demande => demande.id == id);
                             var sentDemande = medecin.demandes.find(demande => demande == user.id);
                             var oldMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi != null);
-                            Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                            //Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                            Alert.find({ utilisateur: req.userInfos.userId, date: date })
                                 .then(alerts => {
                                     res.render('medecinProfile', { demandes: user.demandes, alerts: alerts, medecin: medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
                                 })
@@ -206,8 +210,13 @@ module.exports = function (app, mongoose) {
                         .populate('demandes')
                         .then((medecin) => {
                             var maladies = [];
+                            var _users = [];
                             var villes = [];
                             var pays = [];
+                            medecin.utilisateurs.forEach(user => {
+                                if(user.finSuivi == null) _users.push(user.utilisateur);
+                            })
+                            var date = new Date(new Date().toISOString().split('T')[0]);
                             users.forEach(user => {
                                 user.maladies.forEach(maladie => {
                                     var isInArray = maladies.find(_maladie => _maladie.toLowerCase() == maladie.toLowerCase());
@@ -225,8 +234,10 @@ module.exports = function (app, mongoose) {
                                     villes.push(user.ville);
                                 }
                             })
-
-                            res.render('demandes', { villes: villes, pays: pays, maladies: maladies, demandes: medecin.demandes });
+                            Alert.find({utilisateur: {"$in" : _users}, date: date})
+                            .then(alerts => {
+                                res.render('demandes', {alerts: alerts, villes: villes, pays: pays, maladies: maladies, medecin: medecin});
+                            })
                         })
                 })
         }
@@ -261,7 +272,9 @@ module.exports = function (app, mongoose) {
                             villes.push(medecin.ville);
                         }
                     })
-                    Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                    var date = new Date(new Date().toISOString().split('T')[0]);
+                    //Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
+                    Alert.find({ utilisateur: req.userInfos.userId, date: date })
                         .then(alerts => {
                             res.render('patientDemandes', { alerts: alerts, villes: villes, specialites: specialites, pays: pays, demandes: user.demandes });
                         })
@@ -371,13 +384,22 @@ module.exports = function (app, mongoose) {
             User.findById(id)
                 .then((user) => {
                     Medecin.findById(req.userInfos.userId)
+                    .populate('demandes')
                         .then((medecin) => {
-
+                            var date = new Date(new Date().toISOString().split('T')[0]);
+                            var users = []; 
                             var isPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi == null);
                             var sentMeDemande = medecin.demandes.find(demande => demande == id);
                             var sentDemande = user.demandes.find(demande => demande == medecin.id);
                             var oldPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi != null);
-                            res.render('userProfile', { user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                            medecin.utilisateurs.forEach(user => {
+                                if(user.finSuivi == null) users.push(user.utilisateur);
+                            })
+                            Alert.find({utilisateur: {"$in" : users}, date: date})
+                            .populate('utilisateur')
+                            .then(alerts => {
+                                res.render('userProfile', {medecin: medecin, alerts: alerts, user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                            })
                         });
                 })
         }
@@ -407,6 +429,7 @@ module.exports = function (app, mongoose) {
                 .then(users => {
                     Medecin.findById(req.userInfos.userId)
                         .populate('utilisateurs.utilisateur')
+                        .populate('demandes')
                         .then((medecin) => {
                             var oldPatients = [];
                             var currentPatients = [];
@@ -437,8 +460,16 @@ module.exports = function (app, mongoose) {
                                 else {
                                     oldPatients.push(user);
                                 }
+                            }) 
+                            
+                            var alertUsers = [];
+                            currentPatients.forEach(element => alertUsers.push(element.utilisateur._id));
+                            var date = new Date(new Date().toISOString().split('T')[0]);
+                            Alert.find({utilisateur: {"$in" : alertUsers}, date: date})
+                            .populate('utilisateur')
+                            .then(alerts => {
+                                res.render('patients', {alerts: alerts, medecin: medecin, villes: villes, pays: pays, maladies: maladies, allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients });
                             })
-                            res.render('patients', { villes: villes, pays: pays, maladies: maladies, allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients });
                         })
                 })
         }

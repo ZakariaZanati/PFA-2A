@@ -26,34 +26,73 @@
             <ul>
                 <div class="par">
                     <li id="li-alert">
-                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                        <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle"
+                                aria-hidden="true"></i> </a>
                     </li>
-                    <p class="desc desc-alert" id="alert">Alertes</p>
-                    <p class="notif">1</p>
-                    <div class="notif-div" id="alert-div-items">
+                    <p class="desc" id="alert">Alertes</p>
+                    <p id="numberOfAlerts" class="notif"></p>
+                    <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
-                            <li>Alerte 1 </li>
-                            <li>Alerte 2</li>
+                            <% alerts.forEach(alert => { %>
+                            
+                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
+                                <li>
+                                    <a href="userAlerts?id=<%= alert.utilisateur.id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                            <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
+                                                <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                            <% } else { %>
+                                                <div class="notif-text"><%= alert.text %> </div>
+                                            <% } %>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <% } %>
+                                <% }) %>
+                            
                         </ul>
                     </div>
 
                 </div>
                 <div class="par">
                     <li id="li-notif">
-                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell"
+                                aria-hidden="true"></i></a>
                     </li>
-                    <p class="desc desc-notif" id="notif">Notifications</p>
-                    <p class="notif">2</p>
-                    <div class="notif-div" id="notif-div-items">
+                    <p class="desc" id="notif">Notifications</p>
+                    <p id="numberOfNotif" class="notif"></p>
+                    <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <li>Notif 1</li>
-                            <li>Notif 2</li>
+                            <% medecin.demandes.forEach(demande => { %>
+                            <li>
+                                <div class="notif-line-col">
+                                    <a href="userProfile?id=<%= demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        </div>
+                                    </a>
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <% }) %>
                         </ul>
                     </div>
                 </div>
                 <div class="par">
                     <li id="li-profil">
-                        <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                        <a id="aProfile" href="myProfileMedecin"><i class="fa fa-user" aria-hidden="true"></i></a>
                     </li>
                     <p class="desc desc-profil" id="profil">Profil</p>
                 </div>
@@ -75,7 +114,64 @@
         </div>
 
         <div class="container-body">
-            <table class="table table-sortable table-5">
+            <div class=" columns filter-bar">
+                <div class="col filter-input-div" id="dates">
+                    <div class="col filter-input-div">
+                        <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                        <input class="filter-input" name="name" id="searchNom" type="text" placeholder="Nom complet"
+                            onkeyup="searchPatient()">
+                    </div>
+                </div>
+                <div class="col filter-check" id="choice" onchange="selectChoiceAlerts()">
+                    <div class="par btn-success">
+                        <p class="desc " id="desc-temp">Température</p>
+                        <label>
+                            <img class="check-icon" id="temp" src="/public/icons/temperature-measure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="temperature" type="checkbox" checked="true" name="temperature"
+                                value="temperature">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ts">Tension Systolique</p>
+                        <label>
+                            <img id="ts" class="check-icon" src="/public/icons/blood-presure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique"
+                                value="tensionSystolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <label>
+                            <p class="desc" id="desc-td">Tension Diastolique</p>
+                            <img id="td" class="check-icon" src="/public/icons/blood-pressure-control-tool.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique"
+                                value="tensionDiastolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ox">Oxygene</p>
+                        <label>
+                            <img id="ox" class="check-icon" src="/public/icons/oxygen-mask.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-tg">Glycémie</p>
+                        <label>
+                            <img id="tg" class="check-icon" src="/public/icons/sugar-blood-level.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
+                        </label>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <table id="alerts" class="table table-sortable table-5">
                 <thead>
                     <tr>
                         <th>Patient</th>
@@ -106,7 +202,8 @@
     </div>
     </div>
 </body>
-
+<script src="public/js/alerts.js"></script>
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/pop-up.js"></script>
 

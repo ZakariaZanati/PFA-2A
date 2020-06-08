@@ -41,7 +41,11 @@
                                 <a href="userAlerts">
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                        <div class="notif-text"><%= alert.text %> </div>
+                                        <% if(alert.alertedPatient == 0) { %>
+                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <% } else { %>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <% } %>
                                     </div>
                                 </a>
                             </li>
@@ -147,6 +151,7 @@
             <div class="col col-3 container-add">
                 <div class="container-header add-header">
                     <p class="add-info">N'oubliez pas d'ajouter vos informations 4 fois par jour</p>
+                    <p id="length" class="add-info">Vous avez entrez <%= length %> fois vos valeurs jusqu'à ce moment</p>
                 </div>
                 <div class="container-body">
 
@@ -168,7 +173,7 @@
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-round submit">Valider</button>
+                        <button type="submit" class="btn btn-round submit" onclick="checkLength('<%= length %>')">Valider</button>
                     </form>
                 </div>
 

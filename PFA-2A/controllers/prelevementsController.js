@@ -16,15 +16,20 @@ module.exports = function (app , mongoose) {
             if(req.query.id != req.userInfos.userId && req.query.id != null) {
                 res.redirect('patientHome')
             }
+            else if(req.query.id == req.userInfos.userId && req.query.id != null) {
+                res.redirect('patientValues')
+            }
             else {
+                var date = new Date(new Date().toISOString().split('T')[0]);
                 await Prelevements.find({utilisateur: req.userInfos.userId}).sort([['date', -1]])
                 .then((prelevements)=>{
                     User.findById(req.userInfos.userId)
                     .populate('demandes')
                     .then(user => {
-                        Alert.find({utilisateur : req.userInfos.userId, statutPatient : 0})
+                        //Alert.find({utilisateur : req.userInfos.userId, statutPatient : 0})
+                        Alert.find({utilisateur : req.userInfos.userId, date: date})
                         .then(alerts => {
-                            res.render('patientValues',{alerts : alerts, demandes : user.demandes, prelevements : prelevements, utilisateur: user, patient: true});
+                            res.render('patientValues',{estPatient: true, alerts : alerts, demandes : user.demandes, prelevements : prelevements, utilisateur: user, patient: true});
                         });
                     })
                 });
@@ -33,25 +38,39 @@ module.exports = function (app , mongoose) {
         }
         else if(req.userInfos.type === 'medecin') {
             console.log("A doctor is logged!!!" + req.userInfos.type);
-            patientId = req.query.id;
-            User.findById(patientId)
-            .then((user) => {
-                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
-                if(estPatient) {
-                    Prelevements.find({utilisateur: patientId}).sort([['date', -1]])
-                    .then((prelevements)=>{
+            var date = new Date(new Date().toISOString().split('T')[0]);
+            var users = [];
+            Medecin.findById(req.userInfos.userId)
+            .populate('demandes')
+            .then(medecin => {
+                medecin.utilisateurs.forEach(user => {
+                    if(user.finSuivi == null) users.push(user.utilisateur);
+                })
+                //Alert.find({utilisateur: {"$in" : users}, date: date, statutMedecin: {"$ne" : req.userInfos.userId}})
+                Alert.find({utilisateur: {"$in" : users}, date: date, statutMedecin: {"$ne" : req.userInfos.userId}})
+                .populate('utilisateur')
+                .then(alerts => {
+                    patientId = req.query.id;
+                    if(patientId == null) res.redirect('medecinHome');
+                    else {
                         User.findById(patientId)
-                        .then(user => {
-                            res.render('patientValues',{prelevements : prelevements, utilisateur: user, patient: false});
+                        .then((user) => {
+                            var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
+                            if(estPatient) {
+                                Prelevements.find({utilisateur: patientId}).sort([['date', -1]])
+                                .then((prelevements)=>{
+                                    res.render('patientValues',{estPatient: false, medecin: medecin , alerts: alerts, prelevements : prelevements, utilisateur: user, patient: false});
+                                });
+                            }
+                            else {
+                                res.redirect('medecinHome');
+                            }
                         })
-                        
-                    });
-                }
-                else {
-                    res.redirect('medecinHome');
-                }
-            })
-    
+                    }
+                    
+                })
+                
+            });
         }
         else {
             console.log("Not logged");
@@ -81,33 +100,65 @@ module.exports = function (app , mongoose) {
 
     app.get('/userAlerts', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal') {
-            Alert.find({utilisateur: req.userInfos.userId})
-            .then((alerts) => {
-                User.findById(req.userInfos.userId)
-                .populate('demandes')
-                .then(user => {
-                    res.render('userAlerts', {alerts: alerts, utilisateur: user});
+            if(req.query.id != req.userInfos.userId && req.query.id != null) {
+                res.redirect('patientHome')
+            }
+            else if(req.query.id == req.userInfos.userId && req.query.id != null) {
+                res.redirect('userAlerts')
+            }
+            else {
+                Alert.find({utilisateur: req.userInfos.userId})
+                .then((alerts) => {
+                    User.findById(req.userInfos.userId)
+                    .populate('demandes')
+                    .then(user => {
+                        alerts.forEach(alert => {
+                            if(alert.alertedPatient == 0) {
+                                alert.alertedPatient = 1;
+                                alert.save();
+                            }
+                        });
+                        res.render('userAlerts', {userAlerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes});
+                    })
                 })
-            })
+            }
+            
         }
         else if(req.userInfos.type === 'medecin') {
-            patientId = req.query.id;
-            User.findById(patientId)
-            .then((user) => {
-                var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
-                if(estPatient) {
-                    Alert.find({utilisateur: patientId})
-                    .then((alerts)=>{
+            var date = new Date(new Date().toISOString().split('T')[0]);
+            var users = [];
+            Medecin.findById(req.userInfos.userId)
+            .populate('demandes')
+            .then(medecin => {
+                medecin.utilisateurs.forEach(user => {
+                    if(user.finSuivi == null) users.push(user.utilisateur);
+                })
+                //Alert.find({utilisateur: {"$in" : users}, date: date, statutMedecin: {"$ne" : req.userInfos.userId}})
+                Alert.find({utilisateur: {"$in" : users}, date: date})
+                .populate('utilisateur')
+                .then(alerts => {
+                    
+                    patientId = req.query.id;
+                    if(patientId == null) res.redirect('medecinHome');
+                    else {
                         User.findById(patientId)
-                        .then(user => {
-                            res.render('userAlerts', {alerts: alerts, utilisateur: user});
+                        .then((user) => {
+                            var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
+                            if(estPatient) {
+                                Alert.find({utilisateur: patientId})
+                                .then((userAlerts)=>{
+                                    res.render('userAlerts', {medecin, alerts: alerts, utilisateur: user, userAlerts: userAlerts, estPatient: false}); 
+                                });
+                            }
+                            else {
+                                res.redirect('medecinHome');
+                            }
                         })
-                    });
-                }
-                else {
-                    res.redirect('medecinHome');
-                }
-            })
+                    }
+                    
+                })
+                
+            });
         }
         else {
             res.redirect('/');
@@ -122,6 +173,7 @@ module.exports = function (app , mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
+            .populate('demandes')
             .then(medecin => {
                 medecin.utilisateurs.forEach(user => {
                     if(user.finSuivi == null) users.push(user.utilisateur);
@@ -141,7 +193,11 @@ module.exports = function (app , mongoose) {
                             tauxGlucose: value.tauxGlucose
                         })
                     });
-                    res.render('dayValues', {values: _values});
+                    Alert.find({utilisateur: {"$in" : users}, date: date})
+                    .then(alerts => {
+                        res.render('dayValues', {alerts: alerts, medecin: medecin, values: _values});
+                    })
+                    
                 })
                 
             });
@@ -162,6 +218,7 @@ module.exports = function (app , mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
+            .populate('demandes')
             .then(medecin => {
                 medecin.utilisateurs.forEach(user => {
                     if(user.finSuivi == null) users.push(user.utilisateur);
@@ -169,18 +226,13 @@ module.exports = function (app , mongoose) {
                 Alert.find({utilisateur: {"$in" : users}, date: date})
                 .populate('utilisateur')
                 .then(alerts => {
-                    var _alerts = [];
                     alerts.forEach(alert => {
-                        _alerts.push({
-                            utilisateur: alert.utilisateur,
-                            date: alert.date.toISOString().split('T')[0],
-                            temps: alert.temps,
-                            mesure: alert.mesure,
-                            text: alert.text,
-                            difference: alert.difference
-                        })
+                        if(!alert.alertedMedecin.some(element => element == req.userInfos.userId)) {
+                            alert.alertedMedecin.push(req.userInfos.userId)
+                            alert.save();
+                        }
                     });
-                    res.render('medecinHome', {alerts: _alerts});
+                    res.render('medecinHome', {medecin: medecin, alerts: alerts});
                 })
                 
             });
@@ -201,7 +253,15 @@ module.exports = function (app , mongoose) {
                 User.findById(req.userInfos.userId)
                 .populate('demandes')
                 .then(user => {
-                    res.render('patientHome', {demandes: user.demandes, alerts: alerts});
+                    var _date = new Date(new Date().toISOString().split('T')[0])
+                    Prelevements.findOne({utilisateur: req.userInfos.userId, date: _date}, (err, values) => {
+                        var length = 0;
+                        if(values) {
+                            length = values.temperature.length; 
+                        }
+                        res.render('patientHome', {demandes: user.demandes, alerts: alerts, length: length});
+                    });
+                    
                 })
             })
             //res.render('patientHome')
