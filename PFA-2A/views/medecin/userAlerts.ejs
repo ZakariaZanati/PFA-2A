@@ -10,19 +10,134 @@
 </head>
 
 <body>
-    <nav class="navigation-bar">
-        <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="medecinHome">Accueil</a></li>
-            <li><a href="dayValues">Santé</a></li>
-            <li><a href="demandes">Demandes</a></li>
-            <li><a class="active" href="patients">Patients</a></li>
-            <li><a href="myProfileMedecin">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
-        </ul>
-    </nav>
+    <div id="navPatient">
+        <nav class="navigation-bar">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+            <label class="logo"><a href="patientHome">LOGO</a></label>
+            <ul class="nav-items">
+                <li><a href="patientValues">Santé</a></li>
+                <li><a href="#">Statistiques</a></li>
+                <li><a href="patientDemandes">Demandes</a></li>
+                <li><a href="medecins">Médecins</a></li>
+                <li><a href="seuils">Seuils</a></li>
+            </ul>
+
+            <div class="param">
+                <ul>
+                    <div class="par">
+                        <li id="li-alert">
+                            <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle"
+                                    aria-hidden="true"></i> </a>
+                        </li>
+                        <p class="desc" id="alert">Alertes</p>
+                        <p id="numberOfAlerts" class="notif"></p>
+                        <div id="alerts" class="notif-div" id="alert-div-items">
+                            <ul>
+                                <% alerts.forEach(alert => { %>
+                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
+                                <li>
+                                    <a href="userAlerts">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <% } %>
+                                <% }) %>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="par">
+                        <li id="li-notif">
+                            <a type="button" onclick="showNotifications()"><i class="fa fa-bell"
+                                    aria-hidden="true"></i></a>
+                        </li>
+                        <p class="desc" id="notif">Notifications</p>
+                        <p id="numberOfNotif" class="notif"></p>
+                    </div>
+                    <div class="par">
+                        <li id="li-profil">
+                            <a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a>
+                        </li>
+                        <p class="desc desc-profil" id="profil">Profil</p>
+                    </div>
+                </ul>
+            </div>
+            <div class="param">
+                <div class="last-par">
+                    <ul>
+                        <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                        <p class="desc desc-dec" id="dec">Deconnexion</p>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+    </div>
+    <div id="navMedecin">
+        <nav class="navigation-bar">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+            <label class="logo"><a href="patientHome">LOGO</a></label>
+
+            <ul class="nav-items">
+                <li class="active"><a href="dayValues">Santé</a></li>
+                <li><a href="demandes">Demandes</a></li>
+                <li><a href="patients">Patients</a></li>
+            </ul>
+
+            <div class="param">
+                <ul>
+                    <div class="par">
+                        <li id="li-alert">
+                            <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                        </li>
+                        <p class="desc desc-alert" id="alert">Alertes</p>
+                        <p class="notif">1</p>
+                        <div class="notif-div" id="alert-div-items">
+                            <ul>
+                                <li>Alerte 1 </li>
+                                <li>Alerte 2</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="par">
+                        <li id="li-notif">
+                            <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                        </li>
+                        <p class="desc desc-notif" id="notif">Notifications</p>
+                        <p class="notif">2</p>
+                        <div class="notif-div" id="notif-div-items">
+                            <ul>
+                                <li>Notif 1</li>
+                                <li>Notif 2</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="par">
+                        <li id="li-profil">
+                            <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                        </li>
+                        <p class="desc desc-profil" id="profil">Profil</p>
+                    </div>
+                </ul>
+            </div>
+            <div class="param">
+                <div class="last-par">
+                    <ul>
+                        <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                        <p class="desc desc-dec" id="dec">Deconnexion</p>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+    </div>
     <div class="container-home">
         <div class="container-header container-img-header">
             <img src="public/images/red.jpg" class="img-header">
@@ -31,7 +146,64 @@
         </div>
 
         <div class="container-body">
-            <table class="table table-sortable table-5">
+            <div class=" columns filter-bar">
+                <div class="col filter-input-div" id="dates">
+                    <i class="fas fa-filter search-icon"></i>
+                    <input id="dateValueMin" class="filter-input" type="date" name="dateMin"
+                        onchange="searchValeurAlert()" required>
+
+                    <a id="dateBtn" class="btn-icon btn-success" onclick="addDate()"><i id="addIc"
+                            class="fas fa-plus"></i></a> </div>
+                <div class="col filter-check" id="choice" onchange="selectChoiceAlerts()">
+                    <div class="par btn-success">
+                        <p class="desc " id="desc-temp">Température</p>
+                        <label>
+                            <img class="check-icon" id="temp" src="/public/icons/temperature-measure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="temperature" type="checkbox" checked="true" name="temperature"
+                                value="temperature">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ts">Tension Systolique</p>
+                        <label>
+                            <img id="ts" class="check-icon" src="/public/icons/blood-presure.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique"
+                                value="tensionSystolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <label>
+                            <p class="desc" id="desc-td">Tension Diastolique</p>
+                            <img id="td" class="check-icon" src="/public/icons/blood-pressure-control-tool.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique"
+                                value="tensionDiastolique">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-ox">Oxygene</p>
+                        <label>
+                            <img id="ox" class="check-icon" src="/public/icons/oxygen-mask.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
+                        </label>
+                    </div>
+                    <div class="par btn-success">
+                        <p class="desc" id="desc-tg">Glycémie</p>
+                        <label>
+                            <img id="tg" class="check-icon" src="/public/icons/sugar-blood-level.png"
+                                onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
+                            <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
+                        </label>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <table id="alerts" class="table table-sortable table-5">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -58,8 +230,9 @@
     </div>
     </div>
 </body>
-
+<script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/pop-up.js"></script>
+<script src="public/js/userNav.js"></script>
 
 </html>

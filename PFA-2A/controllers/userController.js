@@ -4,6 +4,7 @@ module.exports = function (app , mongoose) {
     var User = require('../models/userModel');
     var Medecin = require('../models/medecinModel');
     var Statistics = require('../models/statisticsModel');
+    var Alert = require('../models/alertModel');
     const cookieParser = require('cookie-parser');
     const bcrypt = require('bcrypt');
     var url = require('url');
@@ -236,15 +237,18 @@ module.exports = function (app , mongoose) {
         if(req.userInfos.type === 'normal') {
             User.findById(req.userInfos.userId)
             .populate('medecins.medecin')
+            .populate('demandes')
             .then((user) => {
                 var currentMedecin = user.medecins.find(medecin => medecin.finSuivi == null);
-                if(currentMedecin) {
-                    res.render('myProfileUser', {user: user, currentMedecin: currentMedecin.medecin});
-                }
-                else {
-                    res.render('myProfileUser', {user: user, currentMedecin: null})
-                }
-                
+                Alert.find({utilisateur : req.userInfos.userId, statutPatient: 0})
+                .then(alerts => {
+                    if(currentMedecin) {
+                        res.render('myProfileUser', {alerts: alerts, user: user, currentMedecin: currentMedecin.medecin});
+                    }
+                    else {
+                        res.render('myProfileUser', {alerts: alerts, user: user, currentMedecin: null})
+                    }
+                });
             })
         }
         else if(req.userInfos.type === 'medecin') {

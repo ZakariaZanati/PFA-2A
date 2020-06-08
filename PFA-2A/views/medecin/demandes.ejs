@@ -11,55 +11,109 @@
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="medecinHome">Accueil</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="dayValues">Santé</a></li>
-            <li><a href="demandes" class="active">Demandes</a></li>
+            <li class="active"><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="myProfileMedecin">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <div class="container">
+    <div class="container-home">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
             <img src="public/images/list.jpg" class="img-header">
             <h1 class="text-header">La liste des demandes</h1>
         </div>
-        <div class="container-body">
-            <label>
-                <span>Maladies</span>
-                <select id="maladies" name="maladies" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% maladies.forEach(maladie => {%>
-                    <option value="<%= maladie %>"><%= maladie %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="searchPatients()">
-            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="searchPatients()">
-            <br>
-            <label>
-                <span>Pays</span>
-                <select id="pays" name="pays" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% pays.forEach(pays => {%>
-                    <option value="<%= pays %>"><%= pays %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <label>
-                <span>Villes</span>
-                <select id="villes" name="villes" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% villes.forEach(ville => {%>
-                    <option value="<%= ville %>"><%= ville %></option>
-                    <% }) %>
-                </select>
-            </label>
+        <div class=" columns filter-bar">
+            <div class="col filter-input-div">
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                <input class="filter-input" name="last" id="searchNom" type="text" placeholder="nom"
+                    onkeyup="searchPatients()">
+                <input class="filter-input" name="first" id="searchPrenom" type="text" placeholder="prenom"
+                    onkeyup="searchPatients()">
+            </div>
+            <div class="col filter-select-div">
+                <i class="fas fa-filter filter-icon"></i>
+                <div class="filter-select-mini">
+                    <span>Maladies</span>
+                    <select class="filter-select" id="maladies" name="maladies" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% maladies.forEach(maladie => {%>
+                        <option value="<%= maladie %>"><%= maladie %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="filter-select-mini">
+                    <span>Pays</span>
+                    <select class="filter-select" id="pays" name="pays" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% pays.forEach(pays => {%>
+                        <option value="<%= pays %>"><%= pays %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="filter-select-mini">
+                    <span>Villes</span>
+                    <select class="filter-select" id="villes" name="villes" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% villes.forEach(ville => {%>
+                        <option value="<%= ville %>"><%= ville %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container container-body">
             <table id="demandes" class="table table-sortable table-6">
                 <thead>
                     <tr>

@@ -11,19 +11,96 @@
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="patientHome">Accueil</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="patientValues">Santé</a></li>
             <li><a href="#">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
-            <li><a class="active" href="medecins">Médecins</a></li>
+            <li class="active"><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
-            <li><a href="myProfileUser">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle"
+                                aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc" id="alert">Alertes</p>
+                    <p id="numberOfAlerts" class="notif"></p>
+                    <div id="alerts" class="notif-div" id="alert-div-items">
+                        <ul>
+                            <% alerts.forEach(alert => { %>
+                            <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
+                            <li>
+                                <a href="userAlerts">
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                        <div class="notif-text"><%= alert.text %> </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <% } %>
+                            <% }) %>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc" id="notif">Notifications</p>
+                    <p id="numberOfNotif" class="notif"></p>
+                    <div id="notifs" class="notif-div" id="notif-div-items">
+                        <ul>
+                            <% demandes.forEach(demande => { %>
+                            <li>
+                                <div class="notif-line-col">
+                                    <a href="medecinProfile?id=<%= demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        </div>
+                                    </a>
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container">
         <div class="container-header container-img-header">
@@ -45,7 +122,7 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="phone" value="<%= medecin.telephone %>" readonly>
+                    <input class="login-input" type="tel" name="phone" value="<%= medecin.telephone %>" readonly>
                 </label>
                 <label>
                     <span>Pays</span>
@@ -79,11 +156,11 @@
                     <form action="/medecinProfile?id=<%= medecin._id%>&action=end" method="post">
                         <button class="btn btn-echec" type="submit" value="Fin suivi">Fin suivi</button>
                     </form>
-                    <a href="myProfileUser" class="btn">Retour</a>
+                    <a href="medecins" class="btn">Retour</a>
                 </div>
                 <% } else if(sentMeDemande) { %>
                 <label>
-                    <span> Demande de nouveau suivi</span>
+                    <span>Demande de nouveau suivi</span>
                 </label>
                 <div class="buttons-inline">
                     <form action="/medecinProfile?id=<%= medecin._id%>&action=yes" method="post">
@@ -119,7 +196,7 @@
 
 
 </body>
-
+<script src="public/js/alerts.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
 

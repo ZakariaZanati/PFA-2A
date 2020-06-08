@@ -11,17 +11,68 @@
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="medecinHome">Accueil</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
-            <li><a href="myProfileMedecin" class="active">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                            <li>Alerte 1 </li>
+                            <li>Alerte 2</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container">
         <div class="container-header container-img-header">
@@ -29,10 +80,8 @@
             <img src="public/images/doctor.jpg" class="img-header">
             <h1 class="text-header">Profil</h1>
         </div>
-        <div class="container-body" id="editDiv">
-            <a class="btn btn-round" href='myProfileMedecin?action=edit'>Modifer le profil</a>
-        </div>
         <div class="container-body">
+
             <form class="profil" action="/myProfileMedecin" method="POST">
                 <label class="noEditable">
                     <span>Nom complet</span>
@@ -45,7 +94,7 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required
+                    <input class="login-input" type="tel" name="telephone" value="<%= medecin.telephone %>" required
                         readonly>
                 </label>
                 <label>
@@ -78,12 +127,17 @@
                         <a class="btn btn-success" href='patients?filtre=old'>Consulter</a>
                     </div>
                 </label>
-
                 <div class="buttons-inline no-display" id="saveDiv">
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>
                 </div>
+
             </form>
+        </div>
+        <div class="container-body">
+            <div class="buttons-inline margin" id="editDiv">
+                <a class="btn btn-round" href='myProfileMedecin?action=edit'>Modifer le profil</a>
+            </div>
         </div>
     </div>
 

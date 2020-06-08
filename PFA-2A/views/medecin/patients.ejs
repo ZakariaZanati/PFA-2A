@@ -11,17 +11,73 @@
 
 <body>
     <nav class="navigation-bar">
+
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo">LOGO</label>
-        <ul>
-            <li><a href="medecinHome">Accueil</a></li>
+        <label class="logo"><a href="patientHome">LOGO</a></label>
+
+        <ul class="nav-items">
             <li><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
-            <li><a class="active" href="patients">Patients</a></li>
-            <li><a href="myProfileMedecin">Profil</a></li>
-            <li><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+            <li class="active"><a href="patients">Patients</a></li>
         </ul>
+
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc desc-alert" id="alert">Alertes</p>
+                    <p class="notif">1</p>
+                    <div class="notif-div" id="alert-div-items">
+                        <ul>
+                            <li>
+                                <div class="notif-line">
+                                    <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                    <div class="notif-text">Alerte1
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="notif-line">
+                                    <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                    <div class="notif-text">Alerte2
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-notif" id="notif">Notifications</p>
+                    <p class="notif">2</p>
+                    <div class="notif-div" id="notif-div-items">
+                        <ul>
+                            <li>Notif 1</li>
+                            <li>Notif 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a href="myProfileMedecin"><i class="fa fa-user-md" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container-home">
         <div class="container-img-header container-header">
@@ -29,58 +85,70 @@
             <img src="/public/images/patient.jpg" class="img-header">
             <h1 class="text-header">La liste des patients</h1>
         </div>
-
-        <div class="container-body">
-            <label>
-                <span>Maladies</span>
-                <select id="maladies" name="maladies" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% maladies.forEach(maladie => {%>
+        <div class=" columns filter-bar">
+            <div class="col filter-input-div">
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                <input class="filter-input" name="last" id="searchNom" type="text" placeholder="nom"
+                    onkeyup="searchPatients()">
+                <input class="filter-input" name="first" id="searchPrenom" type="text" placeholder="prenom"
+                    onkeyup="searchPatients()">
+            </div>
+            <div class="col filter-select-div">
+                <i class="fas fa-filter filter-icon"></i>
+                <div class="filter-select-mini">
+                    <span>Maladies</span>
+                    <select class="filter-select" id="maladies" name="maladies" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% maladies.forEach(maladie => {%>
                         <option value="<%= maladie %>"><%= maladie %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <input name="last" id="searchNom" type="text" placeholder="nom" onkeyup="searchPatients()">
-            <input name="first" id="searchPrenom" type="text" placeholder="prenom" onkeyup="searchPatients()">
-            <br>
-            <label>
-                <span>Pays</span>
-                <select id="pays" name="pays" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% pays.forEach(pays => {%>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="filter-select-mini">
+                    <span>Pays</span>
+                    <select class="filter-select" id="pays" name="pays" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% pays.forEach(pays => {%>
                         <option value="<%= pays %>"><%= pays %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <label>
-                <span>Villes</span>
-                <select id="villes" name="villes" onchange="searchPatients()">
-                    <option value="-1">tous</option>
-                    <% villes.forEach(ville => {%>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="filter-select-mini">
+                    <span>Villes</span>
+                    <select class="filter-select" id="villes" name="villes" onchange="searchPatients()">
+                        <option value="-1">tous</option>
+                        <% villes.forEach(ville => {%>
                         <option value="<%= ville %>"><%= ville %></option>
-                    <% }) %>
-                </select>
-            </label>
-            <div class="radio-group margin">
-                <label class="radio">
-                    <input type="radio" checked="true" name="patients" id="all" value="all" onclick="getPatients()">
-                    <span>Tous les patients</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="patients" id="current" value="current" onclick="getPatients()">
-                    <span>Patients actuels</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="patients" id="old" value="old" onclick="getPatients()">
-                    <span>Anciens patients</span>
-                </label>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container-body container">
+            <div class="center">
+
+
+
+                <div class="radio-group margin">
+                    <label class="radio">
+                        <input type="radio" checked="true" name="patients" id="all" value="all" onclick="getPatients()">
+                        <span>Tous les patients</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="patients" id="current" value="current" onclick="getPatients()">
+                        <span>Patients actuels</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="patients" id="old" value="old" onclick="getPatients()">
+                        <span>Anciens patients</span>
+                    </label>
+                </div>
             </div>
             <div id="allPatients">
                 <table class="table table-sortable table-3">
                     <thead id="table-head">
                         <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
+                            <th>Patient</th>
                             <th>Pays</th>
                             <th>Ville</th>
                             <th>Maladies</th>
@@ -90,17 +158,23 @@
                         <% allPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient._id %>'><%= patient.nom %></a></td>
-                            <td data-label="Prenom"><%= patient.prenom%></td>
+                                    href='userProfile?id=<%= patient._id %>'><%= patient.nom %>
+                                    <%= patient.prenom %></a></td>
                             <td data-label="Pays"><%= patient.pays %></td>
                             <td data-label="Ville"><%= patient.ville %></td>
-                            <td>    
-                                <input id="showAll<%= patient._id %>" type="button" value="afficher" onclick="showMaladies(true, 'All' , '<%= patient._id %>')">
-                                <input id="hideAll<%= patient._id %>" type="button" value="cacher" onclick="showMaladies(false, 'All' , '<%= patient._id %>')" style="display: none;">
-                                <div id="divMaladies<%= patient._id %>" style="display: none;">
-                                    <% patient.maladies.forEach(maladie => { %>
+                            <td>
+                                <div class="buttons-inline">
+                                    <div id="divMaladies<%= patient._id %>" style="display: none;">
+
+                                        <% if(patient.maladies.length!=0 ) {patient.maladies.forEach(maladie => { %>
                                         <%= maladie %> <br>
-                                    <% }) %>
+                                        <% }) } else { %> Aucune maladie<% }%>
+                                    </div>
+                                    <i class="fa fa-eye" aria-hidden="true" id="showAll<%= patient._id %>"
+                                        onclick="showMaladies(true, 'All' , '<%= patient._id %>')"></i>
+                                    <i class="fa fa-eye-slash" aria-hidden="true" id="hideAll<%= patient._id %>"
+                                        onclick="showMaladies(false, 'All' , '<%= patient._id %>')"
+                                        style="display: none;"></i>
                                 </div>
                             </td>
                         </tr>
@@ -112,8 +186,7 @@
                 <table class="table table-sortable table-3">
                     <thead id="table-head">
                         <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
+                            <th>Patient</th>
                             <th>Pays</th>
                             <th>Ville</th>
                             <th>Maladies</th>
@@ -124,24 +197,33 @@
                         <% currentPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %></a></td>
-                            <td data-label="Prenom"><%= patient.utilisateur.prenom %></td>
+                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
+                                    <%= patient.utilisateur.prenom %></a>
+                            </td>
                             <td data-label="Pays"><%= patient.utilisateur.pays %></td>
                             <td data-label="Ville"><%= patient.utilisateur.ville %></td>
-                            <td>    
-                                <input id="showCurrent<%= patient.utilisateur._id %>" type="button" value="afficher" onclick="showMaladies(true, 'Current' , '<%= patient.utilisateur._id %>')">
-                                <input id="hideCurrent<%= patient.utilisateur._id %>" type="button" value="cacher" onclick="showMaladies(false, 'Current' , '<%= patient.utilisateur._id %>')" style="display: none;">
-                                <div id="divMaladies<%= patient.utilisateur._id %>" style="display: none;">
-                                    <% patient.utilisateur.maladies.forEach(maladie => { %>
+                            <td>
+                                <div class="buttons-inline">
+                                    <div id="divMaladies<%= patient._id %>" style="display: none;">
+
+                                        <% if(patient.utilisateur.maladies.length!=0 ) {patient.utilisateur.maladies.forEach(maladie => { %>
                                         <%= maladie %> <br>
-                                    <% }) %>
+                                        <% }) } else { %> Aucune maladie<% }%>
+                                    </div>
+                                    <i class="fa fa-eye" aria-hidden="true" id="showCurrent<%= patient._id %>"
+                                        onclick="showMaladies(true, 'Current' , '<%= patient._id %>')"></i>
+                                    <i class="fa fa-eye-slash" aria-hidden="true" id="hideCurrent<%= patient._id %>"
+                                        onclick="showMaladies(false, 'Current' , '<%= patient._id %>')"
+                                        style="display: none;"></i>
                                 </div>
                             </td>
                             <td data-label="Début suivi"><%= patient.debutSuivi.toISOString().split('T')[0]; %></td>
                             <td><a href='patientValues?id=<%= patient.utilisateur._id %>'
-                                    class="btn btn-success">Santé</a></td>
-                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a></td>
-                            
+                                    class="btn btn-success">Santé</a>
+                            </td>
+                            <td><a href='userAlerts?id=<%= patient.utilisateur._id %>' class="btn btn-echec">Alertes</a>
+                            </td>
+
                         </tr>
                         <% }); %>
                     </tbody>
@@ -151,8 +233,7 @@
                 <table class="table table-sortable table-4">
                     <thead id="table-head">
                         <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
+                            <th>Patient</th>
                             <th>Pays</th>
                             <th>Ville</th>
                             <th>Maladies</th>
@@ -164,17 +245,24 @@
                         <% oldPatients.forEach((patient)=>{ %>
                         <tr>
                             <td id="patient" data-label="Patient"><a class="btn"
-                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %></a></td>
-                            <td data-label="Prenom"><%= patient.utilisateur.prenom %></td>
+                                    href='userProfile?id=<%= patient.utilisateur._id %>'><%= patient.utilisateur.nom %>
+                                    <%= patient.utilisateur.prenom %></a>
+                            </td>
                             <td data-label="Pays"><%= patient.utilisateur.pays %></td>
                             <td data-label="Ville"><%= patient.utilisateur.ville %></td>
-                            <td>    
-                                <input id="showOld<%= patient.utilisateur._id %>" type="button" value="afficher" onclick="showMaladies(true, 'Old', '<%= patient.utilisateur._id %>')">
-                                <input id="hideOld<%= patient.utilisateur._id %>" type="button" value="cacher" onclick="showMaladies(false, 'Old', '<%= patient.utilisateur._id %>')" style="display: none;">
-                                <div id="divMaladies<%= patient.utilisateur._id %>" style="display: none;">
-                                    <% patient.utilisateur.maladies.forEach(maladie => { %>
+                            <td>
+                                <div class="buttons-inline">
+                                    <div id="divMaladies<%= patient._id %>" style="display: none;">
+
+                                        <% if(patient.utilisateur.maladies.length!=0 ) {patient.utilisateur.maladies.forEach(maladie => { %>
                                         <%= maladie %> <br>
-                                    <% }) %>
+                                        <% }) } else { %> Aucune maladie<% }%>
+                                    </div>
+                                    <i class="fa fa-eye" aria-hidden="true" id="showOld<%= patient._id %>"
+                                        onclick="showMaladies(true, 'Old' , '<%= patient._id %>')"></i>
+                                    <i class="fa fa-eye-slash" aria-hidden="true" id="hideCurrent<%= patient._id %>"
+                                        onclick="showMaladies(false, 'Old' , '<%= patient._id %>')"
+                                        style="display: none;"></i>
                                 </div>
                             </td>
                             <td data-label="Début suivi"><%= patient.debutSuivi.toISOString().split('T')[0]; %></td>

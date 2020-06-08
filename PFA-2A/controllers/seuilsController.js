@@ -1,6 +1,8 @@
 module.exports = function (app , mongoose) {
 
     var Seuils = require('../models/seuilsModel');
+    var Alert = require('../models/alertModel');
+    var User = require('../models/userModel');
     var url = require('url');
     var bodyParser = require('body-parser');
     var authenticateToken = require('../authenticateToken');
@@ -55,7 +57,15 @@ module.exports = function (app , mongoose) {
                 })
                 
                 if(seuils != null) {
-                    res.render('seuils', {names : names, seuils: seuils, userType: req.userInfos.type});
+                    User.findById(req.userInfos.userId)
+                    .populate('demandes')
+                    .then(user => {
+                        Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                        .then(alerts => {
+                            res.render('seuils', {demandes : user.demandes, alerts : alerts, names : names, seuils: seuils, userType: req.userInfos.type});
+                        }) 
+                    })
+                    
                 }
             }) 
         }
