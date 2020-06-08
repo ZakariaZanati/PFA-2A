@@ -17,6 +17,7 @@ body {
 .capitalize{
     text-transform: capitalize;
 }
+
 /* Container */
 
 .container {
@@ -298,6 +299,11 @@ nav{
     -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
     box-shadow: 0 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
+#navPatient,#navMed{
+    position: sticky;
+    z-index: 2;
+    top: 0;
+}
 
 label.logo {
     color : #143774;
@@ -427,16 +433,14 @@ nav .desc{
 #navMedecin,#navPatient,#h1Medecin,#h1Patient {
     display: none;
 }
-
-#alert-div-items{
-    display: block;
-}
 .notif-div{
     position: absolute;
     background-color: white;
-    width:30vw;
+    width: fit-content;
+    min-width:300px;
+    width: fit-content;
     max-height: 60vh;
-    top: 4.4em;
+    top: 4em;
     right: 0;
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -445,14 +449,28 @@ nav .desc{
     -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
     box-shadow: 8px 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
+.notif-div a{
+    padding: 0;
+    margin: 0;
+    font-size: .8em;
+}
 .notif-div::-webkit-scrollbar {
     display: none;
 }
-.notif-line{
-    padding:.3em .5em;
+.notif-line,.notif-line-col{
     display: flex;
     align-items: center;
-    height: 5em;
+    min-height: 5em;
+}
+.notif-line-col{
+    justify-content: space-between;
+}
+.notif-line{
+    padding:.3em .5em;
+    justify-content: flex-start;
+}
+.notif-line li{
+    border:1px solid;
 }
 .notif-div ul{    
     display: flex;
@@ -564,6 +582,12 @@ nav .desc{
     #check:checked  ~ .nav-overlay {
         left: 0;
     } 
+    .notif-div{
+        min-width: auto;
+        width: 100%;
+        position: fixed;
+    }
+
 }
 
 
@@ -571,7 +595,6 @@ nav .desc{
 @media(max-width: 400px) {
     html{
         font-size: 3.2vw;
-        overflow-x: hidden;
     }
 }
 

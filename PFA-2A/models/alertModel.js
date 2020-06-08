@@ -11,7 +11,15 @@ var alertSchema = new Schema({
     temps: String,
     mesure: String,
     text: String,
-    difference: Number
+    difference: Number,
+    statutPatient: {
+        type: Number,
+        default: 0
+    },
+    statutMedecin: {
+        type: Number,
+        default: 0
+    }
 })
 
 var alert = mongoose.model('alert', alertSchema);

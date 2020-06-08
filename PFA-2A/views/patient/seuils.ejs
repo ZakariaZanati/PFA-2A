@@ -23,33 +23,64 @@
             <li><a href="medecins">Médecins</a></li>
             <li class="active"><a href="seuils">Seuils</a></li>
         </ul>
-
         <div class="param">
             <ul>
                 <div class="par">
                     <li id="li-alert">
-                        <a href="#"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </a>
+                        <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle"
+                                aria-hidden="true"></i> </a>
                     </li>
-                    <p class="desc desc-alert" id="alert">Alertes</p>
-                    <p class="notif">1</p>
-                    <div class="notif-div" id="alert-div-items">
+                    <p class="desc" id="alert">Alertes</p>
+                    <p id="numberOfAlerts" class="notif"></p>
+                    <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
-                            <li>Alerte 1 </li>
-                            <li>Alerte 2</li>
+                            <% alerts.forEach(alert => { %>
+                            <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
+                            <li>
+                                <a href="userAlerts">
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                        <div class="notif-text"><%= alert.text %> </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <% } %>
+                            <% }) %>
                         </ul>
                     </div>
 
                 </div>
                 <div class="par">
                     <li id="li-notif">
-                        <a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell" aria-hidden="true"></i></a>
                     </li>
-                    <p class="desc desc-notif" id="notif">Notifications</p>
-                    <p class="notif">2</p>
-                    <div class="notif-div" id="notif-div-items">
+                    <p class="desc" id="notif">Notifications</p>
+                    <p id="numberOfNotif" class="notif"></p>
+                    <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <li>Notif 1</li>
-                            <li>Notif 2</li>
+                            <% demandes.forEach(demande => { %>
+                            <li>
+                                <div class="notif-line-col">
+                                    <a href="medecinProfile?id=<%= demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        </div>
+                                    </a>
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <% }) %>
                         </ul>
                     </div>
                 </div>
@@ -124,7 +155,7 @@
 
 
 </body>
-
+<script src="public/js/alerts.js"></script>
 <script src="public/js/filtres.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>

@@ -80,10 +80,8 @@
             <img src="public/images/doctor.jpg" class="img-header">
             <h1 class="text-header">Profil</h1>
         </div>
-        <div class="container-body" id="editDiv">
-            <a class="btn btn-round" href='myProfileMedecin?action=edit'>Modifer le profil</a>
-        </div>
         <div class="container-body">
+
             <form class="profil" action="/myProfileMedecin" method="POST">
                 <label class="noEditable">
                     <span>Nom complet</span>
@@ -96,7 +94,7 @@
                 </label>
                 <label>
                     <span>Téléphone</span>
-                    <input class="login-input" type="number" name="telephone" value="<%= medecin.telephone %>" required
+                    <input class="login-input" type="tel" name="telephone" value="<%= medecin.telephone %>" required
                         readonly>
                 </label>
                 <label>
@@ -129,12 +127,17 @@
                         <a class="btn btn-success" href='patients?filtre=old'>Consulter</a>
                     </div>
                 </label>
-
                 <div class="buttons-inline no-display" id="saveDiv">
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileMedecin">Annuler</a>
                 </div>
+
             </form>
+        </div>
+        <div class="container-body">
+            <div class="buttons-inline margin" id="editDiv">
+                <a class="btn btn-round" href='myProfileMedecin?action=edit'>Modifer le profil</a>
+            </div>
         </div>
     </div>
 
