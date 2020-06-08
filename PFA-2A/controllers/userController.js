@@ -339,6 +339,7 @@ module.exports = function (app , mongoose) {
                     if(medecin.finSuivi != null ) oldMedecins.push(medecin);
                     else currentMedecins.push(medecin);
                 })
+                
                 res.render('myMedecins', {currentMedecins: currentMedecins , oldMedecins: oldMedecins});
             })
         }
@@ -354,6 +355,30 @@ module.exports = function (app , mongoose) {
         else {
             res.redirect('/');
         }
+    })
+
+    app.get('/location',authenticateToken,(req,res)=>{
+        if (req.query) {
+            console.log(req.query.lat);
+
+            console.log(req.query.long);
+        }
+        if(req.userInfos.type === 'normal') {
+            User.findById(req.userInfos.userId)
+            .populate('medecins.medecin')
+            .then(user => {
+               
+                var currentMedecins = [];
+                user.medecins.forEach(medecin => {
+                    if(medecin.finSuivi == null ){
+                        currentMedecins.push(medecin);
+                    }
+                    
+                })
+                res.render('location', {currentMedecins: currentMedecins});
+            })
+        }
+        res.render('location');
     })
 
 
