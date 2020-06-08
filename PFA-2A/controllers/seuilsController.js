@@ -47,6 +47,7 @@ module.exports = function (app , mongoose) {
     
     app.get('/seuils', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'normal') {
+            var date = new Date(new Date().toISOString().split('T')[0]);
             Seuils.find({}).sort('nom')
             .then((seuils) => {
                 var names = [];
@@ -60,7 +61,8 @@ module.exports = function (app , mongoose) {
                     User.findById(req.userInfos.userId)
                     .populate('demandes')
                     .then(user => {
-                        Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                        //Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
+                        Alert.find({utilisateur: req.userInfos.userId, date: date})
                         .then(alerts => {
                             res.render('seuils', {demandes : user.demandes, alerts : alerts, names : names, seuils: seuils, userType: req.userInfos.type});
                         }) 

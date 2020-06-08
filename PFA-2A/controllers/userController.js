@@ -213,10 +213,21 @@ module.exports = function (app , mongoose) {
 
     app.get('/myProfileMedecin', authenticateToken, (req, res) => {
         if(req.userInfos.type === 'medecin') {
+            var date = new Date(new Date().toISOString().split('T')[0]);
+            var users = [];
             Medecin.findById(req.userInfos.userId)
-            .then((medecin) => {
-                res.render('myProfileMedecin', {medecin: medecin});
-            })
+            .populate('demandes')
+            .then(medecin => {
+                medecin.utilisateurs.forEach(user => {
+                    if(user.finSuivi == null) users.push(user.utilisateur);
+                })
+                Alert.find({utilisateur: {"$in" : users}, date: date})
+                .populate('utilisateur')
+                .then(alerts => {
+                    res.render('myProfileMedecin', {medecin: medecin, alerts: alerts});
+                })
+                
+            });
         }
         else if(req.userInfos.type === 'normal') {
             res.redirect('patientHome');
@@ -240,7 +251,9 @@ module.exports = function (app , mongoose) {
             .populate('demandes')
             .then((user) => {
                 var currentMedecin = user.medecins.find(medecin => medecin.finSuivi == null);
-                Alert.find({utilisateur : req.userInfos.userId, statutPatient: 0})
+                var date = new Date(new Date().toISOString().split('T')[0]);
+                //Alert.find({utilisateur : req.userInfos.userId, statutPatient: 0})
+                Alert.find({utilisateur : req.userInfos.userId, date: date})
                 .then(alerts => {
                     if(currentMedecin) {
                         res.render('myProfileUser', {alerts: alerts, user: user, currentMedecin: currentMedecin.medecin});

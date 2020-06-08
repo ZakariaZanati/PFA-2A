@@ -26,7 +26,10 @@ if (document.getElementById("sang") != null) {
 if (param != null) {
     editBtn.style.display = "none";
     saveBtn.style.display = "block";
-
+    if(document.getElementById("pasMaladies")) {
+        document.getElementById("pasMaladies").style.display = "none"
+    }
+    
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].readOnly = false;
     }
@@ -49,7 +52,9 @@ if (param != null) {
     }
 }
 else {
-
+    if(document.getElementById("pasMaladies")) {
+        document.getElementById("pasMaladies").style.display = "block"
+    }
     editBtn.style.display = "block";
     saveBtn.style.display = "none";
 

@@ -280,7 +280,13 @@ function searchPatient() {
     var input = document.getElementById('searchNom');
     var value = input.value.toUpperCase();
     value == '' ? value = "-1" : value;
+    var url_string = window.location.pathname;
+    var urlTab = url_string.split('/');
     var table = document.getElementById("dayValues");
+    if(urlTab[1] == 'medecinHome') {
+        table = document.getElementById("alerts");
+    }
+    
     tr = table.getElementsByTagName("tr");
     for (var i = 1; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[0];
@@ -310,7 +316,7 @@ function searchValeurAlert() {
     var table = document.getElementById("alerts");
     var inputMin = document.getElementById("dateValueMin");
     var dateBtn = document.getElementById("dateBtn");
-
+    
     var tr = table.getElementsByTagName("tr");
 
     if (dateBtn.className == "btn-icon btn-success") {
@@ -374,6 +380,14 @@ function selectChoiceAlerts() {
     var mesures = ["Temperature", "Tension systolique", "Tension diastolique", "Taux de glucose", "Taux d'oxygène"];
     var filters = [];
     var inputs = [];
+
+    var url_string = window.location.pathname;
+    var urlTab = url_string.split('/');
+    var index = 2;
+    if(urlTab[1] == "medecinHome") {
+        index = 3;
+    }
+
     for (var i = 0; i < idNames.length; i++) {
         inputs[i] = document.getElementById(idNames[i]);
     }
@@ -389,7 +403,7 @@ function selectChoiceAlerts() {
     }
     var tr = table.getElementsByTagName("tr");
     for (var i = 1; i < tr.length; i++) {
-        var td = tr[i].getElementsByTagName("td")[2];
+        var td = tr[i].getElementsByTagName("td")[index];
         txtValue = td.textContent || td.innerText;
         if (filters.some(filter => txtValue.indexOf(filter) > -1)) {
             tr[i].style.display = "";

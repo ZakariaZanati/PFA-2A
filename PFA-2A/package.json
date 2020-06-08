@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "alerts": "^0.1.3",
     "bcrypt": "^4.0.1",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
@@ -25,6 +26,7 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "alert-message": "^0.1.24",
     "nodemon": "^2.0.4"
   }
 }

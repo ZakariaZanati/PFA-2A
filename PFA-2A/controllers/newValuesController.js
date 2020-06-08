@@ -52,7 +52,7 @@ module.exports = (app , mongoose) => {
                 
                 var length = values.temperature.length;
                 if(length == 4) {
-                    console.log("You cannot add more, Max = 4 is reached ")
+                    console.log("You cannot add more, Max = 4 is reached ");
                 }   
                 else {
                     

@@ -42,7 +42,11 @@
                                 <a href="userAlerts">
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                        <div class="notif-text"><%= alert.text %> </div>
+                                        <% if(alert.alertedPatient == 0) { %>
+                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <% } else { %>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <% } %>
                                     </div>
                                 </a>
                             </li>

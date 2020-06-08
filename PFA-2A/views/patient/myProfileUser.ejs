@@ -41,7 +41,11 @@
                                 <a href="userAlerts">
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                        <div class="notif-text"><%= alert.text %> </div>
+                                        <% if(alert.alertedPatient == 0) { %>
+                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <% } else { %>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <% } %>
                                     </div>
                                 </a>
                             </li>
@@ -159,10 +163,15 @@
                     <span>Groupe sanguin</span>
                     <input class="login-input" id="sang" type="text" value="<%= user.groupeSanguin %>" readonly>
                 </label>
-                <% if(user.maladies[0]!=null) { %>
+                
                 <label>
                     <span>Maladies</span>
-                    <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
+                    <% if(user.maladies[0]==null) { %>
+                        <h3 id="pasMaladies">Pas de maladies</h3>
+                    <% } else { %>
+                        <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
+                    <% } %> 
+                    
                     <input id="hide" type="button" value="cacher" onclick="showMaladies(false)" style="display: none;">
                     <input id="add" type="button" value="ajouter" onclick="addField()" style="display: none;">
                     <div id="maladies">
@@ -174,7 +183,6 @@
                         <%})%>
                     </div>
                 </label>
-                <%}%>
                 <br>
                 <br>
                 <label class="noEditable">
