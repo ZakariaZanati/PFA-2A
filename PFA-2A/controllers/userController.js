@@ -153,7 +153,7 @@ module.exports = function (app , mongoose) {
                         }
                         else {
                             var maladies = [data.diabete];
-                            maladies = maladies.concat(data.maladie.filter(m => {return m!='' && m.trim()!='';}));
+                            maladies = maladies.concat(maladies.filter(m => {return m!='' && m.trim()!='';}));
                             var user = new User({
                                 nom : data.nom.toUpperCase(),
                                 prenom : data.prenom,
@@ -172,7 +172,8 @@ module.exports = function (app , mongoose) {
                         }
                         console.log('patient created');
                         res.redirect('/login');
-                    } catch {
+                    } catch(err) {
+                        console.log(err);
                         res.status(500).send();
                     }
                     
@@ -374,29 +375,7 @@ module.exports = function (app , mongoose) {
         }
     })
 
-    app.get('/location',authenticateToken,(req,res)=>{
-        if (req.query) {
-            console.log(req.query.lat);
-
-            console.log(req.query.long);
-        }
-        if(req.userInfos.type === 'normal') {
-            User.findById(req.userInfos.userId)
-            .populate('medecins.medecin')
-            .then(user => {
-               
-                var currentMedecins = [];
-                user.medecins.forEach(medecin => {
-                    if(medecin.finSuivi == null ){
-                        currentMedecins.push(medecin);
-                    }
-                    
-                })
-                res.render('location', {currentMedecins: currentMedecins});
-            })
-        }
-        res.render('location');
-    })
+    
 
 
     app.get('/logout',async (req,res)=>{
