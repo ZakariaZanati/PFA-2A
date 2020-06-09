@@ -1,4 +1,5 @@
 module.exports = function (app , mongoose) {
+    const Statistics = require('../models/statisticsModel')
     const Prelevements = require('../models/valuesModel');
     const User = require('../models/userModel');
     const Medecin = require('../models/medecinModel');
@@ -267,5 +268,75 @@ module.exports = function (app , mongoose) {
             //res.render('patientHome')
         }
     })
+
+    app.get('/statistics', authenticateToken, async (req, res) => {
+        if(req.userInfos.type == 'normal') {
+            if(req.query.id != req.userInfos.userId && req.query.id != null) {
+                res.redirect('patientHome')
+            }
+            else if(req.query.id == req.userInfos.userId && req.query.id != null) {
+                res.redirect('statistics')
+            }
+            else {
+                Alert.find({utilisateur: req.userInfos.userId})
+                .then((alerts) => {
+                    User.findById(req.userInfos.userId)
+                    .populate('demandes')
+                    .then(user => {
+                        alerts.forEach(alert => {
+                            if(alert.alertedPatient == 0) {
+                                alert.alertedPatient = 1;
+                                alert.save();
+                            }
+                        });
+                        Prelevements.find({utilisateur: req.userInfos.userId})
+                        .then(prelevements => {
+                            res.render('statistics', {prelevements: prelevements, alerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes});
+                        })
+                    })
+                })
+            }
+
+        }
+        else if(req.userInfos.type == 'medecin') {
+            var date = new Date(new Date().toISOString().split('T')[0]);
+            var users = [];
+            Medecin.findById(req.userInfos.userId)
+            .populate('demandes')
+            .then(medecin => {
+                medecin.utilisateurs.forEach(user => {
+                    if(user.finSuivi == null) users.push(user.utilisateur);
+                })
+                //Alert.find({utilisateur: {"$in" : users}, date: date, statutMedecin: {"$ne" : req.userInfos.userId}})
+                Alert.find({utilisateur: {"$in" : users}, date: date})
+                .populate('utilisateur')
+                .then(alerts => {
+                    patientId = req.query.id;
+                    if(patientId == null) res.redirect('medecinHome');
+                    else {
+                        User.findById(patientId)
+                        .then((user) => {
+                            var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
+                            if(estPatient) {
+                                Prelevements.find({utilisateur: patientId})
+                                .then((prelevements)=>{
+                                    res.render('statistics', {medecin, alerts: alerts, utilisateur: user, prelevements: prelevements, estPatient: false}); 
+                                });
+                            }
+                            else {
+                                res.redirect('medecinHome');
+                            }
+                        })
+                    }
+                    
+                })
+                
+            });
+        }
+        else {
+            res.redirect('/')
+        }
+        res.render('statistics', {hello: "hello"});
+    });
 
 }

@@ -389,7 +389,7 @@ module.exports = function (app, mongoose) {
                             var date = new Date(new Date().toISOString().split('T')[0]);
                             var users = []; 
                             var isPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi == null);
-                            var sentMeDemande = medecin.demandes.find(demande => demande == id);
+                            var sentMeDemande = medecin.demandes.find(demande => demande.id == id);
                             var sentDemande = user.demandes.find(demande => demande == medecin.id);
                             var oldPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi != null);
                             medecin.utilisateurs.forEach(user => {
