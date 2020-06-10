@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 const User = require('./models/userModel');
 const Seuils = require('./models/seuilsModel');
 const Alert = require('./models/alertModel');
+const Prelevements = require('./models/valuesModel')
 
 function getFormatDate(){
     var dateArray = Date().split(' ');
@@ -13,12 +14,46 @@ function getFormatDate(){
     return [date, time,day];
 }
 
+function updateDanger(userId, nom, type, date, heure, level) {
+    if(nom == "Temperature") {
+        Prelevements.findOneAndUpdate({utilisateur: userId, date: date},
+            {$set: {"temperature.$[temp].danger": level}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {});
+    }
+    else if(nom == "Taux d'oxygène") {
+        Prelevements.findOneAndUpdate({utilisateur: userId, date: date},
+            {$set: {"tauxOxygen.$[temp].danger": level}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {});
+    }
+    else if(nom == "Taux de glucose") {
+        Prelevements.findOneAndUpdate({utilisateur: userId, date: date},
+            {$set: {"tauxGlucose.$[temp].danger": level}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {});
+    }
+    else if(nom == "Tension" && type == "systolique") {
+        Prelevements.findOneAndUpdate({utilisateur: userId, date: date},
+            {$set: {"tensionSystolique.$[temp].danger": level}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {});
+    }
+    else if(nom == "Tension" && type == "diastolique") {
+        Prelevements.findOneAndUpdate({utilisateur: userId, date: date},
+            {$set: {"tensionDiastolique.$[temp].danger": level}},
+            {arrayFilters: [{"temp.temps": heure}]})
+            .then((doc) => {});
+    }
+}
+
 function sendAlert(userId, valeur, nom, type, sousType, heure, operation) {
     var currentDate = getFormatDate();
     var _date = currentDate[0];
     var _time = currentDate[1];
     Seuils.findOne({nom: nom, type: type, sousType: sousType})
     .then((mesure) => {
+        
         var nomMesure = mesure.nom + " " + type;
         var unite = mesure.abreviation;
         var seuilMin = mesure.valMin;
@@ -41,35 +76,56 @@ function sendAlert(userId, valeur, nom, type, sousType, heure, operation) {
         }
         var difference = valeur - valSeuil;
         if(operation == 'create') {
-            var alert = new Alert({
-                utilisateur: userId,
-                date: _date, 
-                valeur: valeur,
-                temps: _time, 
-                mesure: nomMesure,
-                text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
-                difference: difference         
-            });
-            Alert.create(alert);
+            if(level != 0) {
+                
+                var alert = new Alert({
+                    utilisateur: userId,
+                    date: _date, 
+                    valeur: valeur,
+                    temps: _time, 
+                    mesure: nomMesure,
+                    text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                    difference: difference         
+                });
+                Alert.create(alert);
+            } 
         }
         
         else if(operation == 'update') {
             if(level == 0) {
                 Alert.findOneAndDelete({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure})
                 .then((doc) => {
-                    
                 });
             }
             else {
-                Alert.findOneAndUpdate({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure, valeur: {$nin: [valeur]}},
-                    {$set: {difference: valeur - valSeuil,
-                        text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
-                        valeur: valeur,
-                        alertedPatient: 0,
-                        alertedMedecin: []}})
-                .then((doc) => {
-                    
-                });
+                Alert.findOne({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure})
+                .then(alert => {
+                    if(alert == null) {
+                        var alert = new Alert({
+                            utilisateur: userId,
+                            date: _date, 
+                            valeur: valeur,
+                            temps: heure, 
+                            mesure: nomMesure,
+                            text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                            difference: difference         
+                        });
+                        Alert.create(alert);
+                        
+                    }
+                    else {
+                        Alert.findOneAndUpdate({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure, valeur: {$nin: [valeur]}},
+                            {$set: {difference: valeur - valSeuil,
+                                text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                                valeur: valeur,
+                                alertedPatient: 0,
+                                alertedMedecin: []}})
+                        .then((doc) => {
+                            
+                        }); 
+                    }
+                })
+                
             }
         }
         
