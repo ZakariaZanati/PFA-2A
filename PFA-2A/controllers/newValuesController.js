@@ -47,7 +47,7 @@ module.exports = (app , mongoose) => {
         var _time = currentDate[1];
         var _day = currentDate[2];
         var action = req.query.action;
-        Prelevements.findOne({utilisateur: userId, date: _date}, (err, values) => {
+        Prelevements.findOne({utilisateur: userId, date: _date}, async(err, values) => {
             if(values) {
                 
                 var length = values.temperature.length;
@@ -72,54 +72,59 @@ module.exports = (app , mongoose) => {
                         $each: [{temps: _time, valeur: req.body.tauxGlucose}],
                         $position: 0});  
                         values.save();
-                    
-                    Statistics.findOne({utilisateur : userId} ,{ "MoyennesJours" : {$elemMatch : {"jour" : _date}}})
-                    .then(result =>{
-                        
-                        for (i = 0; i < result.MoyennesJours[0].moyennesJour.length; i++) {
-                            var newMoyenne = result.MoyennesJours[0].moyennesJour[0] * length;
-                            //values.moyennesJour.remove(values.moyennesJour[0]);
-                            result.MoyennesJours[0].moyennesJour.shift();
-                            switch(i) {
-                                case 0:
-                                    newMoyenne += parseFloat(req.body.temperature);
-                                    break;
-                                case 1:
-                                    newMoyenne += parseFloat(req.body.tensionSystolique);
-                                    break;
-                                case 2:
-                                    newMoyenne += parseFloat(req.body.tensionDiastolique);
-                                    break;    
-                                case 3:
-                                    newMoyenne += parseFloat(req.body.tauxOxygene);
-                                    break;
-                                case 4:
-                                    newMoyenne += parseFloat(req.body.tauxGlucose);
-                                    break;
-                            }
-                            newMoyenne = newMoyenne / (length + 1);
-                            result.MoyennesJours[0].moyennesJour.push(newMoyenne);
+                        console.log(length);
+                    if (length +1 == 4) {
+                        await Statistics.findOne({utilisateur : userId})
+                        .then(result=>{
                             
-                        }
-                        result.save();
-                        console.log(values.temperature.length);
-                        
-                        if(values.temperature.length === 4){
+                            console.log(result);
+
+                            moyenneTemp = 0;
+                            moyenneTensionSys = 0;
+                            moyenneTensionDyas = 0;
+                            moyenneTauxOx = 0;
+                            moyenneTauxGluc = 0;
+
+                            values.temperature.forEach((temperature)=>{
+                                moyenneTemp += temperature.valeur;
+                            });
+                            values.tensionSystolique.forEach((tensionSystolique)=>{
+                                moyenneTensionSys += tensionSystolique.valeur;
+                            });
+                            values.tensionDiastolique.forEach((tensionDiastolique)=>{
+                                moyenneTensionDyas += tensionDiastolique.valeur;
+                            });
+                            values.tauxOxygen.forEach((tauxOxygen)=>{
+                                moyenneTauxOx += tauxOxygen.valeur;
+                            });
+                            values.tauxGlucose.forEach((tauxGlucose)=>{
+                                moyenneTauxGluc += tauxGlucose.valeur;
+                            });
+                            moyennesJour = [moyenneTemp/4,moyenneTensionSys/4,moyenneTensionDyas/4,moyenneTauxOx/4,moyenneTauxGluc/4];
+                            console.log(moyenneTemp)
+                            _moyenne = {jour : _date, moyennesJour : moyennesJour};
+                            result.MoyennesJours.push(_moyenne);
+                            result.save();
+                            console.log(result);
+
                             moyenneSemaine(userId,_day,_date,result.MoyennesJours[0].moyennesJour);
                             moyenneMoi(userId,result.MoyennesJours[0].moyennesJour);
-                        }
-                    })
-
-                    
+                            
+                        });
+                        
+                        
+        
+                        console.log('moyenne ajouté');
+                    }
                     
                     var aJeun = req.body.typeTest === 'aJeun';
                     sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun, "", "create");
                 
+
                 } 
             }
             else {
-                moyennesjour = [req.body.temperature, req.body.tensionSystolique, req.body.tensionDiastolique, req.body.tauxOxygene, req.body.tauxGlucose]
-                console.log(req.body.tensionSystolique + " " + req.body.tensionDiastolique);
+                
                 var _values = new Prelevements({
                     utilisateur: userId,
                     date: _date,
@@ -134,17 +139,7 @@ module.exports = (app , mongoose) => {
                 sendAlerts(userId, req.body.temperature, req.body.tauxOxygene, [req.body.tensionSystolique, req.body.tensionDiastolique], req.body.tauxGlucose, aJeun, "", "create")
 
                 console.log("Values created");
-
-                Statistics.findOne({utilisateur : userId})
-                .then(result=>{
-                    
-                    console.log(result);
-                    _moyenne = {jour : _date, moyennesJour : moyennesjour};
-                    result.MoyennesJours.push(_moyenne);
-                    result.save();
-                });
-
-                console.log('moyenne ajouté');
+                
             }
         });
         res.redirect('/patientHome');
