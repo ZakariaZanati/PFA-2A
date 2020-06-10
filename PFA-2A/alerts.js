@@ -25,19 +25,26 @@ function sendAlert(userId, valeur, nom, type, sousType, heure, operation) {
         var seuilMax = mesure.valMax;
         var valSeuil;
         var comparaison;
+        var level;
         if(valeur < seuilMin) {
             valSeuil = seuilMin;
             comparaison = " est inferieure au seuil min ";
+            level = -1;
         }
-        if(valeur > seuilMax) {
+        else if(valeur > seuilMax) {
             valSeuil = seuilMax;
             comparaison = " est superieure au seuil max ";
+            level = 1;
+        }
+        else {
+            level = 0;
         }
         var difference = valeur - valSeuil;
         if(operation == 'create') {
             var alert = new Alert({
                 utilisateur: userId,
                 date: _date, 
+                valeur: valeur,
                 temps: _time, 
                 mesure: nomMesure,
                 text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
@@ -45,13 +52,25 @@ function sendAlert(userId, valeur, nom, type, sousType, heure, operation) {
             });
             Alert.create(alert);
         }
+        
         else if(operation == 'update') {
-            Alert.findOneAndUpdate({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure},
-                {$set: {difference: valeur - valSeuil,
-                    text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite}})
-            .then((doc) => {
-                
-            });
+            if(level == 0) {
+                Alert.findOneAndDelete({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure})
+                .then((doc) => {
+                    
+                });
+            }
+            else {
+                Alert.findOneAndUpdate({utilisateur: userId, date: _date, mesure: nomMesure, temps: heure, valeur: {$nin: [valeur]}},
+                    {$set: {difference: valeur - valSeuil,
+                        text: nomMesure + " : " + valeur + " " + unite + comparaison + valSeuil + " " + unite,
+                        valeur: valeur,
+                        alertedPatient: 0,
+                        alertedMedecin: []}})
+                .then((doc) => {
+                    
+                });
+            }
         }
         
         
@@ -84,5 +103,7 @@ var sendAlerts = (userId, temperature, tauxOxygen, tensionArray, tauxGlucose, aJ
     });
     
 }
+
+
 
 module.exports = sendAlerts;
