@@ -34,32 +34,31 @@
                     <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
                             <% alerts.forEach(alert => { %>
-                            
-                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
-                                <li>
-                                    <a href="userAlerts?id=<%= alert.utilisateur.id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                            <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
-                                                <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
-                                            <% } else { %>
-                                                <div class="notif-text"><%= alert.text %> </div>
-                                            <% } %>
-                                        </div>
-                                    </a>
-                                </li>
 
-                                <% } %>
-                                <% }) %>
-                            
+                            <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
+                            <li>
+                                <a href="userAlerts?id=<%= alert.utilisateur.id %>">
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                        <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
+                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <% } else { %>
+                                        <div class="notif-text"><%= alert.text %> </div>
+                                        <% } %>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <% } %>
+                            <% }) %>
+
                         </ul>
                     </div>
 
                 </div>
                 <div class="par">
                     <li id="li-notif">
-                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell"
-                                aria-hidden="true"></i></a>
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell" aria-hidden="true"></i></a>
                     </li>
                     <p class="desc" id="notif">Notifications</p>
                     <p id="numberOfNotif" class="notif"></p>
@@ -67,23 +66,16 @@
                         <ul>
                             <% medecin.demandes.forEach(demande => { %>
                             <li>
-                                <div class="notif-line-col">
-                                    <a href="userProfile?id=<%= demande._id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                        </div>
-                                    </a>
+
+                                <a href="userProfile?id=<%= demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                aria-hidden="true"></i>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                         </div>
-                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                aria-hidden="true"></i>
-                                        </div>
+                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
                                     </div>
-                                </div>
+                                </a>
+
+
 
                             </li>
                             <% }) %>

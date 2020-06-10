@@ -18,7 +18,7 @@
             <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
             <label class="logo"><a id="logo" href="patientHome">LOGO</a></label>
             <ul id="navPatient" class="nav-items">
-                <li><a href="patientValues">Santé</a></li>
+                <li class="active"><a href="patientValues">Santé</a></li>
                 <li><a href="#">Statistiques</a></li>
                 <li><a href="patientDemandes">Demandes</a></li>
                 <li><a href="medecins">Médecins</a></li>
@@ -41,45 +41,45 @@
                         <div id="alerts" class="notif-div" id="alert-div-items">
                             <ul>
                                 <% if(estPatient) { %>
-                                    <% alerts.forEach(alert => { %>
-                                    
-                                        <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" && alert.statutPatient == 0) { %>
-                                        <li>
-                                            <a href="userAlerts">
-                                                <div class="notif-line">
-                                                    <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                                    <% if(alert.alertedPatient == 0) { %>
-                                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
-                                                    <% } else { %>
-                                                        <div class="notif-text"><%= alert.text %> </div>
-                                                    <% } %>
-                                                </div>
-                                            </a>
-                                        </li>
-        
-                                        <% } %>
-                                    <% }) %>
-                                <% } else { %>
-                                    <% alerts.forEach(alert => { %>
-                                    
-                                        <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
-                                        <li>
-                                            <a href="userAlerts?id=<%= alert.utilisateur.id %>">
-                                                <div class="notif-line">
-                                                    <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
-                                                    <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
-                                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
-                                                    <% } else { %>
-                                                        <div class="notif-text"><%= alert.text %> </div>
-                                                    <% } %>
-                                                </div>
-                                            </a>
-                                        </li>
-        
-                                        <% } %>
-                                        <% }) %>
+                                <% alerts.forEach(alert => { %>
+
+                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
+                                <li>
+                                    <a href="userAlerts">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                            <% if(alert.alertedPatient == 0) { %>
+                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                            <% } else { %>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                            <% } %>
+                                        </div>
+                                    </a>
+                                </li>
+
                                 <% } %>
-                                
+                                <% }) %>
+                                <% } else { %>
+                                <% alerts.forEach(alert => { %>
+
+                                <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
+                                <li>
+                                    <a href="userAlerts?id=<%= alert.utilisateur.id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                            <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
+                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                            <% } else { %>
+                                            <div class="notif-text"><%= alert.text %> </div>
+                                            <% } %>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <% } %>
+                                <% }) %>
+                                <% } %>
+
                             </ul>
                         </div>
 
@@ -96,34 +96,23 @@
                                 <% if(!estPatient) {demandes = medecin.demandes} %>
                                 <% demandes.forEach(demande => { %>
                                 <li>
-                                    <div class="notif-line-col">
-                                        <% if(estPatient) { %>
-                                            <a href="medecinProfile?id=<%= demande._id %>">
-                                                <div class="notif-line">
-                                                    <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                                </div>
-                                            </a>
-                                        <%} else { %>
-                                            <a href="userProfile?id=<%= demande._id %>">
-                                                <div class="notif-line">
-                                                    <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                                </div>
-                                            </a>
-                                        <% }%>
+                                    <% if(estPatient) { %>
+                                    <a href="medecinProfile?id=<%= demande._id %>">
                                         <div class="notif-line">
-                                            <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                    aria-hidden="true"></i>
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                             </div>
-                                            <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                    aria-hidden="true"></i>
-                                            </div>
+                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
                                         </div>
-                                    </div>
-
+                                    </a>
+                                    <%} else { %>
+                                    <a href="userProfile?id=<%= demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        </div>
+                                    </a>
+                                    <% }%>
                                 </li>
                                 <% }) %>
                             </ul>

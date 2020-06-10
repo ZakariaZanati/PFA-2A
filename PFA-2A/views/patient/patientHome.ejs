@@ -42,9 +42,9 @@
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
                                         <% if(alert.alertedPatient == 0) { %>
-                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
                                         <% } else { %>
-                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <div class="notif-text"><%= alert.text %> </div>
                                         <% } %>
                                     </div>
                                 </a>
@@ -66,24 +66,13 @@
                         <ul>
                             <% demandes.forEach(demande => { %>
                             <li>
-                                <div class="notif-line-col">
-                                    <a href="medecinProfile?id=<%= demande._id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                        </div>
-                                    </a>
+                                <a href="medecinProfile?id=<%= demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                aria-hidden="true"></i>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                         </div>
-                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                aria-hidden="true"></i>
-                                        </div>
+                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
                                     </div>
-                                </div>
-
+                                </a>
                             </li>
                             <% }) %>
                         </ul>
@@ -151,7 +140,8 @@
             <div class="col col-3 container-add">
                 <div class="container-header add-header">
                     <p class="add-info">N'oubliez pas d'ajouter vos informations 4 fois par jour</p>
-                    <p id="length" class="add-info">Vous avez entrez <%= length %> fois vos valeurs jusqu'à ce moment</p>
+                    <p id="length" class="add-info">Vous avez entrez <%= length %> fois vos valeurs jusqu'à ce moment
+                    </p>
                 </div>
                 <div class="container-body">
 
@@ -173,7 +163,8 @@
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-round submit" onclick="checkLength('<%= length %>')">Valider</button>
+                        <button type="submit" class="btn btn-round submit"
+                            onclick="checkLength('<%= length %>')">Valider</button>
                     </form>
                 </div>
 

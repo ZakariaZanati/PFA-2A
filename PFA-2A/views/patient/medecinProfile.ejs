@@ -42,9 +42,9 @@
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
                                         <% if(alert.alertedPatient == 0) { %>
-                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
                                         <% } else { %>
-                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <div class="notif-text"><%= alert.text %> </div>
                                         <% } %>
                                     </div>
                                 </a>
@@ -66,24 +66,13 @@
                         <ul>
                             <% demandes.forEach(demande => { %>
                             <li>
-                                <div class="notif-line-col">
-                                    <a href="medecinProfile?id=<%= demande._id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                        </div>
-                                    </a>
+                                <a href="medecinProfile?id=<%= demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                aria-hidden="true"></i>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                         </div>
-                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                aria-hidden="true"></i>
-                                        </div>
+                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
                                     </div>
-                                </div>
-
+                                </a>
                             </li>
                             <% }) %>
                         </ul>
@@ -158,9 +147,9 @@
                 </label>
                 <div class="buttons-inline">
                     <form action="/medecinProfile?id=<%= medecin._id%>&action=end" method="post">
-                        <button class="btn btn-echec" type="submit" value="Fin suivi">Fin suivi</button>
+                        <input class="btn btn-echec" type="submit" value="Fin suivi">
                     </form>
-                    <a href="medecins" class="btn">Retour</a>
+                    <a href="medecins"><input class="btn" type="submit" value="Retour"></a>
                 </div>
                 <% } else if(sentMeDemande) { %>
                 <label>
@@ -179,7 +168,7 @@
                     <span>Demande nouveau suivi envoyée</span>
                     <form action="/medecinProfile?id=<%= medecin._id%>&action=annuler" method="post">
                         <input class="btn btn-success" type="submit" value="Annuler la demande">
-                        <a href="medecins" class="btn btn-echec">Retour</a>
+                        <a href="medecins"><input class="btn btn-echec" type="submit" value="Retour"></a>
                     </form>
                 </label>
                 <% } else { %>
@@ -188,7 +177,7 @@
                         <button class="btn btn-success" type="submit" value="Envoyer la demande">Envoyer la
                             demande</button>
                     </form>
-                    <a href="medecins" class="btn btn-echec">Retour</a>
+                    <a href="medecins"><input class="btn btn-echec" type="submit" value="Retour"></a>
                 </div>
                 <% } %>
             </div>

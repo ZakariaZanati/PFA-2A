@@ -42,9 +42,9 @@
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
                                         <% if(alert.alertedPatient == 0) { %>
-                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
                                         <% } else { %>
-                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <div class="notif-text"><%= alert.text %> </div>
                                         <% } %>
                                     </div>
                                 </a>
@@ -66,24 +66,13 @@
                         <ul>
                             <% user.demandes.forEach(demande => { %>
                             <li>
-                                <div class="notif-line-col">
-                                    <a href="medecinProfile?id=<%= demande._id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                        </div>
-                                    </a>
+                                <a href="medecinProfile?id=<%= demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                aria-hidden="true"></i>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                         </div>
-                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                aria-hidden="true"></i>
-                                        </div>
+                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
                                     </div>
-                                </div>
-
+                                </a>
                             </li>
                             <% }) %>
                         </ul>
@@ -163,15 +152,15 @@
                     <span>Groupe sanguin</span>
                     <input class="login-input" id="sang" type="text" value="<%= user.groupeSanguin %>" readonly>
                 </label>
-                
+
                 <label>
                     <span>Maladies</span>
                     <% if(user.maladies[0]==null) { %>
-                        <h3 id="pasMaladies">Pas de maladies</h3>
+                    <h3 id="pasMaladies">Pas de maladies</h3>
                     <% } else { %>
-                        <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
-                    <% } %> 
-                    
+                    <input id="show" type="button" value="afficher" onclick="showMaladies(true)">
+                    <% } %>
+
                     <input id="hide" type="button" value="cacher" onclick="showMaladies(false)" style="display: none;">
                     <input id="add" type="button" value="ajouter" onclick="addField()" style="display: none;">
                     <div id="maladies">
@@ -190,14 +179,14 @@
                     <div class="buttons-inline">
                         <a class="btn btn-success" href='medecins?filtre=current'>Consulter</a>
                     </div>
-                </label> 
+                </label>
                 <label class="noEditable">
                     <span>Mes anciens medecins</span>
                     <div class="buttons-inline">
                         <a class="btn btn-success" href='medecins?filtre=old'>Consulter</a>
                     </div>
-                </label>            
-                <div class="buttons-inline no-display" id="saveDiv" >
+                </label>
+                <div class="buttons-inline no-display" id="saveDiv">
                     <button class="btn btn-success" type="submit">Sauvegarder</button>
                     <a class="btn btn-echec" href="myProfileUser">Annuler</a>
                 </div>
@@ -206,7 +195,7 @@
         <div class="container-body">
             <div class="buttons-inline margin" id="editDiv">
                 <a class="btn btn-round" href='myProfileUser?action=edit'>Modifer le profil</a>
-            </div> 
+            </div>
         </div>
     </div>
 

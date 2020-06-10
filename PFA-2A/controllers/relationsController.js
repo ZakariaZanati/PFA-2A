@@ -214,7 +214,7 @@ module.exports = function (app, mongoose) {
                             var villes = [];
                             var pays = [];
                             medecin.utilisateurs.forEach(user => {
-                                if(user.finSuivi == null) _users.push(user.utilisateur);
+                                if (user.finSuivi == null) _users.push(user.utilisateur);
                             })
                             var date = new Date(new Date().toISOString().split('T')[0]);
                             users.forEach(user => {
@@ -234,10 +234,10 @@ module.exports = function (app, mongoose) {
                                     villes.push(user.ville);
                                 }
                             })
-                            Alert.find({utilisateur: {"$in" : _users}, date: date})
-                            .then(alerts => {
-                                res.render('demandes', {alerts: alerts, villes: villes, pays: pays, maladies: maladies, medecin: medecin});
-                            })
+                            Alert.find({ utilisateur: { "$in": _users }, date: date })
+                                .then(alerts => {
+                                    res.render('demandes', { alerts: alerts, villes: villes, pays: pays, maladies: maladies, medecin: medecin });
+                                })
                         })
                 })
         }
@@ -384,22 +384,22 @@ module.exports = function (app, mongoose) {
             User.findById(id)
                 .then((user) => {
                     Medecin.findById(req.userInfos.userId)
-                    .populate('demandes')
+                        .populate('demandes')
                         .then((medecin) => {
                             var date = new Date(new Date().toISOString().split('T')[0]);
-                            var users = []; 
+                            var users = [];
                             var isPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi == null);
-                            var sentMeDemande = medecin.demandes.find(demande => demande == id);
+                            var sentMeDemande = medecin.demandes.find(demande => demande.id == id);
                             var sentDemande = user.demandes.find(demande => demande == medecin.id);
                             var oldPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi != null);
                             medecin.utilisateurs.forEach(user => {
-                                if(user.finSuivi == null) users.push(user.utilisateur);
+                                if (user.finSuivi == null) users.push(user.utilisateur);
                             })
-                            Alert.find({utilisateur: {"$in" : users}, date: date})
-                            .populate('utilisateur')
-                            .then(alerts => {
-                                res.render('userProfile', {medecin: medecin, alerts: alerts, user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
-                            })
+                            Alert.find({ utilisateur: { "$in": users }, date: date })
+                                .populate('utilisateur')
+                                .then(alerts => {
+                                    res.render('userProfile', { medecin: medecin, alerts: alerts, user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                                })
                         });
                 })
         }
@@ -460,16 +460,16 @@ module.exports = function (app, mongoose) {
                                 else {
                                     oldPatients.push(user);
                                 }
-                            }) 
-                            
+                            })
+
                             var alertUsers = [];
                             currentPatients.forEach(element => alertUsers.push(element.utilisateur._id));
                             var date = new Date(new Date().toISOString().split('T')[0]);
-                            Alert.find({utilisateur: {"$in" : alertUsers}, date: date})
-                            .populate('utilisateur')
-                            .then(alerts => {
-                                res.render('patients', {alerts: alerts, medecin: medecin, villes: villes, pays: pays, maladies: maladies, allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients });
-                            })
+                            Alert.find({ utilisateur: { "$in": alertUsers }, date: date })
+                                .populate('utilisateur')
+                                .then(alerts => {
+                                    res.render('patients', { alerts: alerts, medecin: medecin, villes: villes, pays: pays, maladies: maladies, allPatients: users, oldPatients: oldPatients, currentPatients: currentPatients });
+                                })
                         })
                 })
         }

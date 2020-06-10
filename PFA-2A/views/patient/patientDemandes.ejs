@@ -42,9 +42,9 @@
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
                                         <% if(alert.alertedPatient == 0) { %>
-                                            <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                        <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
                                         <% } else { %>
-                                            <div class="notif-text"><%= alert.text %> </div>
+                                        <div class="notif-text"><%= alert.text %> </div>
                                         <% } %>
                                     </div>
                                 </a>
@@ -66,15 +66,15 @@
                         <ul>
                             <% demandes.forEach(demande => { %>
                             <li>
-                                <div class="notif-line-col">
-                                    <a href="medecinProfile?id=<%= demande._id %>">
-                                        <div class="notif-line">
-                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                        </div>
-                                    </a>
+                                <!-- <div class="notif-line-col"> -->
+                                <a href="medecinProfile?id=<%= demande._id %>">
                                     <div class="notif-line">
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                    </div>
+                                </a>
+                                <!-- <div class="notif-line">
                                         <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
                                                 aria-hidden="true"></i>
                                         </div>
@@ -82,7 +82,7 @@
                                                 aria-hidden="true"></i>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                             </li>
                             <% }) %>
