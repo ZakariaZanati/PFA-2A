@@ -274,9 +274,7 @@ module.exports = function (app , mongoose) {
             if(req.query.id != req.userInfos.userId && req.query.id != null) {
                 res.redirect('patientHome')
             }
-            else if(req.query.id == req.userInfos.userId && req.query.id != null) {
-                res.redirect('statistics')
-            }
+            
             else {
                 Alert.find({utilisateur: req.userInfos.userId})
                 .then((alerts) => {
@@ -291,7 +289,11 @@ module.exports = function (app , mongoose) {
                         });
                         Prelevements.find({utilisateur: req.userInfos.userId})
                         .then(prelevements => {
-                            res.render('statistics', {prelevements: prelevements, alerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes});
+                            Statistics.find({utilisateur: req.userInfos.userId})
+                            .then(statistics=>{
+                                res.render('statistics', {prelevements: prelevements, alerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes,statistics:statistics});
+                            })
+                            
                         })
                     })
                 })
@@ -320,7 +322,11 @@ module.exports = function (app , mongoose) {
                             if(estPatient) {
                                 Prelevements.find({utilisateur: patientId})
                                 .then((prelevements)=>{
-                                    res.render('statistics', {medecin, alerts: alerts, utilisateur: user, prelevements: prelevements, estPatient: false}); 
+                                    Statistics.find({utilisateur: patientId})
+                                    .then(statistics=>{
+                                        res.render('statistics', {medecin, alerts: alerts, utilisateur: user, prelevements: prelevements, estPatient: false,statistics:statistics});
+                                    })
+                                    
                                 });
                             }
                             else {
@@ -338,5 +344,7 @@ module.exports = function (app , mongoose) {
         }
         res.render('statistics', {hello: "hello"});
     });
+
+
 
 }
