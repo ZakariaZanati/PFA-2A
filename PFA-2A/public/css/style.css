@@ -30,6 +30,7 @@ body {
     border: 5px solid #efefef;
 }
 .container-body {
+    position: relative;
     text-align: center;
     overflow-x: auto;   
 }
@@ -53,6 +54,11 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+.login-img-logo{
+    height: 20vh;
+    /* border: .25rem solid #0082e6; */
+    border-radius: 1em;
 }
 
 .text-header{
@@ -80,11 +86,14 @@ body {
     height: 100%;
 }
 
-.login-container img {
+.login-container .login-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: -150px;
+   
+}
+.auth-img{
+    object-position: -7rem;
 }
 
 img {
@@ -92,8 +101,10 @@ img {
 }
 
 .img{
+    position: sticky;
+    top:0;
     width: 40%;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 h1{
@@ -134,11 +145,11 @@ p{
 }
 
 .col-2 {
-    width: 50%;
+    width: 45%;
 }
 
 .col-3{
-    width: 75%;
+    width: 70%;
 }
 
 .col-bg{
@@ -253,6 +264,9 @@ text-decoration: underline;
     html{
         font-size: .9rem;
     }
+    .img{
+        position: relative;
+    }
     .columns{
         flex-direction: column;
         align-items: center;
@@ -263,11 +277,12 @@ text-decoration: underline;
     .container {
         width: 100%;
     }
-    .login-container img {
+    .login-container .login-img {
         height: 100%;
         width: 100%;
         object-fit: cover;
         object-position: left;
+    
     }
     .img{
         width: 100%;
@@ -284,14 +299,20 @@ text-decoration: underline;
         font-size: 4.5vw;
     }    
 }
+.ham-logo{
+    display: flex;
+    justify-content: flex-start;
+}
 
 /* NAVIGATION BAR*/
 
 nav{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     position: sticky;
     top: 0;
+    height: 5em;
     background: #f8f8f8;
     width: 100%;
     z-index: 10;
@@ -299,18 +320,15 @@ nav{
     -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
     box-shadow: 0 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
-#navPatient,#navMed{
+/* #navPatient,#navMed{
     position: sticky;
     z-index: 2;
     top: 0;
-}
+} */
 
-label.logo {
-    color : #143774;
-    font-size: 2rem;
-    line-height: 4rem;
+.logo{
     margin: 0 1em;
-    font-weight: bold;
+    height: 4em;
 }
 .nav-index{
     padding: 0 1em;
@@ -318,6 +336,7 @@ label.logo {
 
 nav ul li {
     display: inline-block;
+    height: 100%;
     line-height: 3rem;
     font-weight: 700;
 }
@@ -333,10 +352,12 @@ nav ul li a {
     color:#143774;
     float: right;
     line-height: 4rem;
-    margin-right: 1.5em;
+    margin-right: .5em;
     cursor: pointer;
     display: none;
 }
+
+
 
 .param ul{
     display: flex;
@@ -351,6 +372,7 @@ nav ul li a {
     color: #0082e6;
 }
 .par li:hover{
+cursor: pointer;
 background-color: #d3d1d1;
 }
 .active {
@@ -358,7 +380,7 @@ background-color: #d3d1d1;
     border-radius: 3px;
 }
 .param a{
-    padding:1.5em 1.1em;
+    padding:1em;
 }
 
 nav li:hover{
@@ -377,14 +399,13 @@ nav li:hover{
     position: relative;
     width: 100%;
     height: 100%;
-    padding-top:.5em;
     margin: 0 .3em;
     border-radius: .5em;
 }
 .notif {
     position: absolute;
-    margin-top:.7em;
-    margin-right: .7em;
+    margin-top:.4em;
+    margin-right: .4em;
     padding: .1em .3em;
     top: 0;
     right: 0;
@@ -397,7 +418,7 @@ nav li:hover{
     z-index: 2;
     font-size: .8rem;
     position: absolute;
-    top: 4em;
+    top: 5em;
     right: 0;
     background-color: rgba(0, 0, 0, 0.4);
     padding: .5em 1em;
@@ -440,7 +461,7 @@ nav .desc{
     min-width:300px;
     width: fit-content;
     max-height: 60vh;
-    top: 4em;
+    top: 5em;
     right: 0;
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -493,8 +514,9 @@ nav .desc{
     background-color: #efefef;
 }
 .nav-items li {
-    padding: .5em 0;
+    padding: 0;
 }
+
 .notif-img{
    margin-right: 2em;
 }
@@ -506,15 +528,17 @@ nav .desc{
     }
     .checkbtn {
         display: block;
-        font-size: 3vw;
-        
+        font-size: 3vw;        
     }
+
     .nav-items .active {
         border-bottom: none;
         border-radius: 3px;
         background-color: #143774;
     }
-     
+    .logo{
+        margin: 0;
+    }
     nav li:hover{
         background-color: #efefef;
     }
@@ -579,9 +603,7 @@ nav .desc{
     #check:checked  ~ .nav-items {
         left: 0
     }
-    #check:checked  ~ .nav-overlay {
-        left: 0;
-    } 
+
     .notif-div{
         min-width: auto;
         width: 100%;
@@ -923,16 +945,19 @@ button{
 }
 .filter-check{
     display: flex;
+    align-items: center;
     font-family: 'Nunito', sans-serif;
     padding:.9em;
 }
 
 
+
 .filter-check label{
-    font-size: 1.5em;
+    font-size: 1.7em;
     padding: 0;
     margin: 0 .5em;
 }
+
 .filter-check label input{
     display: none;
 }
@@ -983,7 +1008,7 @@ i:hover{
         font-size: 1em;
     }
 
-    .table, .table tbody, .table tr, .table td{
+    .table, .table tbody, .table tr,.table td{
         display: block;
         width: 100%;
         font-size:2.5vw;      
@@ -1037,6 +1062,9 @@ i:hover{
         display: flex;
         align-items: center;
     }
+    .table .no-display{
+        display: none;
+    }
 }
 /* PROFIL */
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -1046,9 +1074,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 1rem;
     border-width: thin;
     }
-
-.profil {
-    padding: .5em 4em;
+.container-profil{
+    padding: 0 2em;
+}
+.profil label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.profil label span{
+    padding-right: 1em;
+    width: 30%;
+    font-size: .8rem;
+}
+.profil label input {
+    text-align: left;
+    font-size: .9rem;
 }
 
 
@@ -1061,8 +1102,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 1rem;
     font-weight: 700;
 }
-.no-display{
+.edit-profil-div{
     display: none;
+}
+.div-maladies{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.div-maladies span {
+    background-color: red;
 }
 
 
@@ -1170,4 +1219,37 @@ and (max-device-height: 400px){
 
 .no-margin{
     margin: 0;
+}
+/*CHART*/
+.chart-select {
+    position: relative;
+    display: flex;
+    padding: .3em .5em;
+    min-height: fit-content;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+#charSelect{
+width: fit-content;
+}
+#canvas{
+    display: none;
+}
+.no-display{
+    display: none;
+}
+canvas{
+    margin: 0 auto;
+    }
+
+@media(max-width: 900px ), (orientation: portrait) {
+    .chart-select {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    } 
+ 
+    #canvas{
+        order:2;
+    }    
 }

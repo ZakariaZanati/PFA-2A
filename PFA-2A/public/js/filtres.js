@@ -181,7 +181,6 @@ function addDate() {
     }
     searchValeur();
 }
-
 function selectChoice() {
     var idNames = ["temperature", "tensionSys", "tensionDia", "glucose", "oxygen"];
     var inputs = [];
@@ -195,7 +194,7 @@ function selectChoice() {
         var tdBody = document.getElementsByClassName(idNames[i] + "Body");
         var tdHead = document.getElementsByClassName(idNames[i] + "Head");
         if (inputs[i].checked) {
-            inputs[i].parentElement.parentElement.style.backgroundColor = "#34b3a0"
+            inputs[i].parentElement.parentElement.style.backgroundColor = "#34b3a0";
             for (var j = 0; j < tdHead.length; j++) {
                 tdHead[j].style.display = "";
             }
@@ -204,7 +203,7 @@ function selectChoice() {
             }
         }
         else {
-            inputs[i].parentElement.parentElement.style.backgroundColor = "#d87474"
+            inputs[i].parentElement.parentElement.style.backgroundColor = "#d87474";
             for (var j = 0; j < tdHead.length; j++) {
                 tdHead[j].style.display = "none";
             }

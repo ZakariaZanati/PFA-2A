@@ -16,14 +16,12 @@
     <div class="login-container">
         <div class="columns">
             <div class="img">
-                <img src="/public/images/happy.jpg" id="imginscription">
+                <img class="login-img reg-img" src="/public/images/register.jpg" id="imginscription">
             </div>
 
             <div class="form-cont" action="/registration" method="POST">
                 <div class="form">
-                    <h1 class="logo-img"><a href="/">
-                            LOGO
-                        </a></h1>
+                    <a href="/"><img class="login-img-logo" src="/public/images/logoPFA.png"></a>
                     <h1>S'inscrire</h1>
                     <p>Bienvenue avec nous</p>
                     <p>Vous avez déjà un compte? <a class="link" href="login">S'identifier</a></p>
@@ -73,11 +71,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
                         <label>
                             <span>Pays</span>
                             <div class="pd-flag-select" onclick="cities()">
@@ -130,7 +123,7 @@
                         <Label id="maladies">
                             <div class="buttons-inline">
                                 <span>Ajouter d'autres maladies</span>
-                                <a class="btn-icon btn-success" onclick="addField()"><i class="fas fa-plus"></i></a>
+                                <a class="btn-icon btn-success " onclick="addField()"><i class="fas fa-plus"></i></a>
                             </div>
                         </Label>
                         <label>
@@ -179,7 +172,19 @@
                             </label>
                             <label>
                                 <span>Spécialité</span>
-                                <input class="login-medecin-input" type="text" name="specialite" required>
+                                <select class="login-medecin-input" type="text" name="specialite">
+                                    <option value="Génénéraliste">Généraliste</option>
+                                    <option value="La cardiologie">La cardiologie</option>
+                                    <option value='La pneumologie'>La pneumologie</option>
+                                    <option value="L'endocrinologie">L'endocrinologie</option>
+                                    <option value="La dermatologie">La dermatologie</option>
+                                    <option value="La gastro-entérologie">La gastro-entérologie</option>
+                                    <option value="La néphrologie">La néphrologie</option>
+                                    <option value="La neurologie">La neurologie</option>
+                                    <option value="La pédiatrie">La pédiatrie</option>
+                                    <option value="La gynécologie">La gynécologie</option>
+                                    <option value="Chirurgies">Chirurgies</option>
+                                </select>
                             </label>
                             <label>
                                 <span>Adresse du lieu de travail</span>

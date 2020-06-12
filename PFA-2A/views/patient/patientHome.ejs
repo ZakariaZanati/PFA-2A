@@ -11,11 +11,13 @@
 
 <body>
     <nav class="navigation-bar">
-
-        <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo"><a href="patientHome">LOGO</a></label>
-
+        <div class="ham-logo">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+            <div class="log">
+                <a href="patientHome"><img src="/public/images/logoPFA.png" class="logo"></a>
+            </div>
+        </div>
         <ul class="nav-items">
             <li><a href="patientValues">Santé</a></li>
             <li><a href="statistics">Statistiques</a></li>
@@ -98,7 +100,7 @@
     <div class="container-home">
         <div class="container-header container-img-header">
             <div class="overlay"></div>
-            <img src="public/images/happy.jpg" class="img-header">
+            <img src="public/images/register.jpg" class="img-header">
             <h1 class="text-header">VOTRE SANTE, VOTRE PRIORITE</h1>
         </div>
         <div class="bg-modal" id="modal">
@@ -177,8 +179,7 @@
                 <div class="container-body">
                     <p class="alert-para">
                         Vous recevez une alerte quand la valeur d'une mesure ajoutée est anormale et cette alerte va
-                        être
-                        envoyer automatiquement à votre médecin.
+                        être envoyer automatiquement à votre médecin.
                     </p>
                     <p class="alert-para">Pour consulter vos alertes cliquez ici</p>
 
@@ -190,7 +191,7 @@
     </div>
 
     <script src="public/js/alerts.js"></script>
-    
+
 </body>
 
 

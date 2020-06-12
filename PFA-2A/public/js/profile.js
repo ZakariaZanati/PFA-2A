@@ -26,10 +26,10 @@ if (document.getElementById("sang") != null) {
 if (param != null) {
     editBtn.style.display = "none";
     saveBtn.style.display = "block";
-    if(document.getElementById("pasMaladies")) {
+    if (document.getElementById("pasMaladies")) {
         document.getElementById("pasMaladies").style.display = "none"
     }
-    
+
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].readOnly = false;
     }
@@ -52,7 +52,7 @@ if (param != null) {
     }
 }
 else {
-    if(document.getElementById("pasMaladies")) {
+    if (document.getElementById("pasMaladies")) {
         document.getElementById("pasMaladies").style.display = "block"
     }
     editBtn.style.display = "block";
@@ -68,7 +68,8 @@ else {
     if (urlTab[1] == 'myProfileUser') {
         var maladies = document.getElementsByName("maladie");
         document.getElementById("add").style.display = "none";
-        document.getElementById("show").style.display = "block";
+        if (document.getElementById("show"))
+            document.getElementById("show").style.display = "block";
         for (var i = 0; i < maladies.length; i++) {
             document.getElementById(i).style.display = "none";
             maladies[i].readOnly = true;

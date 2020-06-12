@@ -49,14 +49,12 @@ if (urlTab[1] == 'registration') {
             function () {
                 document.getElementById("form-doc").style.display = "none";
                 document.getElementById("form-user").style.display = "block";
-                document.getElementById("imginscription").src = "public/images/happy.jpg";
             });
 
         document.getElementById('med').addEventListener('click',
             function () {
                 document.getElementById("form-user").style.display = "none";
                 document.getElementById("form-doc").style.display = "block";
-                document.getElementById("imginscription").src = "public/images/doctor.jpg";
             });
     }
 }
