@@ -11,22 +11,249 @@
 </head>
 
 <body>
-  <nav class="nav-index">
-    <label class="logo">LOGO</label>
-    <ul>
-      <li><a href="registration">S'inscrire</a></li>
-      <li><a href="login">S'identifier</a></li>
-    </ul>
-  </nav>
+  <div>
+    <nav class="navigation-bar">
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+        <label class="logo"><a id="logo" href="patientHome">LOGO</a></label>
+        <ul id="navPatient" class="nav-items">
+            <li><a href="patientValues">Santé</a></li>
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="patientDemandes">Demandes</a></li>
+            <li><a href="medecins">Médecins</a></li>
+            <li><a href="seuils">Seuils</a></li>
+        </ul>
+        <ul id="navMedecin" class="nav-items">
+            <li class="active"><a href="dayValues">Santé</a></li>
+            <li><a href="demandes">Demandes</a></li>
+            <li><a href="patients">Patients</a></li>
+        </ul>
+        <div class="param">
+            <ul>
+                <div class="par">
+                    <li id="li-alert">
+                        <a type="button" onclick="showAlerts()"><i class="fa fa-exclamation-triangle"
+                                aria-hidden="true"></i> </a>
+                    </li>
+                    <p class="desc" id="alert">Alertes</p>
+                    <p id="numberOfAlerts" class="notif"></p>
+                    <div id="alerts" class="notif-div" id="alert-div-items">
+                        <ul>
+                            <% if(estPatient) { %>
+                                <% alerts.forEach(alert => { %>
+                                
+                                    <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
+                                    <li>
+                                        <a href="userAlerts">
+                                            <div class="notif-line">
+                                                <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                                <% if(alert.alertedPatient == 0) { %>
+                                                    <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                                <% } else { %>
+                                                    <div class="notif-text"><%= alert.text %> </div>
+                                                <% } %>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <% } %>
+                                <% }) %>
+                            <% } else { %>
+                                <% alerts.forEach(alert => { %>
+                                
+                                    <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
+                                    <li>
+                                        <a href="userAlerts?id=<%= alert.utilisateur.id %>">
+                                            <div class="notif-line">
+                                                <div class="notif-img"><i class="fa fa-exclamation-triangle"></i></div>
+                                                <% if(!alert.alertedMedecin.some(el => el == medecin.id)) { %>
+                                                    <div name="noAlerted" class="notif-text"><%= alert.text %> </div>
+                                                <% } else { %>
+                                                    <div class="notif-text"><%= alert.text %> </div>
+                                                <% } %>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <% } %>
+                                    <% }) %>
+                            <% } %>
+                            
+                        </ul>
+                    </div>
 
+                </div>
+                <div class="par">
+                    <li id="li-notif">
+                        <a type="button" onclick="showNotifications()"><i class="fa fa-bell"
+                                aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc" id="notif">Notifications</p>
+                    <p id="numberOfNotif" class="notif"></p>
+                    <div id="notifs" class="notif-div" id="notif-div-items">
+                        <ul>
+                            <% if(!estPatient) {demandes = medecin.demandes} %>
+                            <% demandes.forEach(demande => { %>
+                            <li>
+                                <div class="notif-line-col">
+                                    <% if(estPatient) { %>
+                                        <a href="medecinProfile?id=<%= demande._id %>">
+                                            <div class="notif-line">
+                                                <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                            </div>
+                                        </a>
+                                    <%} else { %>
+                                        <a href="userProfile?id=<%= demande._id %>">
+                                            <div class="notif-line">
+                                                <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                            </div>
+                                        </a>
+                                    <% }%>
+                                    <div class="notif-line">
+                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+                <div class="par">
+                    <li id="li-profil">
+                        <a id="aProfile" href="myProfileUser"><i class="fa fa-user" aria-hidden="true"></i></a>
+                    </li>
+                    <p class="desc desc-profil" id="profil">Profil</p>
+                </div>
+            </ul>
+        </div>
+        <div class="param">
+            <div class="last-par">
+                <ul>
+                    <li id="li-dec"><a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                    <p class="desc desc-dec" id="dec">Deconnexion</p>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+</div>
+<div class="container-body">
+    <table class="table table-sortable table-5">
+        <thead>
+          <th>Année</th>
+          <th>Moyenne Temperature</th>
+          <th>Moyenne Tension systolique</th>
+          <th>Moyenne Tension diastolique</th>
+          <th>Moyenne Taux oxygen</th>
+          <th>Moyenne Taux glucose</th>
+        </thead>
+        <tbody>
+          <% statistics[0].MoyennesAnnees.forEach(stat => { %>
+            <tr>
+              <td><%= stat.annee %></td>
+              <td><%= stat.moyenneAnnee.moyenneTemperature %></td>
+              <td><%= stat.moyenneAnnee.moyenneTensionDiastolique %></td>
+              <td><%= stat.moyenneAnnee.moyenneTensionDiastolique %></td>
+              <td><%= stat.moyenneAnnee.moyenneTauxOxygen %></td>
+              <td><%= stat.moyenneAnnee.moyenneTauxGlucose %></td>
+            </tr>
+          <% }) %>
+          
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-sortable table-5">
+        <thead>
+          <th>Année</th>
+          <th>Mois</th>
+          <th>Moyenne Temperature</th>
+          <th>Moyenne Tension systolique</th>
+          <th>Moyenne Tension diastolique</th>
+          <th>Moyenne Taux oxygen</th>
+          <th>Moyenne Taux glucose</th>
+        </thead>
+        <tbody>
+          <% statistics[0].MoyennesAnnees.forEach(stat => { %>
+            <tr>
+              <td><%= stat.annee %></td>
+              <% stat.moyennesMois.forEach(statMois => { %>
+                <td><%= statMois.moi %></td>
+                <td><%= statMois.moyenneTemperature %></td>
+                <td><%= statMois.moyenneTensionDiastolique %></td>
+                <td><%= statMois.moyenneTensionDiastolique %></td>
+                <td><%= statMois.moyenneTauxOxygen %></td>
+                <td><%= statMois.moyenneTauxGlucose %></td>
+              <% }) %>  
+            </tr>
+          <% }) %>
+          
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-sortable table-5">
+        <thead>
+          <th>Jour</th>
+          <th>Moyenne Temperature</th>
+          <th>Moyenne Tension systolique</th>
+          <th>Moyenne Tension diastolique</th>
+          <th>Moyenne Taux oxygen</th>
+          <th>Moyenne Taux glucose</th>
+        </thead>
+        <tbody>
+          <% statistics[0].MoyennesJours.forEach(stat => { %>
+            <tr>
+                <td><%= stat.jour.toISOString().split('T')[0] %></td>
+                <td><%= stat.moyennesJour[0] %></td>   
+                <td><%= stat.moyennesJour[1] %></td>
+                <td><%= stat.moyennesJour[2] %></td>
+                <td><%= stat.moyennesJour[3] %></td>
+                <td><%= stat.moyennesJour[4] %></td>
+            </tr>
+          <% }) %>
+          
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-sortable table-5">
+        <thead>
+          <th>Debut Semaine</th>
+          <th>Fin Semaine</th>
+          <th>Moyenne Temperature</th>
+          <th>Moyenne Tension systolique</th>
+          <th>Moyenne Tension diastolique</th>
+          <th>Moyenne Taux oxygen</th>
+          <th>Moyenne Taux glucose</th>
+        </thead>
+        <tbody>
+          <% statistics[0].MoyennesSemaines.forEach(stat => { %>
+            <tr>
+                <td><%= stat.debutSemaine.toISOString().split('T')[0] %></td>
+                <td><%= stat.finSemaine.toISOString().split('T')[0] %></td>
+                <td><%= stat.moyenneTemperature %></td>
+                <td><%= stat.moyenneTensionDiastolique %></td>
+                <td><%= stat.moyenneTensionDiastolique %></td>
+                <td><%= stat.moyenneTauxOxygen %></td>
+                <td><%= stat.moyenneTauxGlucose %></td>
+            </tr>
+          <% }) %>
+          
+        </tbody>
+    </table>
+</div>
   
 
 </body>
-<footer>
-  <div class="footer">
-    <p>&copy; Copyright Ensias 2020</p>
-    <h1>LOGO</h1>
-  </div>
-</footer>
+<script src="public/js/alerts.js"></script>
+<script src="public/js/userNav.js"></script>
 
 </html>
