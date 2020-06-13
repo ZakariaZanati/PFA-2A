@@ -12,20 +12,29 @@
 <body>
     <nav class="navigation-bar">
         <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <label class="logo"><a id="logo" href="patientHome">LOGO</a></label>
+        <div class="ham-logo">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+            <div class="log">
+                <a id="logo" href="medecinHome"><img src="/public/images/logoPFA.png" class="logo"></a>
+            </div>
+        </div>
+
         <ul id="navPatient" class="nav-items">
             <li><a href="patientValues">Santé</a></li>
-            <li><a href="#">Statistiques</a></li>
+            <li><a href="statistics">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
         </ul>
+
+
+
         <ul id="navMedecin" class="nav-items">
             <li class="active"><a href="dayValues">Santé</a></li>
             <li><a href="demandes">Demandes</a></li>
             <li><a href="patients">Patients</a></li>
         </ul>
+
         <div class="param">
             <ul>
                 <div class="par">

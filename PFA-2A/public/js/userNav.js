@@ -8,7 +8,7 @@ if (document.getElementById("h1Patient")) {
 }
 
 var profile = document.getElementById("aProfile");
-
+var home = document.getElementById("logo");
 
 var url_string = window.location.href;
 var url = new URL(url_string);
@@ -22,6 +22,7 @@ if (param === null) {
         patientH1.style.display = "block";
     }
     profile.href = "myProfileUser";
+    home.href = "patientHome";
 }
 else {
     medecinNav.style.display = "block";

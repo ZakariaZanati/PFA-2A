@@ -113,6 +113,7 @@ module.exports = function (app, mongoose) {
             }
             else {
                 Alert.find({ utilisateur: req.userInfos.userId })
+                    .sort({ date: -1, temps: -1 })
                     .then((alerts) => {
                         User.findById(req.userInfos.userId)
                             .populate('demandes')
@@ -151,6 +152,7 @@ module.exports = function (app, mongoose) {
                                         var estPatient = user.medecins.find(medecin => medecin.medecin = req.userInfos.userId && medecin.finSuivi == null);
                                         if (estPatient) {
                                             Alert.find({ utilisateur: patientId })
+                                                .sort({ date: -1, temps: -1 })
                                                 .then((userAlerts) => {
                                                     res.render('userAlerts', { medecin, alerts: alerts, utilisateur: user, userAlerts: userAlerts, estPatient: false });
                                                 });
@@ -258,14 +260,18 @@ module.exports = function (app, mongoose) {
                     User.findById(req.userInfos.userId)
                         .populate('demandes')
                         .then(user => {
-                            var _date = new Date(new Date().toISOString().split('T')[0])
-                            Prelevements.findOne({ utilisateur: req.userInfos.userId, date: _date }, (err, values) => {
-                                var length = 0;
-                                if (values) {
-                                    length = values.temperature.length;
-                                }
-                                res.render('patientHome', { demandes: user.demandes, alerts: alerts, length: length });
-                            });
+                            var _date = new Date(new Date().toISOString().split('T')[0]);
+                            Prelevements.find({ utilisateur: req.userInfos.userId })
+                                .then(prelevements => {
+                                    var length = 0;
+
+                                    if (prelevements) {
+                                        var todayValues = prelevements.find(prelevement => prelevement.date + "" == _date)
+                                        if (todayValues) length = todayValues.temperature.length;
+                                    }
+                                    res.render('patientHome', { prelevements: prelevements, demandes: user.demandes, alerts: alerts, length: length });
+
+                                });
 
                         })
                 })
@@ -293,9 +299,12 @@ module.exports = function (app, mongoose) {
                                         alert.save();
                                     }
                                 });
-                                Prelevements.find({ utilisateur: req.userInfos.userId }).sort([['date', -1]])
+                                Prelevements.find({ utilisateur: req.userInfos.userId })
                                     .then(prelevements => {
-                                        res.render('statistics', { prelevements: prelevements, alerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes });
+                                        Statistics.find({ utilisateur: req.userInfos.userId })
+                                            .then(statistics => {
+                                                res.render('statistics', { prelevements: prelevements, alerts: alerts, utilisateur: user, estPatient: true, demandes: user.demandes, statistics: statistics });
+                                            })
                                     })
                             })
                     })
@@ -324,7 +333,10 @@ module.exports = function (app, mongoose) {
                                         if (estPatient) {
                                             Prelevements.find({ utilisateur: patientId })
                                                 .then((prelevements) => {
-                                                    res.render('statistics', { medecin, alerts: alerts, utilisateur: user, prelevements: prelevements, estPatient: false });
+                                                    Statistics.find({ utilisateur: patientId })
+                                                        .then(statistics => {
+                                                            res.render('statistics', { medecin, alerts: alerts, utilisateur: user, prelevements: prelevements, estPatient: false, statistics: statistics });
+                                                        })
                                                 });
                                         }
                                         else {

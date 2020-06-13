@@ -13,9 +13,7 @@
     <nav class="navigation-bar">
 
         <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <div class="ham-logo">
-            <input type="checkbox" id="check">
             <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
             <div class="log">
                 <a href="patientHome"><img src="/public/images/logoPFA.png" class="logo"></a>
@@ -24,7 +22,7 @@
 
         <ul class="nav-items">
             <li><a href="patientValues">Santé</a></li>
-            <li><a href="#">Statistiques</a></li>
+            <li><a href="statistics">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
             <li class="active"><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
@@ -140,6 +138,7 @@
                     <input class="login-input" type="text" name="adresse" value="<%= medecin.adresse_lieu_travail %>"
                         readonly>
                 </label>
+
                 <% if(ancienMedecin && !estMedecin) { %>
                 <label>
                     <span>Date de dernier fin du suivi</span>
@@ -158,9 +157,10 @@
                     <a href="medecins"><input class="btn" type="submit" value="Retour"></a>
                 </div>
                 <% } else if(sentMeDemande) { %>
-                <label>
-                    <span>Demande de nouveau suivi</span>
-                </label>
+
+
+                <span>Demande de nouveau suivi</span>
+
                 <div class="buttons-inline">
                     <form action="/medecinProfile?id=<%= medecin._id%>&action=yes" method="post">
                         <button class="btn btn-success" type="submit" value="Accepter">Accepter</button>

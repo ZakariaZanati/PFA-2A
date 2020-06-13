@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="disabled-adaptations" content="watch">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PFA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;1,300&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="public/css/style.css" type="text/css">
+  <link rel="shortcut icon" type="image/jpg" href="public/images/doctor.jpg">
+  <link rel="stylesheet" href="/public/css/style.css" type="text/css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
   <script src="public/js/icons.js"></script>
 </head>
 
 <body>
+
   <nav class="navigation-bar">
     <input type="checkbox" id="check">
     <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-    <label class="logo"><a id="logo" href="patientHome">LOGO</a></label>
+    <a id='logo' href="patientHome"><img src="/public/images/logoPFA.png" class="logo"></a>
     <ul id="navPatient" class="nav-items">
       <li><a href="patientValues">Santé</a></li>
       <li class="active"><a href="statistics">Statistiques</a></li>
@@ -26,6 +27,7 @@
     </ul>
     <ul id="navMedecin" class="nav-items">
       <li><a href="dayValues">Santé</a></li>
+      <li class="active"><a href="Statistics">Statistiques</a></li>
       <li><a href="demandes">Demandes</a></li>
       <li><a href="patients">Patients</a></li>
     </ul>
@@ -135,197 +137,168 @@
 
   </nav>
   <div class="container-img-header container-header">
-    <!-- <div class="overlay"></div> -->
-    <!-- <img src="public/images/patient.jpg" class="img-header"> -->
+    <div class="overlay"></div>
+    <img src="public/images/patient.jpg" class="img-header">
+    <h1 class="text-header">Statistiques</h1>
+  </div>
 
+  <div class="columns">
+    <div class="col col-2 border">
+      <h1><span>Le moyen des données par jour</span></h1>
 
-    <div class="container-home">
-      <div class="container-body">
+      <div>
+        <select id="chartSelectDay">
+          <option>Mésure</option>
+          <option>Température</option>
+          <option>Tension Systolique</option>
+          <option>Tension Diastolique</option>
+          <option>Saturation O2</option>
+          <option>Glycémie</option>
+        </select>
 
-        <div class=" columns filter-bar">
-          <div class="col filter-input-div" id="dates">
-            <i class="fas fa-filter search-icon"></i>
-            <input id="dateValueMin" class="filter-input" type="date" name="dateMin" onchange="searchValeur()" required>
-
-            <a id="dateBtn" class="btn-icon btn-success" onclick="addDate()"><i id="addIc" class="fas fa-plus"></i></a>
-          </div>
-          <div class="col filter-check" id="choice" onchange="selectChoice()">
-            <div class="par btn-success">
-              <p class="desc " id="desc-temp">Température</p>
-              <label>
-                <img class="check-icon" id="temp" src="/public/icons/temperature-measure.png"
-                  onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
-                <input id="temperature" type="checkbox" checked="true" name="temperature" value="temperature">
-              </label>
-            </div>
-            <div class="par btn-success">
-              <p class="desc" id="desc-ts">Tension Systolique</p>
-              <label>
-                <img id="ts" class="check-icon" src="/public/icons/blood-presure.png" onmousemove="addDesc(this.id)"
-                  onmouseout="removeDesc(this.id)">
-                <input id="tensionSys" type="checkbox" checked="true" name="tensionSystolique"
-                  value="tensionSystolique">
-              </label>
-            </div>
-            <div class="par btn-success">
-              <label>
-                <p class="desc" id="desc-td">Tension Diastolique</p>
-                <img id="td" class="check-icon" src="/public/icons/blood-pressure-control-tool.png"
-                  onmousemove="addDesc(this.id)" onmouseout="removeDesc(this.id)">
-                <input id="tensionDia" type="checkbox" checked="true" name="tensionDiastolique"
-                  value="tensionDiastolique">
-              </label>
-            </div>
-            <div class="par btn-success">
-              <p class="desc" id="desc-ox">Oxygene</p>
-              <label>
-                <img id="ox" class="check-icon" src="/public/icons/oxygen-mask.png" onmousemove="addDesc(this.id)"
-                  onmouseout="removeDesc(this.id)">
-                <input id="oxygen" type="checkbox" checked="true" name="tauxOxygen" value="tauxOxygen">
-              </label>
-            </div>
-            <div class="par btn-success">
-              <p class="desc" id="desc-tg">Glycémie</p>
-              <label>
-                <img id="tg" class="check-icon" src="/public/icons/sugar-blood-level.png" onmousemove="addDesc(this.id)"
-                  onmouseout="removeDesc(this.id)">
-                <input id="glucose" type="checkbox" checked="true" name="tauxGlucose" value="tauxGlucose">
-              </label>
-            </div>
-
-
-
-          </div>
-        </div>
-        <div class="columns chart-select">
-          <div id="canvas" class="col col-3">
-            <canvas id="T"></canvas>
-          </div>
-          <div>
-            <select id="chartSelect">
-              <option>Graphe</option>
-              <option>Température</option>
-              <option>Tension Systolique</option>
-              <option>Tension Diastolique</option>
-              <option>Saturation O2</option>
-              <option>Glycémie</option>
-            </select>
-          </div>
-        </div>
-        <% prelevements.forEach((prelevement)=>{ 
-                var date = prelevement.date.toISOString().split('T')[0]; %>
-        <div class="content" name="<%= date %>">
-          <div class="container-header">
-            <h1 class="date-header">Les Statistiques du :
-              <span><%= date %></span> </h1>
-          </div>
-          <div class="container-body">
-            <table class="table table-sortable table-6 table-no-header">
-              <thead id="table-head">
-                <tr>
-                  <th>Heure</th>
-                  <th class="temperatureHead">Température</th>
-                  <th class="tensionSysHead">Tension systolique</th>
-                  <th class="tensionDiaHead">Tension diastolique</th>
-                  <th class="oxygenHead">Saturation 02</th>
-                  <th class="glucoseHead">Glycémie</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% for(i = 0; i < prelevement.temperature.length; i++) { 
-                                    var heure = prelevement.temperature[i].temps; %>
-                <% if(prelevement.date + "" == new Date(new Date().toISOString().split('T')[0]) &&  patient) { %>
-                <tr class="tabrow">
-                  <form action="/patientValues?heure=<%= heure %>" method="POST">
-                    <td class="no-display"><%=prelevement.date.toISOString().split('T')[0]%></td>
-                    <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
-                    <td class="temperatureBody" data-label="Température">
-                      <input class="<%= heure %>" name="temperature" value="<%= prelevement.temperature[i].valeur %>"
-                        readonly>
-                    </td>
-                    <td class="tensionSysBody" data-label="Tension systolique">
-                      <input class="<%= heure %>" name="tensionSystolique"
-                        value="<%= prelevement.tensionSystolique[i].valeur %>" readonly>
-                    </td>
-                    <td class="tensionDiaBody" data-label="Tension diastolique">
-                      <input class="<%= heure %>" name="tensionDiastolique"
-                        value="<%= prelevement.tensionDiastolique[i].valeur %>" readonly>
-                    </td>
-                    <td class="oxygenBody" data-label="Taux d'oxygène">
-                      <input class="<%= heure %>" name="tauxOxygen" value="<%= prelevement.tauxOxygen[i].valeur %>"
-                        readonly>
-                    </td>
-                    <td class="glucoseBody" data-label="Glycémie">
-                      <div>
-                        <input class="<%= heure %>" name="tauxGlucose" value="<%= prelevement.tauxGlucose[i].valeur %>"
-                          readonly>
-                        <div id="radio" class="no-display">
-                          <div class="center">
-                            <div class="radio-group">
-                              <label class="radio">
-                                <input type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun">
-                                <span>A jeun</span>
-                              </label>
-                              <label class="radio">
-                                <input type="radio" name="typeTest" id="postPrandial" value="postPrandial">
-                                <span>Post prandial</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="<%= heure %>" id="edit<%= heure %>">
-                      <a class="btn-icon" onclick="showForm('<%= heure %>')"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td class="<%= heure %>" id="valid<%= heure %>" style="display: none;">
-                      <div>
-                        <button type="submit" class="btn-icon btn-success">
-                          <i class="fas fa-check"></i>
-                        </button>
-                        <button onclick="cancel('<%= heure %>')" class="btn-icon btn-echec">
-                          <i class="fa fa-window-close" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                    </td>
-
-                  </form>
-                </tr>
-
-                <% } else {%>
-                <tr class="tabrow">
-                  <td class="no-display"><%=prelevement.date.toISOString().split('T')[0]%></td>
-                  <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
-                  <td class="temperatureBody" data-label="Température">
-                    <%= prelevement.temperature[i].valeur %></td>
-                  <td class="tensionSysBody" data-label="Tension systolique">
-                    <%= prelevement.tensionSystolique[i].valeur %></td>
-                  <td class="tensionDiaBody" data-label="Tension diastolique">
-                    <%= prelevement.tensionDiastolique[i].valeur %></td>
-                  <td class="oxygenBody" data-label="Saturation 02">
-                    <%= prelevement.tauxOxygen[i].valeur %></td>
-                  <td class="glucoseBody" data-label="Glycémie">
-                    <%= prelevement.tauxGlucose[i].valeur %></td>
-                </tr>
-                <% } %>
-                <% } %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <% }); %>
       </div>
+      <div id="canvas">
+        <canvas id="TD" width="400" height="400"></canvas>
+      </div>
+
     </div>
+
+    <div class="col col-2 border ">
+      <h1><span>Le moyen des données par mois</span></h1>
+      <div>
+        <select id="chartSelectMonth">
+          <option>Mésure</option>
+          <option>Température</option>
+          <option>Tension Systolique</option>
+          <option>Tension Diastolique</option>
+          <option>Saturation O2</option>
+          <option>Glycémie</option>
+        </select>
+
+      </div>
+      <div id="canvasMonth">
+        <canvas id="TM" width="400" height="400"></canvas>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <% prelevements.forEach((prelevement)=>{ 
+      var date = prelevement.date.toISOString().split('T')[0]; %>
+
+  <div class="container-body">
+    <table class="no-display table table-sortable table-6 table-no-header">
+      <thead id="table-head">
+        <tr>
+          <th>Heure</th>
+          <th class="temperatureHead">Température</th>
+          <th class="tensionSysHead">Tension systolique</th>
+          <th class="tensionDiaHead">Tension diastolique</th>
+          <th class="oxygenHead">Saturation 02</th>
+          <th class="glucoseHead">Glycémie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(i = 0; i < prelevement.temperature.length; i++) { 
+                          var heure = prelevement.temperature[i].temps; %>
+        <% if(prelevement.date + "" == new Date(new Date().toISOString().split('T')[0]) &&  estPatient) { %>
+        <tr class="tabrow">
+          <form action="/patientValues?heure=<%= heure %>" method="POST">
+            <td class="no-display"><%=prelevement.date.toISOString().split('T')[0]%>
+            </td>
+            <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
+            <td class="temperatureBody" data-label="Température">
+              <input class="<%= heure %>" name="temperature" value="<%= prelevement.temperature[i].valeur %>" readonly>
+            </td>
+            <td class="tensionSysBody" data-label="Tension systolique">
+              <input class="<%= heure %>" name="tensionSystolique"
+                value="<%= prelevement.tensionSystolique[i].valeur %>" readonly>
+            </td>
+            <td class="tensionDiaBody" data-label="Tension diastolique">
+              <input class="<%= heure %>" name="tensionDiastolique"
+                value="<%= prelevement.tensionDiastolique[i].valeur %>" readonly>
+            </td>
+            <td class="oxygenBody" data-label="Taux d'oxygène">
+              <input class="<%= heure %>" name="tauxOxygen" value="<%= prelevement.tauxOxygen[i].valeur %>" readonly>
+            </td>
+            <td class="glucoseBody" data-label="Glycémie">
+              <div>
+                <input class="<%= heure %>" name="tauxGlucose" value="<%= prelevement.tauxGlucose[i].valeur %>"
+                  readonly>
+                <div id="radio" class="no-display">
+                  <div class="center">
+                    <div class="radio-group">
+                      <label class="radio">
+                        <input type="radio" checked="true" name="typeTest" id="aJeun" value="aJeun">
+                        <span>A jeun</span>
+                      </label>
+                      <label class="radio">
+                        <input type="radio" name="typeTest" id="postPrandial" value="postPrandial">
+                        <span>Post prandial</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="<%= heure %>" id="edit<%= heure %>">
+              <a class="btn-icon" onclick="showForm('<%= heure %>')"><i class="fas fa-edit"></i></a>
+            </td>
+            <td class="<%= heure %>" id="valid<%= heure %>" style="display: none;">
+              <div>
+                <button type="submit" class="btn-icon btn-success">
+                  <i class="fas fa-check"></i>
+                </button>
+                <button onclick="cancel('<%= heure %>')" class="btn-icon btn-echec">
+                  <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+
+          </form>
+        </tr>
+
+        <% } else {%>
+        <tr class="tabrow">
+          <td class="no-display" data-label="Date">
+            <%=prelevement.date.toISOString().split('T')[0]%></td>
+          <td data-label="Heure"><%= prelevement.temperature[i].temps %></td>
+          <td class="temperatureBody" data-label="Température">
+            <%= prelevement.temperature[i].valeur %></td>
+          <td class="tensionSysBody" data-label="Tension systolique">
+            <%= prelevement.tensionSystolique[i].valeur %></td>
+          <td class="tensionDiaBody" data-label="Tension diastolique">
+            <%= prelevement.tensionDiastolique[i].valeur %></td>
+          <td class="oxygenBody" data-label="Saturation 02">
+            <%= prelevement.tauxOxygen[i].valeur %></td>
+          <td class="glucoseBody" data-label="Glycémie">
+            <%= prelevement.tauxGlucose[i].valeur %></td>
+        </tr>
+        <% } %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <% }); %>
+
+
+
+
 </body>
 <script src="public/js/alerts.js"></script>
 <script src="public/js/filtres.js"></script>
 <script src="public/js/form.js"></script>
 <script src="public/js/sortedTable.js"></script>
 <script src="public/js/app.js"></script>
-<script src="public/js/charts.js"></script>
 <script src="public/js/userNav.js"></script>
-
-
-
+<script src="public/js/charts.js"></script>
 
 </html>

@@ -15,11 +15,15 @@
 <body>
     <nav class="navigation-bar">
         <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
-        <a id='logo' href="patientHome"><img src="/public/images/logoPFA.png" class="logo"></a>
+        <div class="ham-logo">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+            <div class="log">
+                <a id="logo" href="medecinHome"><img src="/public/images/logoPFA.png" class="logo"></a>
+            </div>
+        </div>
         <ul id="navPatient" class="nav-items">
             <li class="active"><a href="patientValues">Santé</a></li>
-            <li><a href="#">Statistiques</a></li>
+            <li><a href="statistics">Statistiques</a></li>
             <li><a href="patientDemandes">Demandes</a></li>
             <li><a href="medecins">Médecins</a></li>
             <li><a href="seuils">Seuils</a></li>
@@ -206,8 +210,8 @@
                 </div>
             </div>
             <div class="chart-select">
-                <div id="canvas" class="col col-2">
-                    <canvas id="T"></canvas>
+                <div id="canvas" class="container-chart" style="max-height:80vh;">
+                    <canvas id="T" width="300" height="300"></canvas>
                 </div>
                 <div>
                     <select id="chartSelect">

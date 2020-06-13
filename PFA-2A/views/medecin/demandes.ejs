@@ -13,9 +13,7 @@
     <nav class="navigation-bar">
 
         <input type="checkbox" id="check">
-        <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
         <div class="ham-logo">
-            <input type="checkbox" id="check">
             <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
             <div class="log">
                 <a href="patientHome"><img src="/public/images/logoPFA.png" class="logo"></a>
@@ -168,11 +166,12 @@
                         <td data-label="Prénom"><%= demande.prenom %></td>
                         <td data-label="Pays"><%= demande.pays %></td>
                         <td data-label="Ville"><%= demande.ville %></td>
-                        <td>
-                            <input id="showOld<%= demande._id %>" type="button" value="afficher"
-                                onclick="showMaladies(true, 'Old', '<%= demande._id %>')">
-                            <input id="hideOld<%= demande._id %>" type="button" value="cacher"
-                                onclick="showMaladies(false, 'Old', '<%= demande._id %>')" style="display: none;">
+
+                        <td data-label="maladies">
+                            <i class="fa fa-eye" aria-hidden="true" id="showOld<%= demande._id %>"
+                                onclick="showMaladies(true, 'Old' , '<%= demande._id %>')"></i>
+                            <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= demande._id %>"
+                                onclick="showMaladies(false, 'Old' , '<%= demande._id %>')" style="display: none;"></i>
                             <div id="divMaladies<%= demande._id %>" style="display: none;">
                                 <% demande.maladies.forEach(maladie => { %>
                                 <%= maladie %> <br>

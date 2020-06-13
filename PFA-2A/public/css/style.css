@@ -418,7 +418,7 @@ nav li:hover{
     z-index: 2;
     font-size: .8rem;
     position: absolute;
-    top: 5em;
+    top: 3.5em;
     right: 0;
     background-color: rgba(0, 0, 0, 0.4);
     padding: .5em 1em;
@@ -461,7 +461,7 @@ nav .desc{
     min-width:300px;
     width: fit-content;
     max-height: 60vh;
-    top: 5em;
+    top: 4em;
     right: 0;
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -555,7 +555,7 @@ nav .desc{
         width: 60%;
         background: #fff;
         left:-100%;
-        top:4rem;
+        top:5rem;
         text-align: center;
         transition: all .5s;
         max-height: 85vh;
@@ -796,7 +796,7 @@ button{
         object-position: top;
     }
     .buttons-inline * {
-        font-size: .8em;
+        font-size: .9em;
     }
 }
 
@@ -926,7 +926,8 @@ button{
     font-size: 1rem;
 }
 .filter-input[type="text"] {
-    max-width: 17vw;
+    width: fit-content;
+    max-width: 20vh;
 }
 #dateValueMin, #dateValueMax {
     min-width: 20vw;
@@ -1221,6 +1222,19 @@ and (max-device-height: 400px){
     margin: 0;
 }
 /*CHART*/
+.border{
+    border: 3px solid #efefef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.border select{
+width: fit-content;
+margin-top: 1em;
+font-family: Arial, Helvetica, sans-serif;
+font-size: .8rem;
+}
 .chart-select {
     position: relative;
     display: flex;
@@ -1228,19 +1242,25 @@ and (max-device-height: 400px){
     min-height: fit-content;
     justify-content: flex-end;
     align-items: flex-start;
+    overflow-x: scroll;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-size: .8rem;
+}
+.chart-select::-webkit-scrollbar {
+    display: none;
 }
 #charSelect{
 width: fit-content;
 }
 #canvas{
     display: none;
+   
 }
 .no-display{
     display: none;
 }
-canvas{
-    margin: 0 auto;
-    }
+
 
 @media(max-width: 900px ), (orientation: portrait) {
     .chart-select {
@@ -1249,7 +1269,7 @@ canvas{
         justify-content: center;
     } 
  
-    #canvas{
+    #canvas, #canvasMonth{
         order:2;
-    }    
+    }  
 }
