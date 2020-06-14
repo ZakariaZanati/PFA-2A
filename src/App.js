@@ -41,7 +41,7 @@ class App extends Component {
     console.log("tf : " + word + " "+ this.occurences(string, word, true)/(s.length));
     return this.occurences(string, word, true)/(s.length);
   }
-
+//bonjour a toi
   idf(word){
     var inc = 1;
     for(var i = 0; i < RESPONSES.length; i++) 
@@ -67,6 +67,7 @@ class App extends Component {
     for(var i = 0; i < s1.length; i++) {
       sim = sim + this.tfidf(s1[i], string2);
     }
+    
     console.log("sim : " + sim);
     return sim;
   }
