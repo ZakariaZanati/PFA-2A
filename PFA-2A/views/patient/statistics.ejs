@@ -94,22 +94,34 @@
           <div id="notifs" class="notif-div" id="notif-div-items">
             <ul>
               <% if(!estPatient) {demandes = medecin.demandes} %>
-              <% demandes.forEach(demande => { %>
+              <% demandes.forEach(_demande => { %>
               <li>
                 <% if(estPatient) { %>
-                <a href="medecinProfile?id=<%= demande._id %>">
+                <a href="medecinProfile?id=<%= _demande.demande._id %>">
                   <div class="notif-line">
                     <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                     </div>
-                    <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                    <% if(_demande.statut == 0) { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> </div>
+                    <% } else if(_demande.statut == 1) { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a accepté votre demande </div>
+                    <% } else { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a refusé votre demande </div>
+                    <% }%>
                   </div>
                 </a>
                 <%} else { %>
-                <a href="userProfile?id=<%= demande._id %>">
+                <a href="userProfile?id=<%= _demande.demande._id %>">
                   <div class="notif-line">
                     <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                     </div>
-                    <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                    <% if(_demande.statut == 0) { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> </div>
+                    <% } else if(_demande.statut == 1) { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a accepté votre demande </div>
+                    <% } else { %>
+                      <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a refusé votre demande </div>
+                    <% } %>
                   </div>
                 </a>
                 <% }%>

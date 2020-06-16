@@ -69,16 +69,22 @@
                     <p id="numberOfNotif" class="notif"></p>
                     <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <% demandes.forEach(demande => { %>
-                            <li>
-                                <a href="medecinProfile?id=<%= demande._id %>">
-                                    <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                            <% demandes.forEach(_demande => { %>
+                                <li>
+                                    <a href="medecinProfile?id=<%= _demande.demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <% if(_demande.statut == 0) { %>
+                                                <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> </div>
+                                              <% } else if(_demande.statut == 1) { %>
+                                                <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a accepté votre demande </div>
+                                              <% } else { %>
+                                                <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a refusé votre demande </div>
+                                              <% }%>
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                    </div>
-                                </a>
-                            </li>
+                                    </a>
+                                </li>
                             <% }) %>
                         </ul>
                     </div>

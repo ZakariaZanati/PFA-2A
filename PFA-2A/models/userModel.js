@@ -18,9 +18,16 @@ var utilisateurSchema = new Schema({
     maladies: [String],
     demandes: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "medecin",
-            default : null
+            demande: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "medecin",
+                default : null
+            },
+            statut : {
+                type: Number,
+                default: 0
+            }
+            
         }
     ],
     medecins: [

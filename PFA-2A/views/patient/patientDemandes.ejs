@@ -68,27 +68,22 @@
                     <p id="numberOfNotif" class="notif"></p>
                     <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <% demandes.forEach(demande => { %>
-                            <li>
-                                <!-- <div class="notif-line-col"> -->
-                                <a href="medecinProfile?id=<%= demande._id %>">
-                                    <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                            <% demandes.forEach(_demande => { %>
+                                <li>
+                                    <a href="medecinProfile?id=<%= _demande.demande._id %>">
+                                        <div class="notif-line">
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <% if(_demande.statut == 0) { %>
+                                                <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> </div>
+                                            <% } else if(_demande.statut == 1) { %>
+                                            <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a accepté votre demande </div>
+                                            <% } else { %>
+                                            <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a refusé votre demande </div>
+                                            <% }%>
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                    </div>
-                                </a>
-                                <!-- <div class="notif-line">
-                                        <div class="notif-img"><i class="btn-icon btn-success fa fa-check"
-                                                aria-hidden="true"></i>
-                                        </div>
-                                        <div class="notif-img"><i class="btn-icon btn-echec fa fa-times"
-                                                aria-hidden="true"></i>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                            </li>
+                                    </a>
+                                </li>
                             <% }) %>
                         </ul>
                     </div>
@@ -168,14 +163,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% demandes.forEach((demande)=>{ %>
+                    <% demandes.forEach((_demande)=>{ %>
                     <tr>
-                        <td data-label="Nom"><%= demande.nom %></td>
-                        <td data-label="Prénom"><%= demande.prenom %></td>
-                        <td data-label="Pays"><%= demande.pays %></td>
-                        <td data-label="Ville"><%= demande.ville %></td>
-                        <td data-label="Spécialité"><%= demande.specialite %></td>
-                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= demande._id %>'>Consulter</a>
+                        <td data-label="Nom"><%= _demande.demande.nom %></td>
+                        <td data-label="Prénom"><%= _demande.demande.prenom %></td>
+                        <td data-label="Pays"><%= _demande.demande.pays %></td>
+                        <td data-label="Ville"><%= _demande.demande.ville %></td>
+                        <td data-label="Spécialité"><%= _demande.demande.specialite %></td>
+                        <td data-label="Profil"><a class="btn" href='medecinProfile?id=<%= _demande.demande._id %>'>Consulter</a>
                         </td>
                     </tr>
                     <% }); %>

@@ -68,14 +68,20 @@
                     <p id="numberOfNotif" class="notif"></p>
                     <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <% medecin.demandes.forEach(demande => { %>
+                            <% medecin.demandes.forEach(_demande => { %>
                             <li>
 
-                                <a href="userProfile?id=<%= demande._id %>">
+                                <a href="userProfile?id=<%= _demande.demande._id %>">
                                     <div class="notif-line">
                                         <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        <% if(_demande.statut == 0) { %>
+                                            <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> </div>
+                                          <% } else if(_demande.statut == 1) { %>
+                                            <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a accepté votre demande </div>
+                                          <% } else { %>
+                                            <div class="notif-text"><%= _demande.demande.nom %> <%= _demande.demande.prenom %> a refusé votre demande </div>
+                                          <% }%>
                                     </div>
                                 </a>
 
@@ -160,25 +166,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% medecin.demandes.forEach((demande)=>{ %>
+                    <% medecin.demandes.forEach((_demande)=>{ %>
                     <tr>
-                        <td data-label="Nom"><%= demande.nom %></td>
-                        <td data-label="Prénom"><%= demande.prenom %></td>
-                        <td data-label="Pays"><%= demande.pays %></td>
-                        <td data-label="Ville"><%= demande.ville %></td>
+                        <td data-label="Nom"><%= _demande.demande.nom %></td>
+                        <td data-label="Prénom"><%= _demande.demande.prenom %></td>
+                        <td data-label="Pays"><%= _demande.demande.pays %></td>
+                        <td data-label="Ville"><%= _demande.demande.ville %></td>
 
                         <td data-label="maladies">
-                            <i class="fa fa-eye" aria-hidden="true" id="showOld<%= demande._id %>"
-                                onclick="showMaladies(true, 'Old' , '<%= demande._id %>')"></i>
-                            <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= demande._id %>"
-                                onclick="showMaladies(false, 'Old' , '<%= demande._id %>')" style="display: none;"></i>
-                            <div id="divMaladies<%= demande._id %>" style="display: none;">
-                                <% demande.maladies.forEach(maladie => { %>
+                            <i class="fa fa-eye" aria-hidden="true" id="showOld<%= _demande.demande._id %>"
+                                onclick="showMaladies(true, 'Old' , '<%= _demande.demande._id %>')"></i>
+                            <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= _demande.demande._id %>"
+                                onclick="showMaladies(false, 'Old' , '<%= _demande.demande._id %>')" style="display: none;"></i>
+                            <div id="divMaladies<%= _demande.demande._id %>" style="display: none;">
+                                <% _demande.demande.maladies.forEach(maladie => { %>
                                 <%= maladie %> <br>
                                 <% }) %>
                             </div>
                         </td>
-                        <td data-label="Profil"><a class="btn" href='userProfile?id=<%= demande._id %>'>Consulter</a>
+                        <td data-label="Profil"><a class="btn" href='userProfile?id=<%= _demande.demande._id %>'>Consulter</a>
                         </td>
                     </tr>
                     <% }); %>
