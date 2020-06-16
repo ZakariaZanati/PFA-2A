@@ -37,6 +37,12 @@
                     <p id="numberOfAlerts" class="notif"></p>
                     <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
+                            <% if(alerts[0]==null) {%>
+
+                            <div class="notif-none">Vous n'avez aucune alertes récentes
+                            </div>
+
+                            <% } %>
                             <% alerts.forEach(alert => { %>
 
                             <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"" ) { %>
@@ -67,25 +73,45 @@
                     <p class="desc" id="notif">Notifications</p>
                     <p id="numberOfNotif" class="notif"></p>
                     <div id="notifs" class="notif-div" id="notif-div-items">
-                        <ul>
-                            <% medecin.demandes.forEach(demande => { %>
-                            <li>
 
-                                <a href="userProfile?id=<%= demande._id %>">
+                        <ul>
+                            <% if(medecin.demandes[0]==null) {%>
+
+                            <div class="notif-none">vous n'avez aucune notification
+                            </div>
+
+                            <% } %>
+                            <% medecin.demandes.forEach(_demande => { %>
+                            <li>
+                                <a href="userProfile?id=<%= _demande.demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+
+
+                                        <% if(_demande.statut == 0) { %>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i></div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> vous a envoyé une demande
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        <% } else if(_demande.statut == 1) { %>
+                                        <div class="notif-img"><i class="fa fa-check success" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> a accepté votre demande </div>
+                                        <% } else { %>
+                                        <div class="notif-img"><i class="fa fa-times" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> a refusé votre demande </div>
+                                        <% }%>
                                     </div>
                                 </a>
-
-
-
                             </li>
                             <% }) %>
+
                         </ul>
                     </div>
                 </div>
+
                 <div class="par">
                     <li id="li-profil">
                         <a id="aProfile" href="myProfileMedecin"><i class="fa fa-user" aria-hidden="true"></i></a>
@@ -149,7 +175,7 @@
             </div>
         </div>
         <div class="container container-body">
-            <div class='table-div'>
+            <div class="table-div">
                 <table id="demandes" class="table table-sortable table-6">
                     <thead>
                         <tr>
@@ -161,27 +187,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% medecin.demandes.forEach((demande)=>{ %>
+                        <% medecin.demandes.forEach((_demande)=>{ %>
                         <tr>
-                            <td data-label="Nom"><%= demande.nom %></td>
-                            <td data-label="Prénom"><%= demande.prenom %></td>
-                            <td data-label="Pays"><%= demande.pays %></td>
-                            <td data-label="Ville"><%= demande.ville %></td>
+                            <td data-label="Nom"><%= _demande.demande.nom %></td>
+                            <td data-label="Prénom"><%= _demande.demande.prenom %></td>
+                            <td data-label="Pays"><%= _demande.demande.pays %></td>
+                            <td data-label="Ville"><%= _demande.demande.ville %></td>
 
                             <td data-label="maladies">
-                                <i class="fa fa-eye" aria-hidden="true" id="showOld<%= demande._id %>"
-                                    onclick="showMaladies(true, 'Old' , '<%= demande._id %>')"></i>
-                                <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= demande._id %>"
-                                    onclick="showMaladies(false, 'Old' , '<%= demande._id %>')"
+                                <i class="fa fa-eye" aria-hidden="true" id="showOld<%= _demande.demande._id %>"
+                                    onclick="showMaladies(true, 'Old' , '<%= _demande.demande._id %>')"></i>
+                                <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= _demande.demande._id %>"
+                                    onclick="showMaladies(false, 'Old' , '<%= _demande.demande._id %>')"
                                     style="display: none;"></i>
-                                <div id="divMaladies<%= demande._id %>" style="display: none;">
-                                    <% demande.maladies.forEach(maladie => { %>
+                                <div id="divMaladies<%= _demande.demande._id %>" style="display: none;">
+                                    <% _demande.demande.maladies.forEach(maladie => { %>
                                     <%= maladie %> <br>
                                     <% }) %>
                                 </div>
                             </td>
                             <td data-label="Profil"><a class="btn"
-                                    href='userProfile?id=<%= demande._id %>'>Consulter</a>
+                                    href='userProfile?id=<%= _demande.demande._id %>'>Consulter</a>
                             </td>
                         </tr>
                         <% }); %>

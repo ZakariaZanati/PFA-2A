@@ -386,7 +386,7 @@ nav li:hover{
     background-color: #efefef;
     border-radius: 1rem;
 }
-.active-notif {
+.active {
     color: #0082e6;
 }
 
@@ -469,6 +469,21 @@ nav .desc{
     -moz-box-shadow: 0 8px 6px -6px #707070;   /* Firefox 3.5 - 3.6 */
     box-shadow: 8px 8px 6px -6px #707070;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
+.notif-text {
+    color: black;
+}
+.notif-text span{
+    color: #143774;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.notif-none{
+    color: #143774;
+    text-align: center;
+    padding: .5em;
+    font-size: .8em;
+}
+
 .notif-div a{
     padding: 0;
     margin: 0;
@@ -518,6 +533,12 @@ nav .desc{
 
 .notif-img{
    margin-right: 2em;
+}
+.success {
+    color: green;
+}
+.echec {
+    color: red;
 }
 
 
@@ -812,6 +833,9 @@ button{
 .table-div{
     overflow-x: scroll;
 }
+.table-div::-webkit-scrollbar {
+    display: none;
+}
 .table{
     width: 100%;
     border-collapse: collapse;
@@ -924,6 +948,7 @@ button{
 .fit-width{
     max-width: fit-content;
     float: right;
+    justify-content: flex-end;
 }
 .search-icon{
     color: white;

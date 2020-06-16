@@ -44,6 +44,12 @@
                     <p id="numberOfAlerts" class="notif"></p>
                     <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
+                            <% if(alerts[0]==null) {%>
+
+                            <div class="notif-none">Vous n'avez aucune alertes récentes
+                            </div>
+
+                            <% } %>
                             <% if(estPatient) { %>
                             <% alerts.forEach(alert => { %>
 
@@ -97,25 +103,42 @@
                     <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
                             <% if(!estPatient) {demandes = medecin.demandes} %>
-                            <% demandes.forEach(demande => { %>
+                            <% if(demandes[0]==null) {%>
+
+                            <div class="notif-none">vous n'avez aucune notification
+                            </div>
+
+                            <% } %>
+                            <% demandes.forEach(_demande => { %>
                             <li>
                                 <% if(estPatient) { %>
-                                <a href="medecinProfile?id=<%= demande._id %>">
-                                    <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                <a href="medecinProfile?id=<%= _demande.demande._id %>">
+                                    <%} else { %>
+                                    <a href="userProfile?id=<%= _demande.demande._id %>"><% 
+                                }%>
+                                        <div class="notif-line">
+
+                                            <% if(_demande.statut == 0) { %>
+                                            <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                    <%= _demande.demande.prenom %></span> vous a envoyé une demande
+                                            </div>
+                                            <% } else if(_demande.statut == 1) { %>
+                                            <div class="notif-img"><i class="fa fa-check success"
+                                                    aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                    <%= _demande.demande.prenom %></span> a accepté votre demande </div>
+                                            <% } else { %>
+                                            <div class="notif-img"><i class="fa fa-times" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                    <%= _demande.demande.prenom %></span> a refusé votre demande </div>
+                                            <% }%>
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                    </div>
-                                </a>
-                                <%} else { %>
-                                <a href="userProfile?id=<%= demande._id %>">
-                                    <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
-                                        </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
-                                    </div>
-                                </a>
-                                <% }%>
+                                    </a>
+
                             </li>
                             <% }) %>
                         </ul>

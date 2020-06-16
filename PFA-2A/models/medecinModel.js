@@ -30,9 +30,15 @@ var medecinSchema = new Schema({
     ],
     demandes: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "utilisateur",
-            default : null
+            demande: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "utilisateur",
+                default : null
+            },
+            statut : {
+                type: Number,
+                default: 0
+            }
         } 
     ]
 

@@ -40,6 +40,12 @@
                     <p id="numberOfAlerts" class="notif"></p>
                     <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
+                            <% if(alerts[0]==null) {%>
+
+                            <div class="notif-none">Vous n'avez aucune alertes récentes
+                            </div>
+
+                            <% } %>
                             <% alerts.forEach(alert => { %>
                             <% if(alert.date == new Date(new Date().toISOString().split('T')[0])+"") { %>
                             <li>
@@ -69,13 +75,32 @@
                     <p id="numberOfNotif" class="notif"></p>
                     <div id="notifs" class="notif-div" id="notif-div-items">
                         <ul>
-                            <% demandes.forEach(demande => { %>
+                            <% if(demandes[0]==null) {%>
+
+                            <div class="notif-none">vous n'avez aucune notification
+                            </div>
+
+                            <% } %>
+                            <% demandes.forEach(_demande => { %>
                             <li>
-                                <a href="medecinProfile?id=<%= demande._id %>">
+                                <a href="medecinProfile?id=<%= _demande.demande._id %>">
                                     <div class="notif-line">
-                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i>
+                                        <% if(_demande.statut == 0) { %>
+                                        <div class="notif-img"><i class="fa fa-user-md" aria-hidden="true"></i></div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> vous a envoyé une demande
                                         </div>
-                                        <div class="notif-text"><%= demande.nom %> <%= demande.prenom %> </div>
+                                        <% } else if(_demande.statut == 1) { %>
+                                        <div class="notif-img"><i class="fa fa-check success" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> a accepté votre demande </div>
+                                        <% } else { %>
+                                        <div class="notif-img"><i class="fa fa-times" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notif-text"><span><%= _demande.demande.nom %>
+                                                <%= _demande.demande.prenom %></span> a refusé votre demande </div>
+                                        <% }%>
                                     </div>
                                 </a>
                             </li>
