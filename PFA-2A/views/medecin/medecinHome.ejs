@@ -163,33 +163,35 @@
 
                 </div>
             </div>
-            <table id="alerts" class="table table-sortable table-5">
-                <thead>
-                    <tr>
-                        <th>Patient</th>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Mesure</th>
-                        <th>Alert</th>
-                        <th>Différence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tr>
-                    <% alerts.forEach((alert)=>{ %>
-                    <tr>
-                        <td id="patient" data-label="Patient"><a class="btn"
-                                href='userProfile?id=<%= alert.utilisateur._id %>'><%= alert.utilisateur.nom %>
-                                <%= alert.utilisateur.prenom %></a></td>
-                        <td data-label="Date"><%= alert.date %></td>
-                        <td data-label="Heure"><%= alert.temps %></td>
-                        <td data-label="Mesure"><%= alert.mesure %></td>
-                        <td data-label="Alert"><%= alert.text %></td>
-                        <td data-label="Différence"><%= alert.difference %></td>
-                    </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+            <div class="table-div">
+                <table id="alerts" class="table table-sortable table-5">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Mesure</th>
+                            <th>Alert</th>
+                            <th>Différence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tr>
+                        <% alerts.forEach((alert)=>{ %>
+                        <tr>
+                            <td id="patient" data-label="Patient"><a class="btn"
+                                    href='userProfile?id=<%= alert.utilisateur._id %>'><%= alert.utilisateur.nom %>
+                                    <%= alert.utilisateur.prenom %></a></td>
+                            <td data-label="Date"><%= alert.date %></td>
+                            <td data-label="Heure"><%= alert.temps %></td>
+                            <td data-label="Mesure"><%= alert.mesure %></td>
+                            <td data-label="Alert"><%= alert.text %></td>
+                            <td data-label="Différence"><%= alert.difference %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     </div>

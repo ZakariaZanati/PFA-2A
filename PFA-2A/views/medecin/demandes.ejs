@@ -149,41 +149,45 @@
             </div>
         </div>
         <div class="container container-body">
-            <table id="demandes" class="table table-sortable table-6">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Pays</th>
-                        <th>Ville</th>
-                        <th>Maladies</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% medecin.demandes.forEach((demande)=>{ %>
-                    <tr>
-                        <td data-label="Nom"><%= demande.nom %></td>
-                        <td data-label="Prénom"><%= demande.prenom %></td>
-                        <td data-label="Pays"><%= demande.pays %></td>
-                        <td data-label="Ville"><%= demande.ville %></td>
+            <div class='table-div'>
+                <table id="demandes" class="table table-sortable table-6">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Pays</th>
+                            <th>Ville</th>
+                            <th>Maladies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% medecin.demandes.forEach((demande)=>{ %>
+                        <tr>
+                            <td data-label="Nom"><%= demande.nom %></td>
+                            <td data-label="Prénom"><%= demande.prenom %></td>
+                            <td data-label="Pays"><%= demande.pays %></td>
+                            <td data-label="Ville"><%= demande.ville %></td>
 
-                        <td data-label="maladies">
-                            <i class="fa fa-eye" aria-hidden="true" id="showOld<%= demande._id %>"
-                                onclick="showMaladies(true, 'Old' , '<%= demande._id %>')"></i>
-                            <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= demande._id %>"
-                                onclick="showMaladies(false, 'Old' , '<%= demande._id %>')" style="display: none;"></i>
-                            <div id="divMaladies<%= demande._id %>" style="display: none;">
-                                <% demande.maladies.forEach(maladie => { %>
-                                <%= maladie %> <br>
-                                <% }) %>
-                            </div>
-                        </td>
-                        <td data-label="Profil"><a class="btn" href='userProfile?id=<%= demande._id %>'>Consulter</a>
-                        </td>
-                    </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+                            <td data-label="maladies">
+                                <i class="fa fa-eye" aria-hidden="true" id="showOld<%= demande._id %>"
+                                    onclick="showMaladies(true, 'Old' , '<%= demande._id %>')"></i>
+                                <i class="fa fa-eye-slash" aria-hidden="true" id="hideOld<%= demande._id %>"
+                                    onclick="showMaladies(false, 'Old' , '<%= demande._id %>')"
+                                    style="display: none;"></i>
+                                <div id="divMaladies<%= demande._id %>" style="display: none;">
+                                    <% demande.maladies.forEach(maladie => { %>
+                                    <%= maladie %> <br>
+                                    <% }) %>
+                                </div>
+                            </td>
+                            <td data-label="Profil"><a class="btn"
+                                    href='userProfile?id=<%= demande._id %>'>Consulter</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 

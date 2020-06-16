@@ -18,9 +18,16 @@
             </div>
             <div class="form-cont">
                 <div class="form">
+
+
                     <a href="/"><img class="login-img-logo" src="/public/images/logoPFA.png"></a>
                     <h1>S'identifier</h1>
                     <p>Bon retour</p>
+                    <% if(error!="") { %>
+                    <div class="msgError btn-echec">
+                        <p><%=error%></p>
+                    </div>
+                    <% } %>
                     <form action="/login" method="POST">
                         <label>
                             <span>Email</span>

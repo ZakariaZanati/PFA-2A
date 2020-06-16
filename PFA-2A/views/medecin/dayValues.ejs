@@ -165,39 +165,41 @@
 
                 </div>
             </div>
-            <table id="dayValues" class="table table-sortable table-7">
-                <thead id="table-head">
-                    <tr>
-                        <th>Patient</th>
-                        <th>Heure</th>
-                        <th class="temperatureHead">Température</th>
-                        <th class="tensionSysHead">Tension systolique</th>
-                        <th class="tensionDiaHead">Tension diastolique</th>
-                        <th class="oxygenHead">Taux d'oxygène</th>
-                        <th class="glucoseHead">Taux de glucose</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% values.forEach(value => {%>
-                    <% for(i = 0; i < value.temperature.length; i++) { %>
-                    <tr>
-                        <td id="patient" data-label="Patient"><a href='userProfile?id=<%= value.utilisateur._id %>'
-                                class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
-                        <td data-label="Heure"><%= value.temperature[i].temps %></td>
-                        <td class="temperatureBody" data-label="Température"><%= value.temperature[i].valeur %></td>
-                        <td class="tensionSysBody" data-label="Tension systolique">
-                            <%= value.tensionSystolique[i].valeur %></td>
-                        <td class="tensionDiaBody" data-label="Tension diastolique">
-                            <%= value.tensionDiastolique[i].valeur %></td>
-                        <td class="oxygenBody" data-label="Taux d'oxygène"><%= value.tauxOxygen[i].valeur %></td>
-                        <td class="glucoseBody" data-label="Taux de glucose"><%= value.tauxGlucose[i].valeur %></td>
-                        <td data-label="Santé"><a href='patientValues?id=<%= value.utilisateur._id %>'
-                                class="btn btn-success">Santé</a></td>
-                    </tr>
-                    <% } %>
-                    <% }) %>
-                </tbody>
-            </table>
+            <div class="table-div">
+                <table id="dayValues" class="table table-sortable table-7">
+                    <thead id="table-head">
+                        <tr>
+                            <th>Patient</th>
+                            <th>Heure</th>
+                            <th class="temperatureHead">Température</th>
+                            <th class="tensionSysHead">Tension systolique</th>
+                            <th class="tensionDiaHead">Tension diastolique</th>
+                            <th class="oxygenHead">Saturation O2</th>
+                            <th class="glucoseHead">Glycémie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% values.forEach(value => {%>
+                        <% for(i = 0; i < value.temperature.length; i++) { %>
+                        <tr>
+                            <td id="patient" data-label="Patient"><a href='userProfile?id=<%= value.utilisateur._id %>'
+                                    class="btn"><%= value.utilisateur.nom %> <%= value.utilisateur.prenom %></a></td>
+                            <td data-label="Heure"><%= value.temperature[i].temps %></td>
+                            <td class="temperatureBody" data-label="Température"><%= value.temperature[i].valeur %></td>
+                            <td class="tensionSysBody" data-label="Tension systolique">
+                                <%= value.tensionSystolique[i].valeur %></td>
+                            <td class="tensionDiaBody" data-label="Tension diastolique">
+                                <%= value.tensionDiastolique[i].valeur %></td>
+                            <td class="oxygenBody" data-label="Taux d'oxygène"><%= value.tauxOxygen[i].valeur %></td>
+                            <td class="glucoseBody" data-label="Taux de glucose"><%= value.tauxGlucose[i].valeur %></td>
+                            <td data-label="Santé"><a href='patientValues?id=<%= value.utilisateur._id %>'
+                                    class="btn btn-success">Santé</a></td>
+                        </tr>
+                        <% } %>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 

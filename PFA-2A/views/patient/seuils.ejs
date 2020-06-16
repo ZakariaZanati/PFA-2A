@@ -120,32 +120,34 @@
                     </div>
                 </div>
             </div>
-            <table id="seuils" class="table table-sortable table-7">
-                <thead>
-                    <tr>
-                        <th>Mésure</th>
-                        <th>Type</th>
-                        <th>Sous type</th>
-                        <th>Valeur min</th>
-                        <th>Valeur max</th>
-                        <th>Unité</th>
-                        <th>Abréviation de l'unité</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% seuils.forEach((seuil)=>{ %>
-                    <tr>
-                        <td data-label="Nom de la mesure"><%= seuil.nom %></td>
-                        <td data-label="Type"><%= seuil.type %></td>
-                        <td data-label="Sous type"><%= seuil.sousType %></td>
-                        <td data-label="Valeur min"><%= seuil.valMin %></td>
-                        <td data-label="Valeur-max"><%= seuil.valMax %></td>
-                        <td data-label="Unité"><%= seuil.unite %></td>
-                        <td data-label="Abréviation de l'unité"><%= seuil.abreviation %></td>
-                    </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+            <div class="table-div">
+                <table id="seuils" class="table table-sortable table-7">
+                    <thead>
+                        <tr>
+                            <th>Mésure</th>
+                            <th>Type</th>
+                            <th>Sous type</th>
+                            <th>Valeur min</th>
+                            <th>Valeur max</th>
+                            <th>Unité</th>
+                            <th>Abréviation de l'unité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% seuils.forEach((seuil)=>{ %>
+                        <tr>
+                            <td data-label="Nom de la mesure"><%= seuil.nom %></td>
+                            <td data-label="Type"><%= seuil.type %></td>
+                            <td data-label="Sous type"><%= seuil.sousType %></td>
+                            <td data-label="Valeur min"><%= seuil.valMin %></td>
+                            <td data-label="Valeur-max"><%= seuil.valMax %></td>
+                            <td data-label="Unité"><%= seuil.unite %></td>
+                            <td data-label="Abréviation de l'unité"><%= seuil.abreviation %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 

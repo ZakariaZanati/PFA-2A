@@ -1,3 +1,6 @@
+const { request } = require('http');
+const { response } = require('express');
+
 module.exports = function (app, mongoose) {
 
     require('dotenv').config();
@@ -49,7 +52,7 @@ module.exports = function (app, mongoose) {
 
         const token = req.cookies.mytoken || '';
         if (token == '') {
-            res.render('login');
+            res.render('login', { error: "" });
         }
         else {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -98,7 +101,7 @@ module.exports = function (app, mongoose) {
 
                     } else {
                         console.log('echec de connexion');
-                        res.render('login', { err: 'Email ou mot de passe incorrecte' });
+                        res.render('login', { error: 'Email ou mot de passe incorrecte' });
                     }
                 });
             }
@@ -107,26 +110,33 @@ module.exports = function (app, mongoose) {
 
     app.get('/registration', function (req, res) {
         console.log(req.query);
-        res.render('registration');
+        res.render('registration', { error: "" });
     })
 
     app.post('/registration', urlencodedParser, async (req, res, next) => {
         console.log(req.body);
-
         var data = req.body;
         var type = req.query.user;
         User.findOne({ email: data.email })
             .then(async (user) => {
                 if (user != null) {
                     res.render('registration', { error: "L'émail " + data.email + " exist déjà !" });
+                    response.redirect('/registration');
                     var err = new Error("L'émail " + data.email + " exist déjà !");
                     err.status = 500;
                     next(err);
                 }
                 else {
-                    if (data.password != data.confirmation) {
-                        res.render('registration', { error: "Confirmation du mot de passe n'est pas correcte" });
-                        var err = new Error("Confirmation du mot de passe n'est pas correcte");
+                    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                    if (!data.email.match(mailformat)) {
+                        res.render('registration', { error: "Email invalid" });
+                        var err = new Error("Email invalid");
+                        err.status = 500;
+                        next(err);
+                    }
+                    else if (data.password != data.confirmation) {
+                        res.render('registration', { error: "La confirmation du mot de passe n'est pas correcte" });
+                        var err = new Error("La confirmation du mot de passe n'est pas correcte");
                         err.status = 500;
                         next(err);
                     }
@@ -172,6 +182,7 @@ module.exports = function (app, mongoose) {
                             }
                             console.log('patient created');
                             res.redirect('/login');
+
                         } catch (err) {
                             console.log(err);
                             res.status(500).send();

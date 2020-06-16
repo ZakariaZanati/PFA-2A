@@ -19,12 +19,22 @@
                 <img class="login-img reg-img" src="/public/images/register.jpg" id="imginscription">
             </div>
 
+
             <div class="form-cont" action="/registration" method="POST">
+
+
                 <div class="form">
                     <a href="/"><img class="login-img-logo" src="/public/images/logoPFA.png"></a>
                     <h1>S'inscrire</h1>
                     <p>Bienvenue avec nous</p>
                     <p>Vous avez déjà un compte? <a class="link" href="login">S'identifier</a></p>
+
+                    <% if(error!="") { %>
+                    <div class="msgError btn-echec">
+                        <p><%=error%></p>
+                    </div>
+
+                    <% } %>
                     <label>
                         <span class="no-margin">Type d'utilisateur</span>
                     </label>
@@ -48,11 +58,11 @@
                     <form class="form-user" id="form-user" action="/registration?user=normal" method="POST">
                         <label>
                             <span>Nom</span>
-                            <input class="login-user-input" type="text" name="nom" required>
+                            <input class="login-user-input" type="text" name="nom" id="nom" required>
                         </label>
                         <label>
                             <span>Prénom</span>
-                            <input class="login-user-input" type="text" name="prenom" required>
+                            <input class="login-user-input" type="text" name="prenom" id="prenom" required>
                         </label>
 
                         <div class="center">
@@ -128,7 +138,8 @@
                         </Label>
                         <label>
                             <span>Email</span>
-                            <input class="login-user-input" type="text" name="email" required>
+                            <input class="login-user-input" type="text" id='email' name="email" onblur="validateEmail()"
+                                required>
                         </label>
                         <label>
                             <span>Mot de passe</span>
@@ -138,7 +149,7 @@
                             <span>Confirmer le mot de passe</span>
                             <input class="login-user-input" type="password" name="confirmation" required>
                         </label>
-                        <button class="btn btn-round submit" type="submit">S'inscrire</button>
+                        <button class="btn btn-round submit" id='submituser' type="submit">ok</button>
                     </form>
                     <form class="form-doc" id="form-doc" action="/registration?user=medecin" method="POST">
                         <label>
@@ -210,8 +221,10 @@
 
     </div>
     <script src="public/js/radio.js"></script>
+    <script src="public/js/app.js"></script>
     <script src="/public/pidie-master/pidie-0.0.8.js"></script>
     <script src="/public/pidie-master/cities.js"></script>
+
 
 
     <script>

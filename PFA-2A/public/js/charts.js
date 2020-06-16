@@ -8,7 +8,30 @@ var arrDayT = [], arrDayTD = [], arrDayTS = [], arrDayO = [], arrDayTG = [];
 var arrMonT = [], arrMonTD = [], arrMonTS = [], arrMonO = [], arrMonTG = [], arrDMon = [];
 var tabrow = document.getElementsByClassName("tabrow");
 
+function select() {
+    getData();
+    document.getElementById("canvas").style.display = "block";
+    document.getElementById("canvas").parentElement.style.justifyContent = "center";
 
+    cs.value = "Température"
+    T = createChart(cs.value + " (C) ", "bar", "T", arrD);
+    setData(arrT, T);
+    changeCol(T, 36.5, 37.5);
+    T.update();
+
+}
+function selectStat() {
+    getMoyMonth();
+    csd.value = "Température";
+    TM = createChart(csd.value + " (C) ", "line", "TM", arrDMon);
+    setData(arrMonT, TM);
+    changeCol(TM, 36.5, 37.5);
+    TM.update();
+    T = createChart(csd.value + " (C) ", "line", "TD", arrD);
+    setData(arrDayT, T);
+    changeCol(T, 36.5, 37.5);
+    T.update();
+}
 function getMoyDay() {
     arrDayT = [], arrDayTD = [], arrDayTS = [], arrDayO = [], arrDayTG = [];
     getData();
@@ -40,6 +63,7 @@ function getMoyMonth() {
     arrDMon.push(arrD[0].substr(0, 5));
     for (var i = 0; i < arrD.length - 1; i++) {
         if (arrD[i].substr(0, 5) == arrD[i + 1].substr(0, 5)) {
+            console.log(arrD[i].substr(0, 5) + " +++ " + sumT + " ++ " + cpt);
             sumT += parseFloat(arrDayT[i + 1]);
             sumTS += parseFloat(arrDayTS[i + 1]);
             sumTD += parseFloat(arrDayTD[i + 1]);
@@ -58,21 +82,14 @@ function getMoyMonth() {
         }
 
     }
-    if (cpt > 1) {
-        arrMonT.push(sumT / cpt);
-        arrMonTS.push(sumTS / cpt);
-        arrMonTD.push(sumTD / cpt);
-        arrMonTG.push(sumTG / cpt);
-        arrMonO.push(sumO / cpt);
-    }
-    else {
-        arrDMon.push(arrD[arrD.length - 1].substr(0, 5));
-        arrMonT.push(arrDayT[arrD.length - 1]);
-        arrMonTS.push(arrDayTS[arrD.length - 1]);
-        arrMonTD.push(arrDayTD[arrD.length - 1]);
-        arrMonTG.push(arrDayTG[arrD.length - 1]);
-        arrMonO.push(arrDayO[arrD.length - 1]);
-    }
+
+
+    arrMonT.push(arrDayT[arrD.length - 1]);
+    arrMonTS.push(arrDayTS[arrD.length - 1]);
+    arrMonTD.push(arrDayTD[arrD.length - 1]);
+    arrMonTG.push(arrDayTG[arrD.length - 1]);
+    arrMonO.push(arrDayO[arrD.length - 1]);
+
 }
 function createChart(title, type, id, arr) {
     var t = document.getElementById(id).getContext('2d');
@@ -252,7 +269,6 @@ if (csd = document.getElementById("chartSelectDay")) {
     csd.addEventListener('change', function () {
 
         getMoyDay();
-        document.getElementById("canvas").style.display = "block";
         if (typeof T == "object")
             T.destroy();
         if (csd.value == "Température") {

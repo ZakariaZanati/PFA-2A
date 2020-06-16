@@ -12,7 +12,7 @@
     <script src="public/js/icons.js"></script>
 </head>
 
-<body>
+<body onload="select()">
     <nav class="navigation-bar">
         <input type="checkbox" id="check">
         <div class="ham-logo">
@@ -215,7 +215,6 @@
                 </div>
                 <div>
                     <select id="chartSelect">
-                        <option>Graphe</option>
                         <option>Température</option>
                         <option>Tension Systolique</option>
                         <option>Tension Diastolique</option>
@@ -233,7 +232,7 @@
                     <h1 class="date-header">Les données du :
                         <span><%= date %></span> </h1>
                 </div>
-                <div class="container-body">
+                <div class="container-body table-div">
                     <table class="table table-sortable table-6 table-no-header">
                         <thead id="table-head">
                             <tr>

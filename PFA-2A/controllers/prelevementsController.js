@@ -299,7 +299,7 @@ module.exports = function (app, mongoose) {
                                         alert.save();
                                     }
                                 });
-                                Prelevements.find({ utilisateur: req.userInfos.userId })
+                                Prelevements.find({ utilisateur: req.userInfos.userId }).sort([['date', -1]])
                                     .then(prelevements => {
                                         Statistics.find({ utilisateur: req.userInfos.userId })
                                             .then(statistics => {

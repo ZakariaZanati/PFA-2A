@@ -12,7 +12,7 @@
   <script src="public/js/icons.js"></script>
 </head>
 
-<body>
+<body onload="selectStat()">
 
   <nav class="navigation-bar">
     <input type="checkbox" id="check">
@@ -148,7 +148,6 @@
 
       <div>
         <select id="chartSelectDay">
-          <option>Mésure</option>
           <option>Température</option>
           <option>Tension Systolique</option>
           <option>Tension Diastolique</option>
@@ -167,7 +166,6 @@
       <h1><span>Le moyen des données par mois</span></h1>
       <div>
         <select id="chartSelectMonth">
-          <option>Mésure</option>
           <option>Température</option>
           <option>Tension Systolique</option>
           <option>Tension Diastolique</option>

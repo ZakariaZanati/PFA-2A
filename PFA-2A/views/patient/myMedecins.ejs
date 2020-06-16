@@ -104,7 +104,7 @@
             <img src="public/images/list.jpg" class="img-header">
             <h1 class="text-header">Vos anciens médecins </h1>
         </div>
-        <div class="container-body">
+        < class="container-body">
             <div class="radio-group margin">
                 <label class="radio">
                     <input type="radio" checked="true" name="medecins" id="current" value="current"
@@ -116,64 +116,67 @@
                     <span>Anciens medecins</span>
                 </label>
             </div>
-            <div id="currentMedecins">
-                <table class="table table-sortable table-7">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
-                            <th>Pays</th>
-                            <th>Ville</th>
-                            <th>Spécialité</th>
-                            <th>Debut suivi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% currentMedecins.forEach((_medecin)=>{ %>
-                        <tr>
-                            <td data-label="Nom"><%= _medecin.medecin.nom %></td>
-                            <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
-                            <td data-label="Pays"><%= _medecin.medecin.pays %></td>
-                            <td data-label="Ville"><%= _medecin.medecin.ville %></td>
-                            <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
-                            <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
-                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
+            <div class="table-div">
+                <div id="currentMedecins">
+                    <table class="table table-sortable table-7">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Pays</th>
+                                <th>Ville</th>
+                                <th>Spécialité</th>
+                                <th>Debut suivi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% currentMedecins.forEach((_medecin)=>{ %>
+                            <tr>
+                                <td data-label="Nom"><%= _medecin.medecin.nom %></td>
+                                <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
+                                <td data-label="Pays"><%= _medecin.medecin.pays %></td>
+                                <td data-label="Ville"><%= _medecin.medecin.ville %></td>
+                                <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
+                                <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
+                                <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="oldMedecins">
+                    <table class="table table-sortable table-7">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Pays</th>
+                                <th>Ville</th>
+                                <th>Spécialité</th>
+                                <th>Debut suivi</th>
+                                <th>Fin suivi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% oldMedecins.forEach((_medecin)=>{ %>
+                            <tr>
+                                <td data-label="Nom"><%= _medecin.medecin.nom %></td>
+                                <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
+                                <td data-label="Pays"><%= _medecin.medecin.pays %></td>
+                                <td data-label="Ville"><%= _medecin.medecin.ville %></td>
+                                <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
+                                <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
+                                <td data-label="Fin suivi"><%= _medecin.finSuivi %></td>
+                                <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div id="oldMedecins">
-                <table class="table table-sortable table-7">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prenom</th>
-                            <th>Pays</th>
-                            <th>Ville</th>
-                            <th>Spécialité</th>
-                            <th>Debut suivi</th>
-                            <th>Fin suivi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% oldMedecins.forEach((_medecin)=>{ %>
-                        <tr>
-                            <td data-label="Nom"><%= _medecin.medecin.nom %></td>
-                            <td data-label="Prénom"><%= _medecin.medecin.prenom %></td>
-                            <td data-label="Pays"><%= _medecin.medecin.pays %></td>
-                            <td data-label="Ville"><%= _medecin.medecin.ville %></td>
-                            <td data-label="Spécialité"><%= _medecin.medecin.specialite %></td>
-                            <td data-label="Début suivi"><%= _medecin.debutSuivi %></td>
-                            <td data-label="Fin suivi"><%= _medecin.finSuivi %></td>
-                            <td><a class="btn" href='medecinProfile?id=<%= _medecin.medecin._id %>'>Consulter</a></td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+    </div>
 
 
     </div>
