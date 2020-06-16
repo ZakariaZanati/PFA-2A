@@ -26,7 +26,7 @@ module.exports = function (app, mongoose) {
                 .then((medecins) => {
                     User.findById(req.userInfos.userId)
                         .populate('medecins.medecin')
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then(user => {
                             var oldMedecins = [];
                             var currentMedecins = [];
@@ -81,17 +81,21 @@ module.exports = function (app, mongoose) {
             Medecin.findById(id)
                 .then((medecin) => {
                     User.findById(req.userInfos.userId)
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then((user) => {
                             var date = new Date(new Date().toISOString().split('T')[0])
                             var isMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi == null);
-                            var sentMeDemande = user.demandes.find(demande => demande.id == id);
-                            var sentDemande = medecin.demandes.find(demande => demande == user.id);
+                            var sentMeDemande = user.demandes.find(_demande => _demande.demande.id == id && _demande.statut == 0);
+                            var sentDemande = medecin.demandes.find(_demande => _demande.demande == user.id && _demande.statut == 0);
                             var oldMedecin = user.medecins.find(_medecin => _medecin.medecin == id && _medecin.finSuivi != null);
                             //Alert.find({ utilisateur: req.userInfos.userId, statutPatient: 0 })
                             Alert.find({ utilisateur: req.userInfos.userId, date: date })
                                 .then(alerts => {
-                                    res.render('medecinProfile', { demandes: user.demandes, alerts: alerts, medecin: medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                                    User.findByIdAndUpdate(req.userInfos.userId,
+                                        {$pull: {demandes: {demande: id, statut: {"$in": [1, -1] }}}})
+                                    .then(demande => {
+                                        res.render('medecinProfile', { demandes: user.demandes, alerts: alerts, medecin: medecin, estMedecin: isMedecin, ancienMedecin: oldMedecin, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                                    })
                                 })
                         })
                 })
@@ -121,23 +125,33 @@ module.exports = function (app, mongoose) {
                 User.findById(req.userInfos.userId)
                     .then((user) => {
                         var isInArray = user.demandes.some((medecin) => {
-                            return medecin.equals(id);
+                            return medecin.demande.equals(id) && medecin.statut == 0;
                         });
                         if (isInArray) {
-                            user.medecins.push({
-                                $each: [{ medecin: id }],
-                                $position: 0
-                            });
-                            user.demandes.pull(id);
-                            user.save();
-                            Medecin.findById(id)
+                            User.findByIdAndUpdate(req.userInfos.userId,
+                                {$pull: {demandes: {demande: id}}})
+                            .then( user => {
+                                user.medecins.push({
+                                    $each: [{ medecin: id }],
+                                    $position: 0
+                                });
+                                user.save();
+                                Medecin.findById(id)
                                 .then(medecin => {
                                     medecin.utilisateurs.push({
                                         $each: [{ utilisateur: req.userInfos.userId }],
                                         $position: 0
                                     });
+                                    medecin.demandes.push({
+                                        $each: [{demande: req.userInfos.userId, statut: 1}],
+                                        $position: 0
+                                    });
                                     medecin.save();
                                 })
+                            })
+                            /*user.demandes.pull({demande: id});
+                            user.save();*/
+                            
                         }
                     });
             }
@@ -145,11 +159,23 @@ module.exports = function (app, mongoose) {
                 User.findById(req.userInfos.userId)
                     .then((user) => {
                         var isInArray = user.demandes.some((medecin) => {
-                            return medecin.equals(id);
-                        })
+                            return medecin.demande.equals(id) && medecin.statut == 0;
+                        });
                         if (isInArray) {
-                            user.demandes.pull(id);
-                            user.save();
+                            /*user.demandes.pull({demande: id});
+                            user.save();*/
+                            User.findByIdAndUpdate(req.userInfos.userId,
+                                {$pull: {demandes: {demande: id}}})
+                            .then( user => {
+                                Medecin.findById(id)
+                                .then(medecin => {
+                                    medecin.demandes.push({
+                                        $each: [{demande: req.userInfos.userId, statut: -1}],
+                                        $position: 0
+                                    });
+                                    medecin.save();
+                                })
+                            })
                         }
                     });
             }
@@ -170,11 +196,13 @@ module.exports = function (app, mongoose) {
                 Medecin.findById(id)
                     .then((medecin) => {
                         var isInArray = medecin.demandes.some((user) => {
-                            return user.equals(req.userInfos.userId);
+                            return user.demande.equals(req.userInfos.userId) && user.statut == 0;
                         });
                         if (isInArray) {
-                            medecin.demandes.pull(id);
-                            medecin.save();
+                            Medecin.findByIdAndUpdate(id,
+                                {$pull: {demandes: {demande: req.userInfos.userId}}})
+                            .then( medecin => {})
+                            
                         }
                     });
             }
@@ -182,11 +210,11 @@ module.exports = function (app, mongoose) {
                 Medecin.findById(id)
                     .then((medecin) => {
                         var isInArray = medecin.demandes.some((user) => {
-                            return user.equals(req.userInfos.userId);
+                            return user.demande.equals(req.userInfos.userId) && user.statut == 0;
                         });
                         if (!isInArray) {
                             medecin.demandes.push({
-                                $each: [req.userInfos.userId],
+                                $each: [{demande: req.userInfos.userId}],
                                 $position: 0
                             });
                             medecin.save();
@@ -207,7 +235,7 @@ module.exports = function (app, mongoose) {
             User.find()
                 .then(users => {
                     Medecin.findById(req.userInfos.userId)
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then((medecin) => {
                             var maladies = [];
                             var _users = [];
@@ -253,23 +281,23 @@ module.exports = function (app, mongoose) {
     app.get('/patientDemandes', authenticateToken, (req, res) => {
         if (req.userInfos.type === 'normal') {
             User.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then((user) => {
                     var specialites = [];
                     var villes = [];
                     var pays = [];
                     user.demandes.forEach(medecin => {
-                        var isInArray = specialites.find(specialite => specialite == medecin.specialite);
-                        var isInPays = pays.find(pays => pays == medecin.pays);
-                        var isInVille = villes.find(ville => ville == medecin.ville);
+                        var isInArray = specialites.find(specialite => specialite == medecin.demande.specialite);
+                        var isInPays = pays.find(pays => pays == medecin.demande.pays);
+                        var isInVille = villes.find(ville => ville == medecin.demande.ville);
                         if (!isInArray) {
-                            specialites.push(medecin.specialite);
+                            specialites.push(medecin.demande.specialite);
                         }
                         if (!isInPays) {
-                            pays.push(medecin.pays);
+                            pays.push(medecin.demande.pays);
                         }
                         if (!isInVille) {
-                            villes.push(medecin.ville);
+                            villes.push(medecin.demande.ville);
                         }
                     })
                     var date = new Date(new Date().toISOString().split('T')[0]);
@@ -297,23 +325,30 @@ module.exports = function (app, mongoose) {
                 Medecin.findById(req.userInfos.userId)
                     .then((medecin) => {
                         var isInArray = medecin.demandes.some((user) => {
-                            return user.equals(id);
+                            return user.demande.equals(id) && user.statut == 0;
                         });
                         if (isInArray) {
-                            medecin.utilisateurs.push({
-                                $each: [{ utilisateur: id }],
-                                $position: 0
-                            });
-                            medecin.demandes.pull(id);
-                            medecin.save();
-                            User.findById(id)
+                            Medecin.findByIdAndUpdate(req.userInfos.userId,
+                                {$pull: {demandes: {demande: id}}})
+                            .then( medecin => {
+                                medecin.utilisateurs.push({
+                                    $each: [{ utilisateur: id }],
+                                    $position: 0
+                                });
+                                medecin.save();
+                                User.findById(id)
                                 .then(user => {
                                     user.medecins.push({
                                         $each: [{ medecin: req.userInfos.userId }],
                                         $position: 0
                                     });
+                                    user.demandes.push({
+                                        $each: [{demande: req.userInfos.userId, statut: 1}],
+                                        $position: 0
+                                    });
                                     user.save();
                                 })
+                            })
                         }
                     });
             }
@@ -321,11 +356,23 @@ module.exports = function (app, mongoose) {
                 Medecin.findById(req.userInfos.userId)
                     .then((medecin) => {
                         var isInArray = medecin.demandes.some((user) => {
-                            return user.equals(id);
+                            return user.demande.equals(id) && user.statut == 0;
                         })
                         if (isInArray) {
-                            medecin.demandes.pull(id);
-                            medecin.save();
+                            Medecin.findByIdAndUpdate(req.userInfos.userId,
+                                {$pull: {demandes: {demande: id}}})
+                            .then( medecin => {
+                                User.findById(id)
+                                .then(user => {
+                                    user.demandes.push({
+                                        $each: [{demande: req.userInfos.userId, statut: -1}],
+                                        $position: 0
+                                    });
+                                    user.save();
+                                })
+                            })
+                            /*medecin.demandes.pull({demande: id});
+                            medecin.save();*/
                         }
                     });
             }
@@ -346,11 +393,13 @@ module.exports = function (app, mongoose) {
                 User.findById(id)
                     .then((user) => {
                         var isInArray = user.demandes.some((medecin) => {
-                            return medecin.equals(req.userInfos.userId);
+                            return medecin.demande.equals(req.userInfos.userId) && medecin.statut == 0;
                         });
                         if (isInArray) {
-                            user.demandes.pull(req.userInfos.userId);
-                            user.save();
+                            User.findByIdAndUpdate(id,
+                                {$pull: {demandes: {demande: req.userInfos.userId}}})
+                            .then( user => {})
+                            
                         }
                     });
             }
@@ -358,11 +407,11 @@ module.exports = function (app, mongoose) {
                 User.findById(id)
                     .then((user) => {
                         var isInArray = user.demandes.some((medecin) => {
-                            return medecin.equals(req.userInfos.userId);
+                            return medecin.demande.equals(req.userInfos.userId) && medecin.statut == 0;
                         });
                         if (!isInArray) {
                             user.demandes.push({
-                                $each: [req.userInfos.userId],
+                                $each: [{demande: req.userInfos.userId}],
                                 $position: 0
                             });
                             user.save();
@@ -384,13 +433,13 @@ module.exports = function (app, mongoose) {
             User.findById(id)
                 .then((user) => {
                     Medecin.findById(req.userInfos.userId)
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then((medecin) => {
                             var date = new Date(new Date().toISOString().split('T')[0]);
                             var users = [];
                             var isPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi == null);
-                            var sentMeDemande = medecin.demandes.find(demande => demande.id == id);
-                            var sentDemande = user.demandes.find(demande => demande == medecin.id);
+                            var sentMeDemande = medecin.demandes.find(_demande => _demande.demande.id == id && _demande.statut == 0);
+                            var sentDemande = user.demandes.find(_demande => _demande.demande == medecin.id && _demande.statut == 0);
                             var oldPatient = medecin.utilisateurs.find(user => user.utilisateur == id && user.finSuivi != null);
                             medecin.utilisateurs.forEach(user => {
                                 if (user.finSuivi == null) users.push(user.utilisateur);
@@ -398,7 +447,11 @@ module.exports = function (app, mongoose) {
                             Alert.find({ utilisateur: { "$in": users }, date: date })
                                 .populate('utilisateur')
                                 .then(alerts => {
-                                    res.render('userProfile', { medecin: medecin, alerts: alerts, user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                                    Medecin.findByIdAndUpdate(req.userInfos.userId,
+                                        {$pull: {demandes: {demande: id, statut: {"$in": [1, -1] }}}})
+                                    .then(demande => {
+                                        res.render('userProfile', { medecin: medecin, alerts: alerts, user: user, estPatient: isPatient, ancienPatient: oldPatient, sentDemande: sentDemande, sentMeDemande: sentMeDemande });
+                                    })
                                 })
                         });
                 })
@@ -429,7 +482,7 @@ module.exports = function (app, mongoose) {
                 .then(users => {
                     Medecin.findById(req.userInfos.userId)
                         .populate('utilisateurs.utilisateur')
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then((medecin) => {
                             var oldPatients = [];
                             var currentPatients = [];

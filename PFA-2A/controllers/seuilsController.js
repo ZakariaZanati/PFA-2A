@@ -59,7 +59,7 @@ module.exports = function (app , mongoose) {
                 
                 if(seuils != null) {
                     User.findById(req.userInfos.userId)
-                    .populate('demandes')
+                    .populate('demandes.demande')
                     .then(user => {
                         //Alert.find({utilisateur: req.userInfos.userId, statutPatient: 0})
                         Alert.find({utilisateur: req.userInfos.userId, date: date})

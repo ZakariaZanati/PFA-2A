@@ -134,7 +134,10 @@ module.exports = function (app, mongoose) {
                         try {
                             const hashedPassword = await bcrypt.hash(data.password, 10);
                             if (data.diabete === "none") {
-                                var maladies = data.maladie.filter(m => { return m != '' && m.trim() != ''; })
+                                var maladies
+                                if(data.maladie) {
+                                    data.maladie.filter(m => { return m != '' && m.trim() != ''; })
+                                }
                                 var user = new User({
                                     nom: data.nom.toUpperCase(),
                                     prenom: data.prenom,
@@ -153,7 +156,9 @@ module.exports = function (app, mongoose) {
                             }
                             else {
                                 var maladies = [data.diabete];
-                                maladies = maladies.concat(maladies.filter(m => { return m != '' && m.trim() != ''; }));
+                                if(data.maladies) {
+                                    maladies = maladies.concat(data.maladies.filter(m => { return m != '' && m.trim() != ''; }));
+                                }
                                 var user = new User({
                                     nom: data.nom.toUpperCase(),
                                     prenom: data.prenom,
@@ -217,7 +222,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
@@ -249,7 +254,7 @@ module.exports = function (app, mongoose) {
         if (req.userInfos.type === 'normal') {
             User.findById(req.userInfos.userId)
                 .populate('medecins.medecin')
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then((user) => {
                     var currentMedecin = user.medecins.find(medecin => medecin.finSuivi == null);
                     var date = new Date(new Date().toISOString().split('T')[0]);

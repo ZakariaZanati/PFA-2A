@@ -25,7 +25,7 @@ module.exports = function (app, mongoose) {
                 await Prelevements.find({ utilisateur: req.userInfos.userId }).sort([['date', -1]])
                     .then((prelevements) => {
                         User.findById(req.userInfos.userId)
-                            .populate('demandes')
+                            .populate('demandes.demande')
                             .then(user => {
                                 //Alert.find({utilisateur : req.userInfos.userId, statutPatient : 0})
                                 Alert.find({ utilisateur: req.userInfos.userId, date: date })
@@ -42,7 +42,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
@@ -116,7 +116,7 @@ module.exports = function (app, mongoose) {
                     .sort({ date: -1, temps: -1 })
                     .then((alerts) => {
                         User.findById(req.userInfos.userId)
-                            .populate('demandes')
+                            .populate('demandes.demande')
                             .then(user => {
                                 alerts.forEach(alert => {
                                     if (alert.alertedPatient == 0) {
@@ -134,7 +134,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
@@ -180,7 +180,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
@@ -225,7 +225,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
@@ -258,7 +258,7 @@ module.exports = function (app, mongoose) {
                 .sort({ date: -1, temps: -1 })
                 .then((alerts) => {
                     User.findById(req.userInfos.userId)
-                        .populate('demandes')
+                        .populate('demandes.demande')
                         .then(user => {
                             var _date = new Date(new Date().toISOString().split('T')[0]);
                             Prelevements.find({ utilisateur: req.userInfos.userId })
@@ -291,7 +291,7 @@ module.exports = function (app, mongoose) {
                 Alert.find({ utilisateur: req.userInfos.userId })
                     .then((alerts) => {
                         User.findById(req.userInfos.userId)
-                            .populate('demandes')
+                            .populate('demandes.demande')
                             .then(user => {
                                 alerts.forEach(alert => {
                                     if (alert.alertedPatient == 0) {
@@ -315,7 +315,7 @@ module.exports = function (app, mongoose) {
             var date = new Date(new Date().toISOString().split('T')[0]);
             var users = [];
             Medecin.findById(req.userInfos.userId)
-                .populate('demandes')
+                .populate('demandes.demande')
                 .then(medecin => {
                     medecin.utilisateurs.forEach(user => {
                         if (user.finSuivi == null) users.push(user.utilisateur);
