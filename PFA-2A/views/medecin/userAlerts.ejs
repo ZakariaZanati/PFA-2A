@@ -46,7 +46,9 @@
                     <p id="numberOfAlerts" class="notif"></p>
                     <div id="alerts" class="notif-div" id="alert-div-items">
                         <ul>
-                            <% if(alerts[0]==null) {%>
+                            <% alerts = userAlerts%>
+                            <% var today = alerts.some(alert => alert.date == new Date(new Date().toISOString().split('T')[0])+"") %>
+                            <% if(!today) {%>
 
                             <div class="notif-none">Vous n'avez aucune alertes récentes
                             </div>

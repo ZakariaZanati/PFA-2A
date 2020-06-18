@@ -77,10 +77,9 @@ module.exports = function (app, mongoose) {
     app.post('/login', urlencodedParser, async (req, res) => {
 
         User.findOne({ email: req.body.email }, async (err, user) => {
-            if (user && (bcrypt.compare(req.body.password, user.password))) {
+            if (user &&  await bcrypt.compare(req.body.password, user.password)) {
 
                 await generateToken(res, user._id, user.nom, user.prenom, user.email, 'normal');
-
                 Statistics.findOne({ utilisateur: user._id })
                     .then(value => {
                         if (!value) {
@@ -92,7 +91,7 @@ module.exports = function (app, mongoose) {
             }
             else {
                 Medecin.findOne({ email: req.body.email }, async (err, medecin) => {
-                    if (medecin && bcrypt.compare(req.body.password, medecin.password)) {
+                    if (medecin && await bcrypt.compare(req.body.password, medecin.password)) {
 
                         await generateToken(res, medecin._id, medecin.nom, medecin.prenom, medecin.email, 'medecin');
 
